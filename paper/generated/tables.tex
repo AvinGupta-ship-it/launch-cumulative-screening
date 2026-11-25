@@ -62,14 +62,14 @@ Access & $H=$ union of closure windows; $P(H>H_{cap})$ & $E[H]\approx N\,\bar h$
 \hline
 Quantity & 2025 EA value & Reproduced & Basis \\
 \hline
-DNL 65 dB contour extent (miles) & 3.0-3.5 & 2.81 & 22 day + 3 night launches, 22 day landings of each vehicle, 11 static fires; fitted SEL footprints \\
+DNL 65 dB contour extent (miles) & 3-3.5 & 2.81 & 22 day + 3 night launches, 22 day landings of each vehicle, 11 static fires; SEL footprints \\
 DNL 65 dB overland contour radius, digitized Figure 21 (miles) & 2.90 & 2.81 & same scenario; median radius over the overland sector of the digitized DNL contour \\
 DNL 75 dB overland contour radius, digitized Figure 21 (miles) & 1.50 & 1.32 & same scenario; median radius over the overland sector of the digitized DNL contour \\
-CDNL 60 dB contour extent (miles) & 5.0 & 5.98 & 44 daytime booms; FAA Desk Reference psf-to-CSEL conversion; fitted boom footprints \\
+CDNL 60 dB contour extent (miles) & 5 & 5.98 & 44 daytime booms; FAA Desk Reference psf-to-CSEL conversion; fitted boom footprints \\
 annual NOX (short tons) & 98.03 & 98.0 & per-operation values from Table 3/4 divided by the stated activity counts, re-aggregated \\
-annual CO (short tons) & 45.0 & 45.0 & per-operation values from Table 3/4 divided by the stated activity counts, re-aggregated \\
-annual CO2E (metric tons) & 97342.0 & 97,342 & per-operation values from Table 3/4 divided by the stated activity counts, re-aggregated \\
-deluge water per operation (gallons) & 422000.0 & 422,000 & transcribed value \\
+annual CO (short tons) & 45 & 45.0 & per-operation values from Table 3/4 divided by the stated activity counts, re-aggregated \\
+annual CO2E (metric tons) & 97342 & 97,342 & per-operation values from Table 3/4 divided by the stated activity counts, re-aggregated \\
+deluge water per operation (gallons) & 422000 & 422,000 & transcribed value \\
 \hline
 \end{tabular}}
 \newcommand{\tableAggregationErrors}{\begin{tabular}{lrrrr}
@@ -78,14 +78,533 @@ Metric at 456 launches/yr & Simulated & Linear from 25/yr & Error & Relative err
 \hline
 Deluge water (additive) & 420,242,370 & 417,769,872 & -2,472,498 & -1\% (-3, +2) \\
 NO$_x$ (additive) & 1,685 & 1,675 & -10.4 & -1\% (-4, +2) \\
-$L_{dn}$, Port Isabel edge (energy) & 65.7 & 65.6 & -0.15 dB &  \\
+$L_{dn}$, Port Isabel edge (energy) & 75.6 & 75.5 & -0.14 dB &  \\
 Events $>100$ dBA, Port Isabel edge & 453 & 450 & -2.90 & -1\% (-4, +2) \\
 Days $>90$ dBA, Port Isabel edge & 327 & 772 & 445 & +136\% (+130, +142) \\
 Days $>90$ dBA, S. Padre Island edge & 327 & 772 & 445 & +136\% (+129, +142) \\
 Booms $>2$ psf, Port Isabel edge & 904 & 899 & -5.73 & -1\% (-4, +2) \\
 Disturbed fraction, habitat (1 h recovery) & 0.13 & 0.14 & 0.00 & +3\% (-1, +8) \\
-Closure hours & 5,298 & 8,019 & 2,721 & +51\% (+47, +57) \\
-Weekend daylight availability & 0.36 & 17.2 & 16.9 & +4655\% (+4595, +4718) \\
+Closure hours & 5,298 & 8,019 & 2,721 & +51\% (+47, +56) \\
+\hline
+\end{tabular}}
+\newcommand{\tableReceptors}{\begin{tabular}{lrrl}
+\hline
+Receptor & $r$ (km) & azimuth (deg) & kind \\
+\hline
+Rufa red knot proposed critical habitat (nearest) & 0.3 & 344 & critical\_habitat \\
+Boca Chica State Park & 1.1 & 274 & park \\
+Boca Chica Village & 2.7 & 256 & community \\
+Piping plover critical habitat (near pad) & 3.8 & 291 & critical\_habitat \\
+Lower Rio Grande Valley NWR (near pad) & 3.9 & 250 & refuge \\
+Port Isabel (nearest edge) & 7.6 & 318 & community\_edge \\
+Isla Blanca Park & 8.4 & 356 & park \\
+South Padre Island (nearest edge) & 8.7 & 352 & community\_edge \\
+Laguna Atascosa NWR (nearest) & 11.2 & 314 & refuge \\
+Brownsville (nearest edge) & 12.9 & 287 & community\_edge \\
+Laguna Heights (nearest edge) & 13.5 & 311 & community\_edge \\
+South Padre Island & 13.9 & 352 & community \\
+Laguna Heights & 14.1 & 311 & community \\
+Laguna Vista (nearest edge) & 14.2 & 307 & community\_edge \\
+Port Isabel & 17.4 & 296 & community \\
+Laguna Vista & 18.7 & 310 & community \\
+Los Fresnos (nearest edge) & 30.7 & 285 & community\_edge \\
+Brownsville & 32.7 & 268 & community \\
+Los Fresnos & 34.5 & 284 & community \\
+\hline
+\end{tabular}}
+\newcommand{\tableFactorRanges}{\begin{tabular}{lrrrp{7cm}}
+\hline
+Factor & low & high & rank & note \\
+\hline
+night\_fraction & 0 & 0.5 & 1 & NOI assumes 0.5; existing licence 3 of 25 launches \\
+scrub\_probability & 0 & 0.4 & 5 & hypothetical \\
+turnaround\_min\_days & 0.25 & 1.5 & 5 & hypothetical same-pad turnaround \\
+n\_pads & 1 & 2.999 & 5 & hypothetical; floored to integer \\
+cluster\_rate\_per\_year & 20 & 150 & 5 & hypothetical campaign count \\
+cluster\_spread\_days & 0.5 & 5 & 5 & hypothetical \\
+level\_offset\_db & -3 & 6 & 5 & hypothetical vehicle-variant scaling \\
+boom\_scale & 0.7 & 1.5 & 5 & hypothetical vehicle-variant scaling \\
+closure\_launch\_mean\_h & 5 & 25 & 1 & brackets the Flight 1-4 record (7.75-24.5 h) \\
+closure\_launch\_cv & 0.2 & 0.8 & 5 & hypothetical \\
+anomaly\_probability & 0 & 0.1 & 5 & hypothetical \\
+static\_fires\_per\_launch & 0 & 0.5 & 5 & hypothetical \\
+external\_fraction & 0 & 1 & 1 & NOI: landings regardless of launch origin up to 912 \\
+p\_ss\_landing\_local & 0.5 & 1 & 5 & hypothetical share of Starship landings at the site \\
+recovery\_days & 0.0007 & 1 & 3 & literature range: seconds to resume feeding (Collop et al. 2016) to hours (van der Kolk et al. 2020) \\
+window\_days & 0.02 & 2 & 5 & hypothetical required undisturbed window \\
+\hline
+\end{tabular}}
+\newcommand{\tableTemporalModels}{\begin{tabular}{llrrr}
+\hline
+Metric at 456 launches/yr & Model & Mean & Difference vs Poisson & 95\% interval \\
+\hline
+Days $>90$ dBA, S. Padre Island edge & poisson & 328 & 0.000 & (-1.371, 1.310) \\
+Days $>90$ dBA, S. Padre Island edge & weekday\_renewal & 309 & -18.8 & (-20.3, -17.5) \\
+Days $>90$ dBA, S. Padre Island edge & campaign & 255 & -72.7 & (-75.7, -69.5) \\
+Disturbed fraction, habitat (1 h recovery) & poisson & 0.134 & 0.000 & (-0.002, 0.002) \\
+Disturbed fraction, habitat (1 h recovery) & weekday\_renewal & 0.149 & 0.015 & (0.014, 0.017) \\
+Disturbed fraction, habitat (1 h recovery) & campaign & 0.127 & -0.007 & (-0.010, -0.003) \\
+Longest gap, habitat (d) & poisson & 2.910 & 0.000 & (-0.161, 0.162) \\
+Longest gap, habitat (d) & weekday\_renewal & 2.305 & -0.605 & (-0.740, -0.479) \\
+Longest gap, habitat (d) & campaign & 11.0 & 8.082 & (7.097, 9.184) \\
+P(4 h window), habitat & poisson & 1.000 & 0.000 & (0.000, 0.000) \\
+P(4 h window), habitat & weekday\_renewal & 1.000 & 0.000 & (0.000, 0.000) \\
+P(4 h window), habitat & campaign & 1.000 & 0.000 & (0.000, 0.000) \\
+Weekend daylight available & poisson & 0.364 & 0.000 & (-0.007, 0.006) \\
+Weekend daylight available & weekday\_renewal & 0.625 & 0.261 & (0.255, 0.267) \\
+Weekend daylight available & campaign & 0.653 & 0.289 & (0.281, 0.297) \\
+Summer daylight available & poisson & 0.361 & 0.000 & (-0.008, 0.008) \\
+Summer daylight available & weekday\_renewal & 0.320 & -0.040 & (-0.047, -0.033) \\
+Summer daylight available & campaign & 0.477 & 0.116 & (0.102, 0.131) \\
+Closure hours & poisson & 5,316 & 0.000 & (-37.2, 41.4) \\
+Closure hours & weekday\_renewal & 5,166 & -151 & (-183, -125) \\
+Closure hours & campaign & 4,339 & -977 & (-1,046, -917) \\
+\hline
+\end{tabular}}
+\newcommand{\tableCapProbabilities}{\begin{tabular}{lrrrrrr}
+\hline
+Distribution & Cadence & Mean h & $P(H>500)$ & $P(H>800)$ & $P(H>2000)$ & Weekend avail. \\
+\hline
+expected\_upper\_20h & 25 & 653 & 0.880 & 0.135 & 0.000 & 0.921 \\
+expected\_upper\_20h & 50 & 1,239 & 1.000 & 0.990 & 0.000 & 0.856 \\
+expected\_upper\_20h & 100 & 2,343 & 1.000 & 1.000 & 0.965 & 0.727 \\
+expected\_upper\_20h & 200 & 4,112 & 1.000 & 1.000 & 1.000 & 0.529 \\
+expected\_upper\_20h & 456 & 6,917 & 1.000 & 1.000 & 1.000 & 0.234 \\
+recent\_flights\_2\_to\_4 & 25 & 355 & 0.050 & 0.000 & 0.000 & 0.958 \\
+recent\_flights\_2\_to\_4 & 50 & 705 & 0.970 & 0.225 & 0.000 & 0.918 \\
+recent\_flights\_2\_to\_4 & 100 & 1,364 & 1.000 & 1.000 & 0.000 & 0.844 \\
+recent\_flights\_2\_to\_4 & 200 & 2,533 & 1.000 & 1.000 & 1.000 & 0.714 \\
+recent\_flights\_2\_to\_4 & 456 & 4,910 & 1.000 & 1.000 & 1.000 & 0.458 \\
+record\_flights\_1\_to\_4 & 25 & 457 & 0.330 & 0.010 & 0.000 & 0.947 \\
+record\_flights\_1\_to\_4 & 50 & 893 & 1.000 & 0.740 & 0.000 & 0.895 \\
+record\_flights\_1\_to\_4 & 100 & 1,719 & 1.000 & 1.000 & 0.070 & 0.803 \\
+record\_flights\_1\_to\_4 & 200 & 3,134 & 1.000 & 1.000 & 1.000 & 0.638 \\
+record\_flights\_1\_to\_4 & 456 & 5,773 & 1.000 & 1.000 & 1.000 & 0.362 \\
+record\_weekday\_phase2 & 456 & 5,608 & 1.000 & 1.000 & 1.000 & 0.622 \\
+record\_weekday\_phase2\_pea\_measures & 456 & 5,155 & 1.000 & 1.000 & 1.000 & 0.758 \\
+\hline
+\end{tabular}}
+\newcommand{\tableDominantFactors}{\begin{tabular}{rllrr}
+\hline
+Cadence & Output & Factor & $S_T$ & 95\% half-width \\
+\hline
+25 & boom2 & turnaround\_min\_days & 0.62 & 0.38 \\
+25 & boom2 & closure\_launch\_cv & 0.56 & 0.40 \\
+25 & boom2 & cluster\_spread\_days & 0.53 & 0.29 \\
+25 & boom2 & anomaly\_probability & 0.53 & 0.39 \\
+25 & boom2 & night\_fraction & 0.52 & 0.30 \\
+25 & boom2 & external\_fraction & 0.44 & 0.27 \\
+25 & boom2 & closure\_launch\_mean\_h & 0.40 & 0.21 \\
+25 & boom2 & recovery\_days & 0.37 & 0.20 \\
+25 & boom2 & p\_ss\_landing\_local & 0.37 & 0.19 \\
+25 & boom2 & window\_days & 0.35 & 0.19 \\
+25 & boom2 & scrub\_probability & 0.34 & 0.20 \\
+25 & boom2 & n\_pads & 0.29 & 0.17 \\
+25 & boom2 & level\_offset\_db & 0.28 & 0.17 \\
+25 & boom2 & boom\_scale & 0.26 & 0.15 \\
+25 & boom2 & static\_fires\_per\_launch & 0.24 & 0.20 \\
+25 & boom2 & cluster\_rate\_per\_year & 0.22 & 0.15 \\
+25 & cdnl & boom\_scale & 0.53 & 0.24 \\
+25 & cdnl & night\_fraction & 0.45 & 0.22 \\
+25 & cdnl & anomaly\_probability & 0.29 & 0.19 \\
+25 & cdnl & turnaround\_min\_days & 0.27 & 0.11 \\
+25 & cdnl & recovery\_days & 0.24 & 0.13 \\
+25 & cdnl & cluster\_spread\_days & 0.23 & 0.20 \\
+25 & cdnl & level\_offset\_db & 0.23 & 0.16 \\
+25 & cdnl & static\_fires\_per\_launch & 0.23 & 0.12 \\
+25 & cdnl & cluster\_rate\_per\_year & 0.22 & 0.10 \\
+25 & cdnl & window\_days & 0.21 & 0.11 \\
+25 & cdnl & closure\_launch\_cv & 0.17 & 0.13 \\
+25 & cdnl & closure\_launch\_mean\_h & 0.17 & 0.09 \\
+25 & cdnl & p\_ss\_landing\_local & 0.17 & 0.09 \\
+25 & cdnl & scrub\_probability & 0.16 & 0.11 \\
+25 & cdnl & n\_pads & 0.16 & 0.05 \\
+25 & cdnl & external\_fraction & 0.13 & 0.05 \\
+25 & closure\_h & closure\_launch\_cv & 0.75 & 0.67 \\
+25 & closure\_h & anomaly\_probability & 0.62 & 0.64 \\
+25 & closure\_h & night\_fraction & 0.62 & 0.46 \\
+25 & closure\_h & turnaround\_min\_days & 0.53 & 0.45 \\
+25 & closure\_h & p\_ss\_landing\_local & 0.49 & 0.54 \\
+25 & closure\_h & recovery\_days & 0.48 & 0.43 \\
+25 & closure\_h & cluster\_spread\_days & 0.47 & 0.21 \\
+25 & closure\_h & closure\_launch\_mean\_h & 0.45 & 0.32 \\
+25 & closure\_h & static\_fires\_per\_launch & 0.40 & 0.30 \\
+25 & closure\_h & level\_offset\_db & 0.39 & 0.43 \\
+25 & closure\_h & cluster\_rate\_per\_year & 0.37 & 0.41 \\
+25 & closure\_h & window\_days & 0.36 & 0.23 \\
+25 & closure\_h & external\_fraction & 0.35 & 0.34 \\
+25 & closure\_h & scrub\_probability & 0.32 & 0.30 \\
+25 & closure\_h & n\_pads & 0.31 & 0.30 \\
+25 & closure\_h & boom\_scale & 0.29 & 0.22 \\
+25 & days90 & closure\_launch\_cv & 0.64 & 0.48 \\
+25 & days90 & cluster\_spread\_days & 0.54 & 0.32 \\
+25 & days90 & turnaround\_min\_days & 0.54 & 0.24 \\
+25 & days90 & external\_fraction & 0.45 & 0.29 \\
+25 & days90 & night\_fraction & 0.44 & 0.17 \\
+25 & days90 & scrub\_probability & 0.39 & 0.22 \\
+25 & days90 & recovery\_days & 0.39 & 0.15 \\
+25 & days90 & anomaly\_probability & 0.39 & 0.22 \\
+25 & days90 & p\_ss\_landing\_local & 0.39 & 0.21 \\
+25 & days90 & closure\_launch\_mean\_h & 0.35 & 0.14 \\
+25 & days90 & level\_offset\_db & 0.31 & 0.14 \\
+25 & days90 & window\_days & 0.30 & 0.19 \\
+25 & days90 & boom\_scale & 0.28 & 0.16 \\
+25 & days90 & static\_fires\_per\_launch & 0.28 & 0.21 \\
+25 & days90 & cluster\_rate\_per\_year & 0.26 & 0.12 \\
+25 & days90 & n\_pads & 0.24 & 0.17 \\
+25 & disturbed & recovery\_days & 0.82 & 0.34 \\
+25 & disturbed & closure\_launch\_cv & 0.34 & 0.28 \\
+25 & disturbed & p\_ss\_landing\_local & 0.29 & 0.14 \\
+25 & disturbed & turnaround\_min\_days & 0.29 & 0.19 \\
+25 & disturbed & closure\_launch\_mean\_h & 0.27 & 0.17 \\
+25 & disturbed & anomaly\_probability & 0.26 & 0.26 \\
+25 & disturbed & window\_days & 0.24 & 0.17 \\
+25 & disturbed & cluster\_rate\_per\_year & 0.22 & 0.13 \\
+25 & disturbed & cluster\_spread\_days & 0.19 & 0.18 \\
+25 & disturbed & boom\_scale & 0.18 & 0.14 \\
+25 & disturbed & night\_fraction & 0.17 & 0.09 \\
+25 & disturbed & static\_fires\_per\_launch & 0.17 & 0.08 \\
+25 & disturbed & external\_fraction & 0.14 & 0.09 \\
+25 & disturbed & level\_offset\_db & 0.12 & 0.06 \\
+25 & disturbed & scrub\_probability & 0.12 & 0.06 \\
+25 & disturbed & n\_pads & 0.12 & 0.08 \\
+25 & ldn & night\_fraction & 0.30 & 0.14 \\
+25 & ldn & level\_offset\_db & 0.25 & 0.14 \\
+25 & ldn & anomaly\_probability & 0.18 & 0.12 \\
+25 & ldn & turnaround\_min\_days & 0.17 & 0.06 \\
+25 & ldn & recovery\_days & 0.17 & 0.07 \\
+25 & ldn & cluster\_spread\_days & 0.14 & 0.09 \\
+25 & ldn & static\_fires\_per\_launch & 0.14 & 0.08 \\
+25 & ldn & cluster\_rate\_per\_year & 0.14 & 0.06 \\
+25 & ldn & window\_days & 0.12 & 0.08 \\
+25 & ldn & p\_ss\_landing\_local & 0.11 & 0.05 \\
+25 & ldn & closure\_launch\_mean\_h & 0.11 & 0.07 \\
+25 & ldn & n\_pads & 0.11 & 0.05 \\
+25 & ldn & closure\_launch\_cv & 0.10 & 0.07 \\
+25 & ldn & boom\_scale & 0.08 & 0.06 \\
+25 & ldn & scrub\_probability & 0.08 & 0.06 \\
+25 & ldn & external\_fraction & 0.08 & 0.03 \\
+25 & longest\_gap & static\_fires\_per\_launch & 1.63 & 3.63 \\
+25 & longest\_gap & level\_offset\_db & 0.99 & 0.93 \\
+25 & longest\_gap & turnaround\_min\_days & 0.96 & 1.10 \\
+25 & longest\_gap & recovery\_days & 0.92 & 1.14 \\
+25 & longest\_gap & closure\_launch\_cv & 0.83 & 0.73 \\
+25 & longest\_gap & p\_ss\_landing\_local & 0.77 & 0.63 \\
+25 & longest\_gap & n\_pads & 0.76 & 0.62 \\
+25 & longest\_gap & cluster\_rate\_per\_year & 0.76 & 0.61 \\
+25 & longest\_gap & night\_fraction & 0.75 & 0.62 \\
+25 & longest\_gap & anomaly\_probability & 0.75 & 1.06 \\
+25 & longest\_gap & external\_fraction & 0.75 & 0.84 \\
+25 & longest\_gap & cluster\_spread\_days & 0.74 & 0.59 \\
+25 & longest\_gap & closure\_launch\_mean\_h & 0.63 & 0.82 \\
+25 & longest\_gap & scrub\_probability & 0.62 & 0.93 \\
+25 & longest\_gap & window\_days & 0.59 & 0.63 \\
+25 & longest\_gap & boom\_scale & 0.57 & 0.73 \\
+25 & na100 & level\_offset\_db & 0.51 & 0.26 \\
+25 & na100 & night\_fraction & 0.47 & 0.34 \\
+25 & na100 & closure\_launch\_cv & 0.39 & 0.29 \\
+25 & na100 & turnaround\_min\_days & 0.37 & 0.16 \\
+25 & na100 & recovery\_days & 0.36 & 0.17 \\
+25 & na100 & p\_ss\_landing\_local & 0.35 & 0.36 \\
+25 & na100 & cluster\_spread\_days & 0.33 & 0.23 \\
+25 & na100 & boom\_scale & 0.25 & 0.24 \\
+25 & na100 & anomaly\_probability & 0.25 & 0.14 \\
+25 & na100 & scrub\_probability & 0.21 & 0.15 \\
+25 & na100 & cluster\_rate\_per\_year & 0.21 & 0.08 \\
+25 & na100 & window\_days & 0.21 & 0.18 \\
+25 & na100 & closure\_launch\_mean\_h & 0.20 & 0.15 \\
+25 & na100 & static\_fires\_per\_launch & 0.17 & 0.10 \\
+25 & na100 & external\_fraction & 0.16 & 0.12 \\
+25 & na100 & n\_pads & 0.15 & 0.11 \\
+25 & weekend\_avail & closure\_launch\_cv & 1.23 & 1.49 \\
+25 & weekend\_avail & turnaround\_min\_days & 0.88 & 0.57 \\
+25 & weekend\_avail & anomaly\_probability & 0.70 & 0.89 \\
+25 & weekend\_avail & n\_pads & 0.66 & 0.59 \\
+25 & weekend\_avail & static\_fires\_per\_launch & 0.62 & 0.37 \\
+25 & weekend\_avail & closure\_launch\_mean\_h & 0.59 & 0.48 \\
+25 & weekend\_avail & level\_offset\_db & 0.58 & 0.30 \\
+25 & weekend\_avail & scrub\_probability & 0.57 & 0.35 \\
+25 & weekend\_avail & night\_fraction & 0.52 & 0.37 \\
+25 & weekend\_avail & recovery\_days & 0.52 & 0.28 \\
+25 & weekend\_avail & external\_fraction & 0.52 & 0.19 \\
+25 & weekend\_avail & p\_ss\_landing\_local & 0.51 & 0.39 \\
+25 & weekend\_avail & boom\_scale & 0.50 & 0.31 \\
+25 & weekend\_avail & window\_days & 0.49 & 0.61 \\
+25 & weekend\_avail & cluster\_rate\_per\_year & 0.47 & 0.31 \\
+25 & weekend\_avail & cluster\_spread\_days & 0.46 & 0.32 \\
+100 & boom2 & external\_fraction & 0.72 & 0.30 \\
+100 & boom2 & p\_ss\_landing\_local & 0.61 & 0.37 \\
+100 & boom2 & cluster\_rate\_per\_year & 0.55 & 0.47 \\
+100 & boom2 & anomaly\_probability & 0.55 & 0.32 \\
+100 & boom2 & level\_offset\_db & 0.53 & 0.23 \\
+100 & boom2 & scrub\_probability & 0.53 & 0.22 \\
+100 & boom2 & static\_fires\_per\_launch & 0.50 & 0.23 \\
+100 & boom2 & cluster\_spread\_days & 0.47 & 0.22 \\
+100 & boom2 & window\_days & 0.46 & 0.18 \\
+100 & boom2 & boom\_scale & 0.43 & 0.15 \\
+100 & boom2 & n\_pads & 0.42 & 0.18 \\
+100 & boom2 & recovery\_days & 0.40 & 0.20 \\
+100 & boom2 & closure\_launch\_mean\_h & 0.39 & 0.19 \\
+100 & boom2 & turnaround\_min\_days & 0.34 & 0.15 \\
+100 & boom2 & closure\_launch\_cv & 0.27 & 0.14 \\
+100 & boom2 & night\_fraction & 0.26 & 0.13 \\
+100 & cdnl & boom\_scale & 0.56 & 0.33 \\
+100 & cdnl & night\_fraction & 0.39 & 0.30 \\
+100 & cdnl & level\_offset\_db & 0.09 & 0.05 \\
+100 & cdnl & cluster\_spread\_days & 0.09 & 0.04 \\
+100 & cdnl & anomaly\_probability & 0.09 & 0.07 \\
+100 & cdnl & static\_fires\_per\_launch & 0.08 & 0.04 \\
+100 & cdnl & scrub\_probability & 0.08 & 0.03 \\
+100 & cdnl & window\_days & 0.07 & 0.03 \\
+100 & cdnl & recovery\_days & 0.07 & 0.05 \\
+100 & cdnl & cluster\_rate\_per\_year & 0.07 & 0.04 \\
+100 & cdnl & external\_fraction & 0.07 & 0.04 \\
+100 & cdnl & closure\_launch\_mean\_h & 0.07 & 0.03 \\
+100 & cdnl & n\_pads & 0.07 & 0.04 \\
+100 & cdnl & turnaround\_min\_days & 0.07 & 0.05 \\
+100 & cdnl & p\_ss\_landing\_local & 0.05 & 0.02 \\
+100 & closure\_h & closure\_launch\_mean\_h & 0.88 & 0.52 \\
+100 & closure\_h & anomaly\_probability & 0.45 & 0.43 \\
+100 & closure\_h & scrub\_probability & 0.43 & 0.29 \\
+100 & closure\_h & level\_offset\_db & 0.39 & 0.22 \\
+100 & closure\_h & cluster\_spread\_days & 0.37 & 0.27 \\
+100 & closure\_h & static\_fires\_per\_launch & 0.37 & 0.20 \\
+100 & closure\_h & n\_pads & 0.34 & 0.21 \\
+100 & closure\_h & cluster\_rate\_per\_year & 0.32 & 0.18 \\
+100 & closure\_h & recovery\_days & 0.29 & 0.23 \\
+100 & closure\_h & window\_days & 0.27 & 0.17 \\
+100 & closure\_h & night\_fraction & 0.25 & 0.16 \\
+100 & closure\_h & turnaround\_min\_days & 0.24 & 0.17 \\
+100 & closure\_h & closure\_launch\_cv & 0.23 & 0.13 \\
+100 & closure\_h & external\_fraction & 0.23 & 0.18 \\
+100 & closure\_h & boom\_scale & 0.20 & 0.16 \\
+100 & closure\_h & p\_ss\_landing\_local & 0.18 & 0.09 \\
+100 & days90 & external\_fraction & 0.82 & 0.38 \\
+100 & days90 & scrub\_probability & 0.59 & 0.32 \\
+100 & days90 & level\_offset\_db & 0.53 & 0.22 \\
+100 & days90 & static\_fires\_per\_launch & 0.48 & 0.15 \\
+100 & days90 & n\_pads & 0.45 & 0.22 \\
+100 & days90 & cluster\_rate\_per\_year & 0.44 & 0.17 \\
+100 & days90 & recovery\_days & 0.43 & 0.21 \\
+100 & days90 & cluster\_spread\_days & 0.38 & 0.19 \\
+100 & days90 & p\_ss\_landing\_local & 0.38 & 0.15 \\
+100 & days90 & closure\_launch\_mean\_h & 0.36 & 0.18 \\
+100 & days90 & anomaly\_probability & 0.36 & 0.22 \\
+100 & days90 & boom\_scale & 0.35 & 0.16 \\
+100 & days90 & window\_days & 0.35 & 0.19 \\
+100 & days90 & closure\_launch\_cv & 0.27 & 0.16 \\
+100 & days90 & night\_fraction & 0.26 & 0.13 \\
+100 & days90 & turnaround\_min\_days & 0.26 & 0.13 \\
+100 & disturbed & recovery\_days & 0.98 & 0.53 \\
+100 & disturbed & scrub\_probability & 0.17 & 0.17 \\
+100 & disturbed & window\_days & 0.17 & 0.12 \\
+100 & disturbed & cluster\_spread\_days & 0.16 & 0.16 \\
+100 & disturbed & n\_pads & 0.16 & 0.15 \\
+100 & disturbed & cluster\_rate\_per\_year & 0.15 & 0.16 \\
+100 & disturbed & anomaly\_probability & 0.14 & 0.14 \\
+100 & disturbed & turnaround\_min\_days & 0.14 & 0.11 \\
+100 & disturbed & level\_offset\_db & 0.14 & 0.12 \\
+100 & disturbed & static\_fires\_per\_launch & 0.13 & 0.14 \\
+100 & disturbed & external\_fraction & 0.12 & 0.08 \\
+100 & disturbed & p\_ss\_landing\_local & 0.11 & 0.07 \\
+100 & disturbed & boom\_scale & 0.11 & 0.12 \\
+100 & disturbed & night\_fraction & 0.10 & 0.12 \\
+100 & disturbed & closure\_launch\_mean\_h & 0.09 & 0.07 \\
+100 & disturbed & closure\_launch\_cv & 0.09 & 0.07 \\
+100 & ldn & level\_offset\_db & 1.19 & 0.41 \\
+100 & ldn & night\_fraction & 0.29 & 0.17 \\
+100 & ldn & cluster\_spread\_days & 0.07 & 0.03 \\
+100 & ldn & anomaly\_probability & 0.06 & 0.04 \\
+100 & ldn & scrub\_probability & 0.06 & 0.02 \\
+100 & ldn & static\_fires\_per\_launch & 0.06 & 0.03 \\
+100 & ldn & recovery\_days & 0.06 & 0.02 \\
+100 & ldn & cluster\_rate\_per\_year & 0.06 & 0.02 \\
+100 & ldn & n\_pads & 0.05 & 0.03 \\
+100 & ldn & window\_days & 0.05 & 0.02 \\
+100 & ldn & external\_fraction & 0.05 & 0.03 \\
+100 & ldn & closure\_launch\_mean\_h & 0.05 & 0.02 \\
+100 & longest\_gap & scrub\_probability & 0.91 & 0.86 \\
+100 & longest\_gap & window\_days & 0.71 & 0.92 \\
+100 & longest\_gap & n\_pads & 0.67 & 0.60 \\
+100 & longest\_gap & level\_offset\_db & 0.65 & 0.58 \\
+100 & longest\_gap & external\_fraction & 0.63 & 0.64 \\
+100 & longest\_gap & turnaround\_min\_days & 0.58 & 0.50 \\
+100 & longest\_gap & closure\_launch\_mean\_h & 0.57 & 0.78 \\
+100 & longest\_gap & static\_fires\_per\_launch & 0.56 & 0.45 \\
+100 & longest\_gap & cluster\_spread\_days & 0.53 & 0.57 \\
+100 & longest\_gap & recovery\_days & 0.50 & 0.45 \\
+100 & longest\_gap & anomaly\_probability & 0.48 & 0.37 \\
+100 & longest\_gap & night\_fraction & 0.45 & 0.40 \\
+100 & longest\_gap & p\_ss\_landing\_local & 0.45 & 0.31 \\
+100 & longest\_gap & closure\_launch\_cv & 0.42 & 0.31 \\
+100 & longest\_gap & boom\_scale & 0.36 & 0.25 \\
+100 & longest\_gap & cluster\_rate\_per\_year & 0.32 & 0.20 \\
+100 & na100 & level\_offset\_db & 1.91 & 0.35 \\
+100 & na100 & anomaly\_probability & 0.34 & 0.19 \\
+100 & na100 & scrub\_probability & 0.32 & 0.14 \\
+100 & na100 & cluster\_spread\_days & 0.27 & 0.19 \\
+100 & na100 & window\_days & 0.25 & 0.16 \\
+100 & na100 & static\_fires\_per\_launch & 0.24 & 0.10 \\
+100 & na100 & cluster\_rate\_per\_year & 0.23 & 0.11 \\
+100 & na100 & n\_pads & 0.22 & 0.11 \\
+100 & na100 & p\_ss\_landing\_local & 0.20 & 0.20 \\
+100 & na100 & external\_fraction & 0.19 & 0.12 \\
+100 & na100 & night\_fraction & 0.19 & 0.09 \\
+100 & na100 & closure\_launch\_mean\_h & 0.19 & 0.14 \\
+100 & na100 & recovery\_days & 0.18 & 0.12 \\
+100 & na100 & boom\_scale & 0.17 & 0.07 \\
+100 & na100 & turnaround\_min\_days & 0.15 & 0.06 \\
+100 & na100 & closure\_launch\_cv & 0.12 & 0.08 \\
+100 & weekend\_avail & closure\_launch\_mean\_h & 0.67 & 0.39 \\
+100 & weekend\_avail & scrub\_probability & 0.64 & 0.41 \\
+100 & weekend\_avail & external\_fraction & 0.41 & 0.17 \\
+100 & weekend\_avail & recovery\_days & 0.31 & 0.23 \\
+100 & weekend\_avail & level\_offset\_db & 0.29 & 0.20 \\
+100 & weekend\_avail & night\_fraction & 0.27 & 0.17 \\
+100 & weekend\_avail & window\_days & 0.26 & 0.15 \\
+100 & weekend\_avail & anomaly\_probability & 0.23 & 0.14 \\
+100 & weekend\_avail & closure\_launch\_cv & 0.23 & 0.17 \\
+100 & weekend\_avail & static\_fires\_per\_launch & 0.23 & 0.10 \\
+100 & weekend\_avail & cluster\_rate\_per\_year & 0.22 & 0.12 \\
+100 & weekend\_avail & cluster\_spread\_days & 0.21 & 0.13 \\
+100 & weekend\_avail & p\_ss\_landing\_local & 0.19 & 0.11 \\
+100 & weekend\_avail & n\_pads & 0.19 & 0.11 \\
+100 & weekend\_avail & turnaround\_min\_days & 0.19 & 0.09 \\
+100 & weekend\_avail & boom\_scale & 0.18 & 0.07 \\
+456 & boom2 & external\_fraction & 1.09 & 0.84 \\
+456 & boom2 & level\_offset\_db & 0.68 & 0.53 \\
+456 & boom2 & cluster\_rate\_per\_year & 0.64 & 0.62 \\
+456 & boom2 & p\_ss\_landing\_local & 0.53 & 0.19 \\
+456 & boom2 & turnaround\_min\_days & 0.52 & 0.38 \\
+456 & boom2 & night\_fraction & 0.48 & 0.33 \\
+456 & boom2 & scrub\_probability & 0.47 & 0.30 \\
+456 & boom2 & n\_pads & 0.46 & 0.33 \\
+456 & boom2 & static\_fires\_per\_launch & 0.45 & 0.23 \\
+456 & boom2 & anomaly\_probability & 0.45 & 0.19 \\
+456 & boom2 & recovery\_days & 0.44 & 0.30 \\
+456 & boom2 & cluster\_spread\_days & 0.44 & 0.23 \\
+456 & boom2 & closure\_launch\_mean\_h & 0.42 & 0.28 \\
+456 & boom2 & boom\_scale & 0.36 & 0.20 \\
+456 & boom2 & closure\_launch\_cv & 0.35 & 0.18 \\
+456 & boom2 & window\_days & 0.29 & 0.29 \\
+456 & cdnl & boom\_scale & 0.61 & 0.24 \\
+456 & cdnl & night\_fraction & 0.40 & 0.16 \\
+456 & cdnl & level\_offset\_db & 0.09 & 0.08 \\
+456 & cdnl & turnaround\_min\_days & 0.06 & 0.05 \\
+456 & cdnl & cluster\_rate\_per\_year & 0.06 & 0.05 \\
+456 & cdnl & scrub\_probability & 0.06 & 0.03 \\
+456 & cdnl & anomaly\_probability & 0.06 & 0.03 \\
+456 & cdnl & recovery\_days & 0.06 & 0.04 \\
+456 & cdnl & cluster\_spread\_days & 0.05 & 0.03 \\
+456 & closure\_h & anomaly\_probability & 0.90 & 0.62 \\
+456 & closure\_h & closure\_launch\_mean\_h & 0.59 & 0.29 \\
+456 & closure\_h & cluster\_spread\_days & 0.44 & 0.30 \\
+456 & closure\_h & level\_offset\_db & 0.36 & 0.27 \\
+456 & closure\_h & cluster\_rate\_per\_year & 0.36 & 0.21 \\
+456 & closure\_h & scrub\_probability & 0.34 & 0.14 \\
+456 & closure\_h & boom\_scale & 0.29 & 0.13 \\
+456 & closure\_h & external\_fraction & 0.26 & 0.14 \\
+456 & closure\_h & night\_fraction & 0.25 & 0.15 \\
+456 & closure\_h & turnaround\_min\_days & 0.24 & 0.19 \\
+456 & closure\_h & closure\_launch\_cv & 0.24 & 0.13 \\
+456 & closure\_h & recovery\_days & 0.24 & 0.13 \\
+456 & closure\_h & n\_pads & 0.20 & 0.18 \\
+456 & closure\_h & p\_ss\_landing\_local & 0.19 & 0.09 \\
+456 & closure\_h & window\_days & 0.18 & 0.13 \\
+456 & closure\_h & static\_fires\_per\_launch & 0.17 & 0.14 \\
+456 & days90 & external\_fraction & 0.88 & 0.49 \\
+456 & days90 & cluster\_spread\_days & 0.70 & 0.54 \\
+456 & days90 & level\_offset\_db & 0.51 & 1.01 \\
+456 & days90 & cluster\_rate\_per\_year & 0.42 & 0.36 \\
+456 & days90 & turnaround\_min\_days & 0.28 & 0.21 \\
+456 & days90 & night\_fraction & 0.27 & 0.33 \\
+456 & days90 & p\_ss\_landing\_local & 0.25 & 0.25 \\
+456 & days90 & recovery\_days & 0.24 & 0.22 \\
+456 & days90 & n\_pads & 0.23 & 0.25 \\
+456 & days90 & closure\_launch\_cv & 0.20 & 0.18 \\
+456 & days90 & closure\_launch\_mean\_h & 0.19 & 0.27 \\
+456 & days90 & scrub\_probability & 0.19 & 0.21 \\
+456 & days90 & boom\_scale & 0.19 & 0.22 \\
+456 & days90 & anomaly\_probability & 0.19 & 0.17 \\
+456 & days90 & static\_fires\_per\_launch & 0.16 & 0.10 \\
+456 & days90 & window\_days & 0.15 & 0.15 \\
+456 & disturbed & recovery\_days & 1.05 & 0.21 \\
+456 & ldn & level\_offset\_db & 1.19 & 0.45 \\
+456 & ldn & night\_fraction & 0.28 & 0.21 \\
+456 & longest\_gap & level\_offset\_db & 0.89 & 1.90 \\
+456 & longest\_gap & external\_fraction & 0.88 & 0.85 \\
+456 & longest\_gap & n\_pads & 0.69 & 1.68 \\
+456 & longest\_gap & static\_fires\_per\_launch & 0.53 & 0.61 \\
+456 & longest\_gap & cluster\_spread\_days & 0.52 & 0.94 \\
+456 & longest\_gap & closure\_launch\_mean\_h & 0.52 & 1.02 \\
+456 & longest\_gap & p\_ss\_landing\_local & 0.44 & 0.70 \\
+456 & longest\_gap & boom\_scale & 0.33 & 0.31 \\
+456 & longest\_gap & closure\_launch\_cv & 0.32 & 1.22 \\
+456 & longest\_gap & turnaround\_min\_days & 0.26 & 0.56 \\
+456 & longest\_gap & cluster\_rate\_per\_year & 0.25 & 0.88 \\
+456 & longest\_gap & night\_fraction & 0.23 & 0.73 \\
+456 & longest\_gap & window\_days & 0.23 & 0.32 \\
+456 & longest\_gap & scrub\_probability & 0.20 & 0.50 \\
+456 & longest\_gap & anomaly\_probability & 0.18 & 0.44 \\
+456 & longest\_gap & recovery\_days & 0.13 & 0.31 \\
+456 & na100 & level\_offset\_db & 1.39 & 0.32 \\
+456 & na100 & scrub\_probability & 0.16 & 0.14 \\
+456 & na100 & recovery\_days & 0.15 & 0.12 \\
+456 & na100 & night\_fraction & 0.15 & 0.12 \\
+456 & na100 & boom\_scale & 0.14 & 0.08 \\
+456 & na100 & turnaround\_min\_days & 0.13 & 0.06 \\
+456 & na100 & anomaly\_probability & 0.12 & 0.05 \\
+456 & na100 & cluster\_spread\_days & 0.12 & 0.07 \\
+456 & na100 & cluster\_rate\_per\_year & 0.12 & 0.06 \\
+456 & na100 & closure\_launch\_cv & 0.12 & 0.06 \\
+456 & na100 & n\_pads & 0.11 & 0.08 \\
+456 & na100 & static\_fires\_per\_launch & 0.11 & 0.05 \\
+456 & na100 & p\_ss\_landing\_local & 0.11 & 0.10 \\
+456 & na100 & external\_fraction & 0.09 & 0.06 \\
+456 & na100 & window\_days & 0.08 & 0.05 \\
+456 & na100 & closure\_launch\_mean\_h & 0.08 & 0.04 \\
+456 & weekend\_avail & closure\_launch\_mean\_h & 0.50 & 0.38 \\
+456 & weekend\_avail & scrub\_probability & 0.40 & 0.22 \\
+456 & weekend\_avail & external\_fraction & 0.37 & 0.25 \\
+456 & weekend\_avail & cluster\_spread\_days & 0.29 & 0.23 \\
+456 & weekend\_avail & level\_offset\_db & 0.29 & 0.30 \\
+456 & weekend\_avail & recovery\_days & 0.27 & 0.24 \\
+456 & weekend\_avail & night\_fraction & 0.25 & 0.21 \\
+456 & weekend\_avail & cluster\_rate\_per\_year & 0.23 & 0.26 \\
+456 & weekend\_avail & static\_fires\_per\_launch & 0.22 & 0.12 \\
+456 & weekend\_avail & boom\_scale & 0.20 & 0.17 \\
+456 & weekend\_avail & p\_ss\_landing\_local & 0.20 & 0.16 \\
+456 & weekend\_avail & turnaround\_min\_days & 0.20 & 0.21 \\
+456 & weekend\_avail & anomaly\_probability & 0.19 & 0.18 \\
+456 & weekend\_avail & n\_pads & 0.19 & 0.20 \\
+456 & weekend\_avail & window\_days & 0.16 & 0.15 \\
+456 & weekend\_avail & closure\_launch\_cv & 0.16 & 0.12 \\
+\hline
+\end{tabular}}
+\newcommand{\tableEmissions}{\begin{tabular}{llrrrr}
+\hline
+Site & Species & Launches/yr & p05 (t) & median (t) & p95 (t) \\
+\hline
+starbase\_phase2 & H2O & 456 & 571,698 & 745,993 & 945,437 \\
+starbase\_phase2 & CO2 & 456 & 725,758 & 983,890 & 1,333,663 \\
+starbase\_phase2 & CO & 456 & 11,097 & 111,819 & 225,894 \\
+starbase\_phase2 & NOx & 456 & 8,402 & 33,125 & 63,195 \\
+starbase\_phase2 & BC & 456 & 4,205 & 19,834 & 38,259 \\
+ksc\_lc39a & H2O & 44 & 55,152 & 71,914 & 92,009 \\
+ksc\_lc39a & CO2 & 44 & 69,239 & 94,652 & 126,388 \\
+ksc\_lc39a & CO & 44 & 1,044 & 10,858 & 21,610 \\
+ksc\_lc39a & NOx & 44 & 791 & 3,146 & 6,089 \\
+ksc\_lc39a & BC & 44 & 364 & 1,936 & 3,662 \\
+slc37 & H2O & 76 & 95,428 & 123,420 & 157,458 \\
+slc37 & CO2 & 76 & 121,887 & 164,845 & 219,861 \\
+slc37 & CO & 76 & 1,857 & 18,763 & 37,529 \\
+slc37 & NOx & 76 & 1,395 & 5,528 & 10,729 \\
+slc37 & BC & 76 & 594 & 3,319 & 6,312 \\
+fleet\_total & H2O & 576 & 730,843 & 942,164 & 1,183,408 \\
+fleet\_total & CO2 & 576 & 943,253 & 1,252,522 & 1,647,544 \\
+fleet\_total & CO & 576 & 37,926 & 141,265 & 261,153 \\
+fleet\_total & NOx & 576 & 16,145 & 41,933 & 73,460 \\
+fleet\_total & BC & 576 & 8,797 & 25,206 & 44,719 \\
 \hline
 \end{tabular}}
 % pipeline quick seed 20261207

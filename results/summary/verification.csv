@@ -1,0 +1,9 @@
+quantity,ea_value,reproduced,basis
+DNL 65 dB contour extent (miles),3-3.5,2.9082727538128976,"22 day + 3 night launches, 22 day landings of each vehicle, 11 static fires; SEL footprints"
+"DNL 65 dB overland contour radius, digitized Figure 21 (miles)",2.90,2.9082727538128976,same scenario; median radius over the overland sector of the digitized DNL contour
+"DNL 75 dB overland contour radius, digitized Figure 21 (miles)",1.50,1.4447715371712226,same scenario; median radius over the overland sector of the digitized DNL contour
+CDNL 60 dB contour extent (miles),5,5.973127538217552,44 daytime booms; FAA Desk Reference psf-to-CSEL conversion; fitted boom footprints
+annual NOX (short tons),98.03,98.03,"per-operation values from Table 3/4 divided by the stated activity counts, re-aggregated"
+annual CO (short tons),45,45.0,"per-operation values from Table 3/4 divided by the stated activity counts, re-aggregated"
+annual CO2E (metric tons),97342,97342.0,"per-operation values from Table 3/4 divided by the stated activity counts, re-aggregated"
+deluge water per operation (gallons),422000,422000.0,transcribed value

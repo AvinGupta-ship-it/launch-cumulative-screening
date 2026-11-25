@@ -1,0 +1,46 @@
+scenario,metric,mean,se,se_fraction
+scenario_existing,ldn|Piping plover critical habitat (near pad),68.27495455373445,0.015254999065001941,0.0002234347743577888
+scenario_existing,ldn|Port Isabel (nearest edge),58.58032034726741,0.015339715566200854,0.00026185782998908446
+scenario_existing,na100|Piping plover critical habitat (near pad),85.5206,0.1750975256202892,0.0020474309771012973
+scenario_existing,na100|Port Isabel (nearest edge),24.9566,0.05011569417138935,0.0020081138525035198
+scenario_existing,days90|Piping plover critical habitat (near pad),52.9064,0.10496154341738528,0.00198391013974463
+scenario_existing,days90|Port Isabel (nearest edge),43.7089,0.08511886160575755,0.0019474034259786346
+scenario_existing,disturbed|Port Isabel (nearest edge),0.007211866901091176,2.3667016623690057e-05,0.003281676845715105
+scenario_existing,disturbed|Piping plover critical habitat (near pad),0.008468676604452819,2.7503637919261232e-05,0.0032476901886653526
+scenario_existing,closure_h,460.3847928292362,0.9937537349558422,0.002158528583989178
+scenario_phase1,ldn|Piping plover critical habitat (near pad),78.70584013585727,0.005599624592215736,7.114624000645952e-05
+scenario_phase1,ldn|Port Isabel (nearest edge),69.03467589732163,0.005606122633462469,8.120734341971427e-05
+scenario_phase1,na100|Piping plover critical habitat (near pad),319.6385,0.32579640284172945,0.0010192652100473798
+scenario_phase1,na100|Port Isabel (nearest edge),100.1373,0.1009294979049967,0.0010079111170862077
+scenario_phase1,days90|Piping plover critical habitat (near pad),155.6822,0.13230484032369075,0.0008498392258311532
+scenario_phase1,days90|Port Isabel (nearest edge),144.2202,0.12375824338718058,0.0008581200371874437
+scenario_phase1,disturbed|Port Isabel (nearest edge),0.028644409759381807,4.5884382068517134e-05,0.0016018616705302778
+scenario_phase1,disturbed|Piping plover critical habitat (near pad),0.030888944076539103,4.986390927503541e-05,0.0016142963369508074
+scenario_phase1,closure_h,1627.8807370179056,1.6550707476003017,0.0010167027042977395
+scenario_phase2,ldn|Piping plover critical habitat (near pad),85.32612259109895,0.001556697819389173,1.82440942130841e-05
+scenario_phase2,ldn|Port Isabel (nearest edge),75.6549192656379,0.0015615957002999442,2.0641033199928525e-05
+scenario_phase2,na100|Piping plover critical habitat (near pad),1458.7486,0.09493745897227086,6.508143964783984e-05
+scenario_phase2,na100|Port Isabel (nearest edge),456.0,0.0,0.0
+scenario_phase2,days90|Piping plover critical habitat (near pad),317.6912,0.07637033127301383,0.00024039171142610762
+scenario_phase2,days90|Port Isabel (nearest edge),309.4349,0.07650791818599247,0.0002472504497262347
+scenario_phase2,disturbed|Port Isabel (nearest edge),0.139219722409304,5.7223705247595136e-05,0.00041103159995793025
+scenario_phase2,disturbed|Piping plover critical habitat (near pad),0.1494381531288347,6.0362706170209685e-05,0.00040393102368020667
+scenario_phase2,closure_h,5175.57109912446,1.0588332762424792,0.0002045828867893632
+scenario_phase2_clustered,ldn|Piping plover critical habitat (near pad),85.28905598221722,0.006219138814707308,7.29183685185119e-05
+scenario_phase2_clustered,ldn|Port Isabel (nearest edge),75.61797165966001,0.006220508410485371,8.226230185705749e-05
+scenario_phase2_clustered,na100|Piping plover critical habitat (near pad),1456.5503,1.987057217754351,0.0013642214880971505
+scenario_phase2_clustered,na100|Port Isabel (nearest edge),456.4881,0.6223225002909961,0.0013632830741721331
+scenario_phase2_clustered,days90|Piping plover critical habitat (near pad),275.8956,0.1921957439289394,0.0006966248969861767
+scenario_phase2_clustered,days90|Port Isabel (nearest edge),257.004,0.19662071195689695,0.0007650492286380637
+scenario_phase2_clustered,disturbed|Port Isabel (nearest edge),0.11937233116492041,0.00021239171944228822,0.001779237427715604
+scenario_phase2_clustered,disturbed|Piping plover critical habitat (near pad),0.1285516820153239,0.00022827714814183429,0.0017757616591482846
+scenario_phase2_clustered,closure_h,4353.105236666438,4.118282637274487,0.000946056300818545
+scenario_phase2_hypothetical_upscaled_vehicle,ldn|Piping plover critical habitat (near pad),91.32542118226577,0.0015756665988813081,1.7253318719840544e-05
+scenario_phase2_hypothetical_upscaled_vehicle,ldn|Port Isabel (nearest edge),81.65421812388612,0.0015805428492591713,1.93565364481375e-05
+scenario_phase2_hypothetical_upscaled_vehicle,na100|Piping plover critical habitat (near pad),1458.6928,0.09707618242658418,6.655012105810365e-05
+scenario_phase2_hypothetical_upscaled_vehicle,na100|Port Isabel (nearest edge),911.9995,0.0002235620674439204,2.451339802751212e-07
+scenario_phase2_hypothetical_upscaled_vehicle,days90|Piping plover critical habitat (near pad),317.6685,0.07776146513245463,0.00024478808925799896
+scenario_phase2_hypothetical_upscaled_vehicle,days90|Port Isabel (nearest edge),317.6685,0.07776146513245463,0.00024478808925799896
+scenario_phase2_hypothetical_upscaled_vehicle,disturbed|Port Isabel (nearest edge),0.1494423872000977,6.114250278234042e-05,0.0004091376210450448
+scenario_phase2_hypothetical_upscaled_vehicle,disturbed|Piping plover critical habitat (near pad),0.14951593045746336,6.035361047680676e-05,0.0004036600668045677
+scenario_phase2_hypothetical_upscaled_vehicle,closure_h,5174.342609726684,1.0543505234659374,0.000203765116265007

@@ -1,0 +1,17 @@
+name,low,high,source_rank,note
+night_fraction,0.0,0.5,1,NOI assumes 0.5; existing licence 3 of 25 launches
+scrub_probability,0.0,0.4,5,hypothetical
+turnaround_min_days,0.25,1.5,5,hypothetical same-pad turnaround
+n_pads,1.0,2.999,5,hypothetical; floored to integer
+cluster_rate_per_year,20.0,150.0,5,hypothetical campaign count
+cluster_spread_days,0.5,5.0,5,hypothetical
+level_offset_db,-3.0,6.0,5,hypothetical vehicle-variant scaling
+boom_scale,0.7,1.5,5,hypothetical vehicle-variant scaling
+closure_launch_mean_h,5.0,25.0,1,brackets the Flight 1-4 record (7.75-24.5 h)
+closure_launch_cv,0.2,0.8,5,hypothetical
+anomaly_probability,0.0,0.1,5,hypothetical
+static_fires_per_launch,0.0,0.5,5,hypothetical
+external_fraction,0.0,1.0,1,NOI: landings regardless of launch origin up to 912
+p_ss_landing_local,0.5,1.0,5,hypothetical share of Starship landings at the site
+recovery_days,0.0007,1.0,3,literature range: seconds to resume feeding (Collop et al. 2016) to hours (van der Kolk et al. 2020)
+window_days,0.02,2.0,5,hypothetical required undisturbed window

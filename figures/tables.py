@@ -203,6 +203,106 @@ def table_aggregation_errors() -> str:
     return "\n".join(out)
 
 
+def table_receptors() -> str:
+    rec = read_csv("receptors_used.csv")
+    out = [r"\begin{tabular}{lrrl}", r"\hline", r"Receptor & $r$ (km) & azimuth (deg) & kind \\", r"\hline"]
+    for _, r in rec.iterrows():
+        out.append(f"{esc(r['name'])} & {float(r['r_km']):.1f} & {float(r['azimuth_deg']):.0f} & {esc(r['kind'])} \\\\")
+    out += [r"\hline", r"\end{tabular}"]
+    return "\n".join(out)
+
+
+def table_factor_ranges() -> str:
+    f = read_csv("e6_factor_ranges.csv")
+    out = [r"\begin{tabular}{lrrrp{7cm}}", r"\hline", r"Factor & low & high & rank & note \\", r"\hline"]
+    for _, r in f.iterrows():
+        out.append(
+            f"{esc(r['name'])} & {float(r['low']):g} & {float(r['high']):g} & {int(r['source_rank'])} & {esc(r['note'])} \\\\"
+        )
+    out += [r"\hline", r"\end{tabular}"]
+    return "\n".join(out)
+
+
+def table_temporal_models() -> str:
+    d = read_csv("e2_differences.csv")
+    top = d["cadence"].max()
+    d = d[d["cadence"] == top]
+    keep = [
+        f"days90|{COMMUNITY_SPI}",
+        f"disturbed|{HABITAT}",
+        f"longest_gap|{HABITAT}",
+        f"has_window|{HABITAT}",
+        "weekend_avail",
+        "summer_avail",
+        "closure_h",
+    ]
+    labels = {
+        f"days90|{COMMUNITY_SPI}": "Days $>90$ dBA, S. Padre Island edge",
+        f"disturbed|{HABITAT}": "Disturbed fraction, habitat (1 h recovery)",
+        f"longest_gap|{HABITAT}": "Longest gap, habitat (d)",
+        f"has_window|{HABITAT}": "P(4 h window), habitat",
+        "weekend_avail": "Weekend daylight available",
+        "summer_avail": "Summer daylight available",
+        "closure_h": "Closure hours",
+    }
+    out = [
+        r"\begin{tabular}{llrrr}",
+        r"\hline",
+        f"Metric at {int(top)} launches/yr & Model & Mean & Difference vs Poisson & 95\\% interval \\\\",
+        r"\hline",
+    ]
+    for m in keep:
+        for _, r in d[d["metric"] == m].iterrows():
+            out.append(
+                f"{labels[m]} & {esc(r['model'])} & {fmtnum(float(r['mean']), 3)} & {fmtnum(float(r['diff_vs_poisson']), 3)} & ({fmtnum(float(r['ci_lo']), 3)}, {fmtnum(float(r['ci_hi']), 3)}) \\\\"
+            )
+    out += [r"\hline", r"\end{tabular}"]
+    return "\n".join(out)
+
+
+def table_cap_probabilities() -> str:
+    t = read_csv("e4_cap_probabilities.csv")
+    out = [
+        r"\begin{tabular}{lrrrrrr}",
+        r"\hline",
+        r"Distribution & Cadence & Mean h & $P(H>500)$ & $P(H>800)$ & $P(H>2000)$ & Weekend avail. \\",
+        r"\hline",
+    ]
+    for _, r in t.iterrows():
+        out.append(
+            f"{esc(r['distribution'])} & {int(r['cadence'])} & {fmtnum(float(r['closure_anom_h_mean']))} & {float(r['p_exceed_500']):.3f} & {float(r['p_exceed_800']):.3f} & {float(r['p_exceed_2000']):.3f} & {float(r['weekend_avail']):.3f} \\\\"
+        )
+    out += [r"\hline", r"\end{tabular}"]
+    return "\n".join(out)
+
+
+def table_dominant_factors() -> str:
+    d = read_csv("e6_dominant_factors.csv")
+    out = [r"\begin{tabular}{rllrr}", r"\hline", r"Cadence & Output & Factor & $S_T$ & 95\% half-width \\", r"\hline"]
+    for _, r in d.iterrows():
+        out.append(
+            f"{int(r['cadence'])} & {esc(r['output'])} & {esc(r['factor'])} & {float(r['ST']):.2f} & {float(r['ST_conf']):.2f} \\\\"
+        )
+    out += [r"\hline", r"\end{tabular}"]
+    return "\n".join(out)
+
+
+def table_emissions() -> str:
+    e = read_csv("e8_emissions.csv")
+    out = [
+        r"\begin{tabular}{llrrrr}",
+        r"\hline",
+        r"Site & Species & Launches/yr & p05 (t) & median (t) & p95 (t) \\",
+        r"\hline",
+    ]
+    for _, r in e.iterrows():
+        out.append(
+            f"{esc(r['site'])} & {esc(r['species'])} & {int(r['launches_per_year'])} & {fmtnum(float(r['p05_t']))} & {fmtnum(float(r['median_t']))} & {fmtnum(float(r['p95_t']))} \\\\"
+        )
+    out += [r"\hline", r"\end{tabular}"]
+    return "\n".join(out)
+
+
 def main() -> None:
     s = summary()
     parts = [
@@ -212,6 +312,12 @@ def main() -> None:
         r"\newcommand{\tableMetricDefinitions}{" + table_metric_definitions() + "}",
         r"\newcommand{\tableVerification}{" + table_verification() + "}",
         r"\newcommand{\tableAggregationErrors}{" + table_aggregation_errors() + "}",
+        r"\newcommand{\tableReceptors}{" + table_receptors() + "}",
+        r"\newcommand{\tableFactorRanges}{" + table_factor_ranges() + "}",
+        r"\newcommand{\tableTemporalModels}{" + table_temporal_models() + "}",
+        r"\newcommand{\tableCapProbabilities}{" + table_cap_probabilities() + "}",
+        r"\newcommand{\tableDominantFactors}{" + table_dominant_factors() + "}",
+        r"\newcommand{\tableEmissions}{" + table_emissions() + "}",
         f"% pipeline {s.get('pipeline_name')} seed {s.get('seed')}",
     ]
     OUT.parent.mkdir(parents=True, exist_ok=True)

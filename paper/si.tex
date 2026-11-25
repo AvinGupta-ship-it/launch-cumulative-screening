@@ -7,7 +7,6 @@
 \usepackage{siunitx}
 \usepackage{hyperref}
 \usepackage{natbib}
-\usepackage{csvsimple}
 \graphicspath{{figures/}}
 \input{generated/values.tex}
 \input{generated/tables.tex}
@@ -27,13 +26,7 @@
 \begin{table}[htbp]
 \caption{Receptors used in the analysis (distance and azimuth from the pad reference point). Derivations are given in \texttt{data/processed/receptors.csv}.}
 \centering\footnotesize
-\begin{tabular}{lrrl}
-\toprule
-Receptor & $r$ (km) & azimuth (deg) & kind \\
-\midrule
-\csvreader[late after line=\\, respect underscore=true, respect percent=true]{../results/summary/receptors_used.csv}{name=\name, r_km=\rkm, azimuth_deg=\az, kind=\kind}{\name & \rkm & \az & \kind}
-\bottomrule
-\end{tabular}
+\tableReceptors
 \end{table}
 
 \begin{table}[htbp]
@@ -67,13 +60,7 @@ Monte Carlo standard errors of every headline quantity are listed in \texttt{mon
 \begin{table}[htbp]
 \caption{Sensitivity-analysis factors, ranges, source rank and notes. Rank 5 denotes a hypothetical range.}
 \centering\scriptsize
-\begin{tabular}{lrrrl}
-\toprule
-Factor & low & high & rank & note \\
-\midrule
-\csvreader[late after line=\\, respect underscore=true, respect percent=true]{../results/summary/e6_factor_ranges.csv}{name=\fname, low=\lo, high=\hi, source_rank=\rk, note=\nt}{\fname & \lo & \hi & \rk & \nt}
-\bottomrule
-\end{tabular}
+\tableFactorRanges
 \end{table}
 
 \section{Additional results}
@@ -81,49 +68,25 @@ Factor & low & high & rank & note \\
 \begin{table}[htbp]
 \caption{Differences between temporal models at fixed count (bootstrap 95\% intervals), from \texttt{e2\_differences.csv}.}
 \centering\scriptsize
-\begin{tabular}{rllrrrr}
-\toprule
-Cadence & Model & Metric & Mean & Diff vs Poisson & CI low & CI high \\
-\midrule
-\csvreader[late after line=\\, respect underscore=true, respect percent=true, filter expr={test{\ifnumequal{\thecsvinputline}{1}}} ]{../results/summary/e2_differences.csv}{cadence=\cad, model=\mdl, metric=\met, mean=\mn, diff_vs_poisson=\df, ci_lo=\cl, ci_hi=\ch}{\cad & \mdl & \met & \mn & \df & \cl & \ch}
-\bottomrule
-\end{tabular}
+\tableTemporalModels
 \end{table}
 
 \begin{table}[htbp]
 \caption{Probability that annual access-restriction hours exceed each cap, by per-launch closure distribution and cadence (Monte Carlo standard errors in the CSV).}
 \centering\scriptsize
-\begin{tabular}{lrrrrrr}
-\toprule
-Distribution & Cadence & Mean h & $P(H>500)$ & $P(H>800)$ & $P(H>2000)$ & Weekend avail. \\
-\midrule
-\csvreader[late after line=\\, respect underscore=true, respect percent=true]{../results/summary/e4_cap_probabilities.csv}{distribution=\dist, cadence=\cad, closure_anom_h_mean=\mh, p_exceed_500=\pa, p_exceed_800=\pb, p_exceed_2000=\pc, weekend_avail=\wa}{\dist & \cad & \mh & \pa & \pb & \pc & \wa}
-\bottomrule
-\end{tabular}
+\tableCapProbabilities
 \end{table}
 
 \begin{table}[htbp]
 \caption{Factors with total-order Sobol index above 0.05, by output and cadence.}
 \centering\scriptsize
-\begin{tabular}{rllrr}
-\toprule
-Cadence & Output & Factor & $S_T$ & 95\% half-width \\
-\midrule
-\csvreader[late after line=\\, respect underscore=true, respect percent=true]{../results/summary/e6_dominant_factors.csv}{cadence=\cad, output=\outp, factor=\fac, ST=\st, ST_conf=\stc}{\cad & \outp & \fac & \st & \stc}
-\bottomrule
-\end{tabular}
+\tableDominantFactors
 \end{table}
 
 \begin{table}[htbp]
 \caption{Fleet emissions above the tropopause (tonnes per year; median and 5th--95th percentiles of the input ranges).}
 \centering\scriptsize
-\begin{tabular}{llrrrr}
-\toprule
-Site & Species & Launches/yr & p05 & median & p95 \\
-\midrule
-\csvreader[late after line=\\, respect underscore=true, respect percent=true]{../results/summary/e8_emissions.csv}{site=\site, species=\sp, launches_per_year=\lpy, p05_t=\pa, median_t=\pm, p95_t=\pb}{\site & \sp & \lpy & \pa & \pm & \pb}
-\bottomrule
-\end{tabular}
+\tableEmissions
 \end{table}
 
 \begin{figure}[htbp]

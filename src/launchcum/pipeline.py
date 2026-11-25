@@ -1013,9 +1013,27 @@ def derived_values(values: dict[str, Any], out: Path) -> dict[str, Any]:
 
 
 def macro_name(key: str) -> str:
-    parts = re.split(r"[^A-Za-z0-9]+", key)
-    name = "val" + "".join(p[:1].upper() + p[1:] for p in parts if p)
-    return re.sub(r"\d", lambda m: "ZOTTFFSSEN"[int(m.group())], name)
+    """LaTeX macro name for a value key: letters only, digits spelled out.
+
+    ``e1_n456_days90_spi`` becomes ``valEOneNFourFiveSixDaysNineZeroSpi``;
+    a letter following a digit is capitalised so that ``tau1h`` reads ``TauOneH``.
+    """
+    words = ("Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine")
+    out = ["val"]
+    for part in re.split(r"[^A-Za-z0-9]+", key):
+        if not part:
+            continue
+        prev_digit = False
+        chars = []
+        for i, ch in enumerate(part):
+            if ch.isdigit():
+                chars.append(words[int(ch)])
+                prev_digit = True
+            else:
+                chars.append(ch.upper() if (i == 0 or prev_digit) else ch)
+                prev_digit = False
+        out.append("".join(chars))
+    return "".join(out)
 
 
 def fmt(v: Any) -> str:
