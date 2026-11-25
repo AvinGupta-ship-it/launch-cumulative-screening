@@ -11,7 +11,8 @@ build/
 dist/
 
 # large raw inputs fetched on demand (see data/MANIFEST.yaml)
-data/raw/gis/
+data/raw/gis/*
+!data/raw/gis/ch_red_knot_proposed.geojson
 data/raw/faa/2022_final_pea_starship_super_heavy.pdf
 data/processed/_tmp_place/
 

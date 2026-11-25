@@ -199,7 +199,8 @@ items:
     sha256: f0004233ab4363e57e3ef6f6b9abdc2dd800d390b1f87b330bd406dce23820b5
     license: U.S. Government work, public domain
     source_rank: 2
-    fetch_on_demand: true
+    fetch_on_demand: false
+    note: Archived copy committed with the repository (retrieved November 24, 2026) because the feature covers the Atlantic and Gulf coasts and the service's shared quota for large-geometry requests makes on-demand retrieval unreliable.
   gis/nwr_lower_rio_grande_valley.geojson:
     organization: U.S. Fish and Wildlife Service, National Wildlife Refuge System boundaries feature service
     url: https://services.arcgis.com/QVENGdaPbd4LUkLV/arcgis/rest/services/National_Wildlife_Refuge_System_Boundaries/FeatureServer/0/query
