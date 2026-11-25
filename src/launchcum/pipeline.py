@@ -333,7 +333,7 @@ class Runner:
         }
         sub0 = raw[(raw["external_fraction"] == 0.0)]
         for metric, cls in metrics.items():
-            if metric not in sub0:
+            if metric not in sub0 or cls in ("window", "gap", "availability"):
                 continue
             g = sub0.groupby("cadence")[metric]
             mean = g.mean()
@@ -367,7 +367,7 @@ class Runner:
         rng = np.random.default_rng(self.seed.spawn(1)[0])
         ci_rows = []
         for metric, cls in metrics.items():
-            if metric not in sub0 or cls == "energy":
+            if metric not in sub0 or cls in ("energy", "window", "gap", "availability"):
                 continue
             a = sub0[sub0["cadence"] == ref][metric].to_numpy(float)
             for n_l in e.cadences:

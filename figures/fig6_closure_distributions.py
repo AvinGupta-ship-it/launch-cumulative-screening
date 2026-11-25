@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import matplotlib.pyplot as plt
 import numpy as np
+
 from common import OI, SERIES, read_csv, read_parquet, save
 
 
@@ -30,7 +31,14 @@ def main() -> None:
     ax = axes[1]
     for d, col in zip(dists, SERIES, strict=False):
         t = tab[tab["distribution"] == d].sort_values("cadence")
-        ax.plot(t["cadence"], t["closure_anom_h_mean"], marker="o", markersize=3, color=col, label=f"{d.replace('_', ' ')} (mean {t['mean_h'].iloc[0]:g} h/launch)")
+        ax.plot(
+            t["cadence"],
+            t["closure_anom_h_mean"],
+            marker="o",
+            markersize=3,
+            color=col,
+            label=f"{d.replace('_', ' ')} (mean {t['mean_h'].iloc[0]:g} h/launch)",
+        )
     for cap, ls in ((500, ":"), (800, "--"), (2000, "-")):
         ax.axhline(cap, color="gray", linestyle=ls, linewidth=0.8)
         ax.annotate(f"{cap} h", (30, cap * 1.05), fontsize=5.5, color="gray")
@@ -43,14 +51,21 @@ def main() -> None:
     cad = np.linspace(25, 456, 100)
     for cap, ls in ((500, ":"), (800, "--"), (2000, "-")):
         ax.plot(cad, cap / cad, color=OI["blue"], linestyle=ls, label=f"{cap} h cap")
-    for hrs, lab, col in ((24.5, "Flight 1 (24.5 h)", OI["vermillion"]), (10.5, "Flight 2 (10.5 h)", OI["orange"]), (7.75, "Flight 4 (7.75 h)", OI["green"])):
+    for hrs, lab, col in (
+        (24.5, "Flight 1 (24.5 h)", OI["vermillion"]),
+        (10.5, "Flight 2 (10.5 h)", OI["orange"]),
+        (7.75, "Flight 4 (7.75 h)", OI["green"]),
+    ):
         ax.axhline(hrs, color=col, linewidth=0.8, label=lab)
     ax.set_yscale("log")
     ax.set_xlabel("launches per year")
     ax.set_ylabel("closure budget per launch (h)")
     ax.set_title("Cap divided by cadence vs recorded per-launch hours", fontsize=6.5)
     ax.legend(fontsize=5)
-    fig.suptitle("Public-access restriction hours: Monte Carlo distributions (hypothetical per-event closure parameters bracketing the FAA record)", fontsize=7)
+    fig.suptitle(
+        "Public-access restriction hours: Monte Carlo distributions (hypothetical per-event closure parameters bracketing the FAA record)",
+        fontsize=7,
+    )
     fig.tight_layout()
     save(fig, "fig6_closure_distributions")
 

@@ -104,7 +104,7 @@ def realization_metrics(
         out[f"disturbed|{nm}"] = cov.disturbed_fraction
         out[f"longest_gap|{nm}"] = cov.longest_gap_days
         out[f"has_window|{nm}"] = float(cov.has_window[spec.window_days])
-        out[f"n_dist|{nm}"] = float(t.shape[0])
+        out[f"n_dist|{nm}"] = float(np.sum((t >= spec.season[0]) & (t < spec.season[1])))
     acc = access_metrics(real, cal, spec.apply_pea_measures)
     out["closure_h"] = acc.closure_hours
     out["closure_anom_h"] = acc.closure_hours_with_anomaly
@@ -395,7 +395,7 @@ def e5_coverage(
                 "recovery_days": tau,
                 "disturbed": cov.disturbed_fraction,
                 "longest_gap": cov.longest_gap_days,
-                "n_events": t.shape[0],
+                "n_events": int(np.sum((t >= season[0]) & (t < season[1]))),
             }
             for w in window_days:
                 row[f"has_window|{w:g}"] = float(cov.has_window[w])

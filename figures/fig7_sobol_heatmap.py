@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import matplotlib.pyplot as plt
 import numpy as np
+
 from common import read_csv, save
 
 OUTPUT_LABELS = {
@@ -27,7 +28,9 @@ def main() -> None:
     fig, axes = plt.subplots(1, len(cads), figsize=(7.2, 3.6), sharey=True)
     for ax, c in zip(np.atleast_1d(axes), cads, strict=True):
         sub = si[si["cadence"] == c]
-        z = np.array([[float(sub[(sub["output"] == o) & (sub["factor"] == f)]["ST"].iloc[0]) for f in factors] for o in outputs])
+        z = np.array(
+            [[float(sub[(sub["output"] == o) & (sub["factor"] == f)]["ST"].iloc[0]) for f in factors] for o in outputs]
+        )
         im = ax.imshow(np.clip(z, 0, 1), cmap="viridis", vmin=0, vmax=1, aspect="auto")
         ax.set_xticks(range(len(factors)))
         ax.set_xticklabels([f.replace("_", " ") for f in factors], rotation=90, fontsize=5.5)
@@ -36,10 +39,21 @@ def main() -> None:
         ax.set_title(f"{int(c)} launches/yr", fontsize=7)
         for i in range(len(outputs)):
             for j in range(len(factors)):
-                if z[i, j] > 0.05:
-                    ax.text(j, i, f"{z[i, j]:.2f}", ha="center", va="center", fontsize=4.5, color="white" if z[i, j] < 0.6 else "black")
+                if z[i, j] >= 0.3:
+                    ax.text(
+                        j,
+                        i,
+                        f"{min(z[i, j], 1.0):.1f}",
+                        ha="center",
+                        va="center",
+                        fontsize=4.5,
+                        color="white" if z[i, j] < 0.6 else "black",
+                    )
     fig.colorbar(im, ax=axes, shrink=0.7, pad=0.02, label="total-order Sobol index $S_T$")
-    fig.suptitle("Dominant uncertainties by metric and cadence (campaign timing on business days; inputs sampled over documented ranges)", fontsize=7)
+    fig.suptitle(
+        "Dominant uncertainties by metric and cadence (campaign timing on business days; inputs sampled over documented ranges)",
+        fontsize=7,
+    )
     save(fig, "fig7_sobol_heatmap")
 
 

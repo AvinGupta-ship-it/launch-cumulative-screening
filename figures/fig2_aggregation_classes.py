@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import matplotlib.pyplot as plt
 import numpy as np
-from common import OI, save
 
+from common import OI, save
 from launchcum import closed_form as cf
 
 
@@ -21,7 +21,12 @@ def main() -> None:
 
     ax = axes[1]
     ax.plot(n, 10 * np.log10(n / n0), color=OI["blue"], label="count term")
-    ax.plot(n, 10 * np.log10(n / n0) + cf.ldn_night_term(0.12, 0.5), color=OI["vermillion"], label="with night share 0.12 to 0.5")
+    ax.plot(
+        n,
+        10 * np.log10(n / n0) + cf.ldn_night_term(0.12, 0.5),
+        color=OI["vermillion"],
+        label="with night share 0.12 to 0.5",
+    )
     ax.set_title("(ii) Energy-averaged: $L_{dn}$ change (dB)")
     ax.legend(fontsize=5.5, loc="lower right")
 
@@ -44,7 +49,11 @@ def main() -> None:
 
     for ax in axes:
         ax.set_xlabel("events per year")
-    fig.suptitle("Scaling of the four aggregation classes under Poisson operations (schematic; dotted = linear extrapolation)", fontsize=7.5, y=1.04)
+    fig.suptitle(
+        "Scaling of the four aggregation classes under Poisson operations (schematic; dotted = linear extrapolation)",
+        fontsize=7.5,
+        y=1.04,
+    )
     save(fig, "fig2_aggregation_classes")
 
 

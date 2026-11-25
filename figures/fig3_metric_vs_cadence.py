@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import matplotlib.pyplot as plt
 import numpy as np
+
 from common import COMMUNITY_EDGE, COMMUNITY_SPI, HABITAT, OI, read_parquet, save
 
 
@@ -32,15 +33,32 @@ def main() -> None:
         ax.fill_between(cad, lo, hi, color=OI["blue"], alpha=0.15, linewidth=0)
         ax.plot(cad, mean, marker="o", color=OI["blue"], markersize=3, label="simulated mean (95% interval)")
         if mode == "linear":
-            ax.plot(cad, mean[0] * cad / ref, color=OI["vermillion"], linestyle="--", linewidth=1.0, label="linear extrapolation from 25/yr")
+            ax.plot(
+                cad,
+                mean[0] * cad / ref,
+                color=OI["vermillion"],
+                linestyle="--",
+                linewidth=1.0,
+                label="linear extrapolation from 25/yr",
+            )
         elif mode == "energy":
-            ax.plot(cad, mean[0] + 10 * np.log10(cad / ref), color=OI["vermillion"], linestyle="--", linewidth=1.0, label="energy-average extrapolation")
+            ax.plot(
+                cad,
+                mean[0] + 10 * np.log10(cad / ref),
+                color=OI["vermillion"],
+                linestyle="--",
+                linewidth=1.0,
+                label="energy-average extrapolation",
+            )
         ax.set_title(label, fontsize=7)
         ax.set_xlabel("launches per year")
         ax.set_xticks([25, 100, 200, 456])
     axes[0, 0].legend(fontsize=5.5, loc="upper left")
     axes[0, 1].legend(fontsize=5.5, loc="lower right")
-    fig.suptitle("Scaling with cadence (Poisson timing, 50% night share, no external landings); hypothetical closure parameters", fontsize=7.5)
+    fig.suptitle(
+        "Scaling with cadence (Poisson timing, 50% night share, no external landings); hypothetical closure parameters",
+        fontsize=7.5,
+    )
     fig.tight_layout()
     save(fig, "fig3_metric_vs_cadence")
 

@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import xarray as xr
+
 from common import OI, RESULTS, save
 
 
@@ -30,7 +31,15 @@ def main() -> None:
         ax.clabel(cs, fmt="%d", fontsize=5, inline=True)
         ax.plot(0, 0, marker="X", color=OI["vermillion"], markersize=6)
         comm = rec[rec["kind"] == "community"]
-        ax.plot((comm["x"] - pad_x) / 1000, (comm["y"] - pad_y) / 1000, "o", color="white", markersize=2.5, markeredgecolor="black", markeredgewidth=0.4)
+        ax.plot(
+            (comm["x"] - pad_x) / 1000,
+            (comm["y"] - pad_y) / 1000,
+            "o",
+            color="white",
+            markersize=2.5,
+            markeredgecolor="black",
+            markeredgewidth=0.4,
+        )
         ax.set_title(title, fontsize=7)
         ax.set_xlim(-30, 30)
         ax.set_ylim(-30, 30)
@@ -39,7 +48,10 @@ def main() -> None:
     axes[0].set_ylabel("km north of pad")
     cb = fig.colorbar(cf_, ax=axes, shrink=0.8, pad=0.02)
     cb.set_label("$L_{dn}$ (dB), expected-count field")
-    fig.suptitle("Day-night average level from fitted FAA single-event SEL footprints; white dots are community receptors", fontsize=7.5)
+    fig.suptitle(
+        "Day-night average level from fitted FAA single-event SEL footprints; white dots are community receptors",
+        fontsize=7.5,
+    )
     save(fig, "fig4_ldn_maps")
     _ = np.nan
 

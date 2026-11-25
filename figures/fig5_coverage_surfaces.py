@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import matplotlib.pyplot as plt
 import numpy as np
+
 from common import HABITAT, OI, SERIES, read_csv, save
 
 
@@ -44,18 +45,28 @@ def main() -> None:
     ws = [float(c.split("|")[1]) for c in wcols]
     top = s[(s["model"] == "weekday_renewal") & (s["cadence"] == max(cads))].sort_values("recovery_days")
     z = np.array([[1 - top[col].to_numpy()[i] for col in wcols] for i in range(len(top))])
-    im = ax.imshow(z, aspect="auto", origin="lower", cmap="magma", vmin=0, vmax=1,
-                   extent=[-0.5, len(ws) - 0.5, -0.5, len(top) - 0.5])
+    im = ax.imshow(
+        z,
+        aspect="auto",
+        origin="lower",
+        cmap="magma",
+        vmin=0,
+        vmax=1,
+        extent=[-0.5, len(ws) - 0.5, -0.5, len(top) - 0.5],
+    )
     ax.set_xticks(range(len(ws)))
-    ax.set_xticklabels([f"{w*24:g}h" if w < 1 else f"{w:g}d" for w in ws], fontsize=5.5)
+    ax.set_xticklabels([f"{w * 24:.0f} h" if w < 1 else f"{w:.0f} d" for w in ws], fontsize=5.5)
     ax.set_yticks(range(len(top)))
-    ax.set_yticklabels([f"{t*24:g}h" if t < 1 else f"{t:g}d" for t in top["recovery_days"]], fontsize=5.5)
+    ax.set_yticklabels([f"{t * 24:.2g} h" if t < 1 else f"{t:.0f} d" for t in top["recovery_days"]], fontsize=5.5)
     ax.set_xlabel("required undisturbed window $w$")
     ax.set_ylabel("recovery time $\\tau$")
     ax.set_title(f"P(no window $\\geq w$ in season), {int(max(cads))}/yr weekday", fontsize=6.5)
     fig.colorbar(im, ax=ax, shrink=0.8)
-    fig.suptitle("Disturbance-coverage regimes at the piping plover critical-habitat receptor (events > 90 dBA or > 1 psf); "
-                 "$\\tau$ and $w$ swept, not species-specific", fontsize=7)
+    fig.suptitle(
+        "Disturbance-coverage regimes at the piping plover critical-habitat receptor (events > 90 dBA or > 1 psf); "
+        "$\\tau$ and $w$ swept, not species-specific",
+        fontsize=7,
+    )
     fig.tight_layout()
     save(fig, "fig5_coverage_surfaces")
     _ = OI
