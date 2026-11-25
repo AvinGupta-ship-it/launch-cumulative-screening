@@ -564,11 +564,11 @@ class Runner:
         # gridded L_dn fields at 25/100/456 with the scenario night shares
         fields = {}
         areas = []
-        for n_l, fn, label in (
-            (25.0, 0.12, "existing"),
-            (100.0, 0.5, "phase1"),
-            (456.0, 0.5, "phase2"),
-            (456.0, 0.12, "phase2_fn012"),
+        for n_l, fn, label, scen in (
+            (25.0, 0.12, "existing", "scenario_existing"),
+            (100.0, 0.5, "phase1", "scenario_phase1"),
+            (456.0, 0.5, "phase2", "scenario_phase2"),
+            (456.0, 0.12, "phase2_fn012", "scenario_phase2"),
         ):
             n_day = np.zeros(5)
             n_night = np.zeros(5)
@@ -577,7 +577,7 @@ class Runner:
             for et in ("launch", "sh_landing", "ss_landing"):
                 n_day[TYPE_CODE[et]] = n_l * (1 - fn)
                 n_night[TYPE_CODE[et]] = n_l * fn
-            n_day[TYPE_CODE["static_fire"]] = n_l * self.base_params("scenario_phase1").static_fires_per_launch
+            n_day[TYPE_CODE["static_fire"]] = n_l * self.base_params(scen).static_fires_per_launch
             f = ex.grid_fields(self.lib, self.grid, n_day, n_night)
             fields[label] = f
             for thr in (55.0, 60.0, 65.0, 70.0):
@@ -996,6 +996,10 @@ def derived_values(values: dict[str, Any], out: Path) -> dict[str, Any]:
         d["mc_max_se_fraction_pct"] = 100.0 * float(values["mc_max_se_fraction"])
     if "conv_phase2_max_rel" in values:
         d["conv_phase2_max_rel_pct"] = 100.0 * abs(float(values["conv_phase2_max_rel"]))
+    if "conv_dnl65_rel" in values and "conv_cdnl60_rel" in values:
+        d["conv_verif_max_rel_pct"] = 100.0 * max(
+            abs(float(values["conv_dnl65_rel"])), abs(float(values["conv_cdnl60_rel"]))
+        )
     if "e1_ext_ldn_portisabel_1" in values and "e1_ext_ldn_portisabel_0" in values:
         d["e1_ext_ldn_delta_db"] = float(values["e1_ext_ldn_portisabel_1"]) - float(values["e1_ext_ldn_portisabel_0"])
     for key in (

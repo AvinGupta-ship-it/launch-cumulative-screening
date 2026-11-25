@@ -27,7 +27,9 @@ Three temporal models generate launch times (`launchcum.schedule`):
    the axis ($s$ = `renewal_slack`). Interval sets that do not fit the year are
    rejected and redrawn; the rejection count and a feasibility flag are
    returned. Positions on the business-day axis map to calendar days by
-   concatenating business days.
+   concatenating business days; the model therefore has day resolution, the
+   minimum same-pad turnaround is enforced in whole business days, and the
+   time of day is drawn independently (Section 1.2).
 3. **Campaign (Neyman–Scott).** Parent points arrive as a Poisson process with
    rate $\lambda_c$; each parent has $\mathrm{Poisson}(\bar n)$ offspring
    displaced by $\mathcal N(0, \sigma_c^2)$ days, with
@@ -35,16 +37,18 @@ Three temporal models generate launch times (`launchcum.schedule`):
    scenario is weekday-only, generated on the business-day axis.
 
 Each launch spawns a Super Heavy landing at $t_i + \Delta_{SH}$
-($\Delta_{SH}$ = 7 min; the EA states the booster lands about 10 min after
-launch) with probability $p_{SH}$, and a Starship landing on day
+($\Delta_{SH}$ = 10 min, the interval the 2025 EA states between launch and
+booster landing) with probability $p_{SH}$, and a Starship landing on day
 $\lfloor t_i + \Delta_{SS} \rfloor$ with $\Delta_{SS} \sim U(\Delta_{\min},
-\Delta_{\max})$ and an independent day/night draw, with probability $p_{SS}$.
+\Delta_{\max})$ and an independent day/night draw, with probability $p_{SS}$;
+a landing drawn earlier in the day than its launch is moved to the same time
+on the following day.
 Landings of vehicles launched elsewhere arrive as an independent Poisson
 process with mean $N_{ext}$ on the full calendar. Static fires precede each
 launch (Poisson number with mean `static_fires_per_launch`, daytime, 1–14 d
 before launch). Scrubbed attempts precede each launch as a geometric number of
-events with success probability $1 - p_s$, each 1–3 d before the previous
-attempt. Scrubs and static fires falling before 1 January are dropped.
+events with success probability $1 - p_s$, each an independent 1–3 d
+recycle interval before the next attempt. Scrubs and static fires falling before 1 January are dropped.
 
 The time of day of each event is drawn uniformly within its period. The night
 indicator is recomputed from the realized time so that Super Heavy landings
@@ -57,7 +61,8 @@ access-restriction window of lognormal duration $h$ with configured mean and
 coefficient of variation; Super Heavy landings are covered by the launch
 window. The window starts a fraction `lead_fraction` of $h$ before the event.
 Each launch independently triggers an anomaly with probability $p_a$ adding a
-fixed `anomaly_hours`. The launch-window mean (12.9 h) and the 5–25 h Sobol
+fixed `anomaly_hours` to the annual total; anomaly hours are not placed on the
+calendar and so do not enter the availability metrics. The launch-window mean (12.9 h) and the 5–25 h Sobol
 range bracket the per-launch hours stated in the 2025 Tiered EA for Flights
 1–4 (24.5, 10.5, 8.75, 7.75 h); the other closure parameters are
 hypothetical and are labelled so in the configuration files.
@@ -117,9 +122,13 @@ For a receptor $x$ and a realization:
   gap and the indicator that a gap of length $\ge w$ exists are computed by
   interval union. Closed form $\phi = 1 - e^{-\lambda E[\tau]}$
   ($M/G/\infty$ busy-period argument).
+- Additive: deluge water is 422,000 gal per launch, booster landing and
+  booster static fire in the 2025 EA; the model applies it to every static
+  fire because static fires are not split by vehicle, an upper bound.
 - Access: union length of closure windows (hours), anomaly hours, number of
-  windows, fraction of weekend-and-holiday daylight hours and of summer
-  (Memorial Day–Labor Day) daylight hours not inside a closure, and the
+  windows, fraction of weekend-and-holiday day-period hours (07:00–22:00) and
+  of summer (Memorial Day–Labor Day) day-period hours not inside a closure
+  (exact overlap of the merged windows with each clock hour), and the
   probability that annual hours exceed caps of 500, 800 and 2,000 h. With the
   2022 PEA measures applied, windows overlapping protected holidays or summer
   weekends are removed.
@@ -134,9 +143,13 @@ realizations accompany each error.
 
 ## 5. Sensitivity analysis
 
-Sixteen inputs are sampled uniformly over documented ranges with a Saltelli
-design ($N = 2^{13}$ base samples, first- and total-order indices, Jansen
-estimators as implemented in SALib, 200 bootstrap resamples). The model is the
+Sixteen inputs and the random-number seed of the realization are sampled
+uniformly over documented ranges with a Saltelli design ($N = 2^{13}$ base
+samples, first- and total-order indices, Jansen estimators as implemented in
+SALib, 200 bootstrap resamples). Treating the seed as a factor applies the same
+random numbers across the Saltelli matrices, so Monte Carlo noise is reported
+as the seed's own index instead of inflating the total-order indices of the
+model inputs. The model is the
 campaign generator on business days at 25, 100 and 456 launches per year; the
 outputs are $L_{dn}$, CDNL, number-above, exceedance days and boom counts at
 the Port Isabel edge receptor, disturbed fraction and longest gap at the

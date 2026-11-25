@@ -42,10 +42,10 @@ def main() -> None:
         ax.contour(x, y, ds[key].values, levels=[65.0], colors=[color], linewidths=1.3)
     ax.plot([], [], color=OI["blue"], label="DNL 65 dB, existing (25/yr)")
     ax.plot([], [], color=OI["vermillion"], label="DNL 65 dB, Phase 2 (456/yr, 50% night)")
-    cs2 = ax.contour(
-        x, y, ds["phase2_cdnl"].values, levels=[60.0], colors=[OI["green"]], linewidths=1.0, linestyles="dotted"
+    ax.contour(
+        x, y, ds["existing_cdnl"].values, levels=[60.0], colors=[OI["green"]], linewidths=1.0, linestyles="dotted"
     )
-    ax.plot([], [], color=OI["green"], linestyle="dotted", label="CDNL 60 dB, Phase 2")
+    ax.plot([], [], color=OI["green"], linestyle="dotted", label="CDNL 60 dB, existing (25/yr)")
 
     kinds = {
         "community": ("o", OI["black"]),

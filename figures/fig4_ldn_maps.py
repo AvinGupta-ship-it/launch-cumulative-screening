@@ -17,10 +17,10 @@ def main() -> None:
     x = (ds["x"].values - pad_x) / 1000.0
     y = (ds["y"].values - pad_y) / 1000.0
     cases = [
-        ("existing_ldn", "25/yr, 12% night (existing)"),
-        ("phase1_ldn", "100/yr, 50% night (Phase 1)"),
-        ("phase2_ldn", "456/yr, 50% night (Phase 2)"),
-        ("phase2_fn012_ldn", "456/yr, 12% night"),
+        ("existing_ldn", "Existing: 25/yr,\n12% night"),
+        ("phase1_ldn", "Phase 1: 100/yr,\n50% night"),
+        ("phase2_ldn", "Phase 2: 456/yr,\n50% night"),
+        ("phase2_fn012_ldn", "456/yr,\n12% night"),
     ]
     levels = [55, 60, 65, 70, 75]
     fig, axes = plt.subplots(1, 4, figsize=(7.2, 2.3), sharex=True, sharey=True)

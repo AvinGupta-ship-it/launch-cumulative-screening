@@ -14,6 +14,11 @@ from common import COMMUNITY_EDGE, COMMUNITY_SPI, HABITAT, ROOT, read_csv, summa
 OUT = ROOT / "paper" / "generated" / "tables.tex"
 
 
+def row(*cells: object) -> str:
+    """Join table cells into one LaTeX row."""
+    return " & ".join(str(c) for c in cells) + r" \\"
+
+
 def esc(s: object) -> str:
     return str(s).replace("_", r"\_").replace("%", r"\%").replace("&", r"\&")
 
@@ -65,9 +70,16 @@ def table_scenarios() -> str:
         ),
     ]
     out = [
-        r"\begin{tabular}{lrrrll}",
+        r"\begin{tabular}{p{2.6cm}rrrp{3.3cm}p{3.6cm}}",
         r"\hline",
-        r"Scenario & Launches/yr & SH landings/yr & SS landings/yr & Timing stated in the record & Model configuration \\",
+        row(
+            "Scenario",
+            "Launches/yr",
+            "SH landings/yr",
+            "SS landings/yr",
+            "Timing stated in the record",
+            "Model configuration",
+        ),
         r"\hline",
     ]
     for r in rows:
@@ -79,24 +91,39 @@ def table_scenarios() -> str:
 def table_per_operation() -> str:
     po = read_csv("per_operation_inputs.csv")
     fits = read_csv("footprint_fits.csv")
-    out = [r"\begin{tabular}{llrl}", r"\hline", r"Quantity & Event type & Value & Source \\", r"\hline"]
+    out = [r"\begin{tabular}{llrp{6.2cm}}", r"\hline", r"Quantity & Event type & Value & Source \\", r"\hline"]
     src = {
-        "deluge_gal": "2025 Tiered EA p.~39 (422,000 gal per operation)",
-        "co_tons": "2025 Tiered EA Table 3 / 25 operations",
-        "nox_tons": "2025 Tiered EA Table 3 / 25 operations",
-        "co2e_t": "2025 Tiered EA Table 4 / 25 operations (launch includes methane venting)",
+        "deluge_gal": "2025 Tiered EA p.~39 (422,000 gal per launch, booster landing or booster static fire; "
+        "applied to every static fire, an upper bound)",
+        "co_tons": "2025 Tiered EA Table 3 / {n}",
+        "nox_tons": "2025 Tiered EA Table 3 / {n}",
+        "co2e_t": "2025 Tiered EA Table 4 / {n} (launch includes methane venting)",
     }
+    sf = "11 static fires (Appendix B scenario)"
+    basis = {"static_fire": sf, "static_fire_ss": sf}
     for _, r in po.iterrows():
+        n = basis.get(str(r["event_type"]), "25 operations")
         out.append(
-            f"{esc(r['quantity'])} & {esc(r['event_type'])} & {fmtnum(float(r['value']))} & {src.get(r['quantity'], '')} \\\\"
+            row(
+                esc(r["quantity"]),
+                esc(r["event_type"]),
+                fmtnum(float(r["value"])),
+                src.get(r["quantity"], "").format(n=n),
+            )
         )
     out += [
         r"\hline",
-        r"\multicolumn{4}{l}{Footprint fits (digitized contours, monotone interpolation; law parameters for extrapolation):} \\",
+        r"\multicolumn{4}{l}{Footprint fits (digitized contours, monotone interpolation; "
+        r"law parameters for extrapolation):} \\",
     ]
     for _, r in fits.iterrows():
         out.append(
-            f"{esc(r['event_type'])} {esc(r['metric'])} & $L_0$ = {r['l0_db_at_1km']:.1f} dB at 1 km & $\\alpha$ = {r['alpha_db_per_km']:.2f} dB/km & {int(r['n_points'])} points, rms {r['rms_residual_db']:.1f} dB \\\\"
+            row(
+                f"{esc(r['event_type'])} {esc(r['metric'])}",
+                f"$L_0$ = {r['l0_db_at_1km']:.1f} dB at 1 km",
+                f"$\\alpha$ = {r['alpha_db_per_km']:.2f} dB/km",
+                f"{int(r['n_points'])} points, rms {r['rms_residual_db']:.1f} dB",
+            )
         )
     out += [r"\hline", r"\end{tabular}"]
     return "\n".join(out)
@@ -107,7 +134,7 @@ def table_metric_definitions() -> str:
         ("Additive", r"$M=\sum_i q_{m_i}$", r"$E[M]=\sum_\tau N_\tau \bar q_\tau$", "exact; linear"),
         (
             "Energy-averaged",
-            r"$L_{dn}=10\log_{10}\!\big[\tfrac{1}{T}\sum_i 10^{(L_{AE,i}+10\,\mathbb{1}_{n,i})/10}\big]$",
+            r"$L_{dn}=10\log_{10}\!\big[\tfrac{1}{T}\sum_i E_i\big]$, $E_i=10^{(L_{AE,i}+10\,\mathbb{1}_{n,i})/10}$",
             r"$+10\log_{10}(N_2/N_1)+10\log_{10}\tfrac{1+9f_{n,2}}{1+9f_{n,1}}$",
             "logarithmic in count",
         ),
@@ -144,7 +171,7 @@ def table_metric_definitions() -> str:
         ),
     ]
     out = [
-        r"\begin{tabular}{llll}",
+        r"\begin{tabular}{p{1.8cm}p{3.9cm}p{3.5cm}p{2.1cm}}",
         r"\hline",
         r"Class & Definition & Poisson closed form & Scaling with count \\",
         r"\hline",
@@ -157,7 +184,12 @@ def table_metric_definitions() -> str:
 
 def table_verification() -> str:
     vt = read_csv("verification.csv")
-    out = [r"\begin{tabular}{lrrl}", r"\hline", r"Quantity & 2025 EA value & Reproduced & Basis \\", r"\hline"]
+    out = [
+        r"\begin{tabular}{p{4cm}rrp{4.1cm}}",
+        r"\hline",
+        r"Quantity & 2025 EA value & Reproduced & Basis \\",
+        r"\hline",
+    ]
     for _, r in vt.iterrows():
         out.append(
             f"{esc(r['quantity'])} & {esc(r['ea_value'])} & {fmtnum(float(r['reproduced']))} & {esc(r['basis'])} \\\\"
@@ -172,7 +204,7 @@ def table_aggregation_errors() -> str:
     top = err["cadence"].max()
     e = err[err["cadence"] == top].merge(ci[ci["cadence"] == top], on=["metric", "cadence"], how="left")
     labels = {
-        "deluge_gal": "Deluge water (additive)",
+        "deluge_gal": "Deluge water (million gal, additive)",
         "nox_tons": "NO$_x$ (additive)",
         f"ldn|{COMMUNITY_EDGE}": "$L_{dn}$, Port Isabel edge (energy)",
         f"na100|{COMMUNITY_EDGE}": "Events $>100$ dBA, Port Isabel edge",
@@ -180,24 +212,31 @@ def table_aggregation_errors() -> str:
         f"days90|{COMMUNITY_SPI}": "Days $>90$ dBA, S. Padre Island edge",
         f"boom2|{COMMUNITY_EDGE}": "Booms $>2$ psf, Port Isabel edge",
         f"disturbed|{HABITAT}": "Disturbed fraction, habitat (1 h recovery)",
-        "closure_h": "Closure hours",
+        "closure_h": "Closure hours (operations)",
         "weekend_avail": "Weekend daylight availability",
     }
     out = [
-        r"\begin{tabular}{lrrrr}",
+        r"\begin{tabular}{p{3.3cm}rrrr}",
         r"\hline",
-        f"Metric at {int(top)} launches/yr & Simulated & Linear from 25/yr & Error & Relative error (95\\% CI) \\\\",
+        f"Metric at {int(top)}/yr & Simulated & Linear from 25/yr & Error & Rel. error \\% (95\\% CI) \\\\",
         r"\hline",
     ]
     for _, r in e.iterrows():
         if r["metric"] not in labels:
             continue
-        rel = "" if pd.isna(r["relative_error"]) else f"{100 * r['relative_error']:+.0f}\\%"
+        rel = "" if pd.isna(r["relative_error"]) else f"{100 * r['relative_error']:+.0f}"
         if not pd.isna(r.get("rel_error_lo", float("nan"))):
             rel += f" ({100 * r['rel_error_lo']:+.0f}, {100 * r['rel_error_hi']:+.0f})"
         unit = " dB" if "ldn" in r["metric"] else ""
+        scale = 1e-6 if r["metric"] == "deluge_gal" else 1.0
         out.append(
-            f"{labels[r['metric']]} & {fmtnum(float(r['simulated']))} & {fmtnum(float(r['linear_extrapolation']))} & {fmtnum(float(r['error']))}{unit} & {rel} \\\\"
+            row(
+                labels[r["metric"]],
+                fmtnum(float(r["simulated"]) * scale),
+                fmtnum(float(r["linear_extrapolation"]) * scale),
+                f"{fmtnum(float(r['error']) * scale)}{unit}",
+                rel,
+            )
         )
     out += [r"\hline", r"\end{tabular}"]
     return "\n".join(out)
@@ -217,7 +256,7 @@ def table_factor_ranges() -> str:
     out = [r"\begin{tabular}{lrrrp{7cm}}", r"\hline", r"Factor & low & high & rank & note \\", r"\hline"]
     for _, r in f.iterrows():
         out.append(
-            f"{esc(r['name'])} & {float(r['low']):g} & {float(r['high']):g} & {int(r['source_rank'])} & {esc(r['note'])} \\\\"
+            row(esc(r["name"]), f"{float(r['low']):g}", f"{float(r['high']):g}", int(r["source_rank"]), esc(r["note"]))
         )
     out += [r"\hline", r"\end{tabular}"]
     return "\n".join(out)
@@ -243,18 +282,19 @@ def table_temporal_models() -> str:
         f"has_window|{HABITAT}": "P(4 h window), habitat",
         "weekend_avail": "Weekend daylight available",
         "summer_avail": "Summer daylight available",
-        "closure_h": "Closure hours",
+        "closure_h": "Closure hours (operations)",
     }
     out = [
-        r"\begin{tabular}{llrrr}",
+        r"\begin{tabular}{p{4cm}lrrr}",
         r"\hline",
         f"Metric at {int(top)} launches/yr & Model & Mean & Difference vs Poisson & 95\\% interval \\\\",
         r"\hline",
     ]
     for m in keep:
         for _, r in d[d["metric"] == m].iterrows():
+            ci = f"({fmtnum(float(r['ci_lo']), 3)}, {fmtnum(float(r['ci_hi']), 3)})"
             out.append(
-                f"{labels[m]} & {esc(r['model'])} & {fmtnum(float(r['mean']), 3)} & {fmtnum(float(r['diff_vs_poisson']), 3)} & ({fmtnum(float(r['ci_lo']), 3)}, {fmtnum(float(r['ci_hi']), 3)}) \\\\"
+                row(labels[m], esc(r["model"]), fmtnum(float(r["mean"]), 3), fmtnum(float(r["diff_vs_poisson"]), 3), ci)
             )
     out += [r"\hline", r"\end{tabular}"]
     return "\n".join(out)
@@ -263,14 +303,22 @@ def table_temporal_models() -> str:
 def table_cap_probabilities() -> str:
     t = read_csv("e4_cap_probabilities.csv")
     out = [
-        r"\begin{tabular}{lrrrrrr}",
+        r"\begin{tabular}{p{2.8cm}rrrrrr}",
         r"\hline",
         r"Distribution & Cadence & Mean h & $P(H>500)$ & $P(H>800)$ & $P(H>2000)$ & Weekend avail. \\",
         r"\hline",
     ]
     for _, r in t.iterrows():
         out.append(
-            f"{esc(r['distribution'])} & {int(r['cadence'])} & {fmtnum(float(r['closure_anom_h_mean']))} & {float(r['p_exceed_500']):.3f} & {float(r['p_exceed_800']):.3f} & {float(r['p_exceed_2000']):.3f} & {float(r['weekend_avail']):.3f} \\\\"
+            row(
+                esc(str(r["distribution"]).replace("_", " ")),
+                int(r["cadence"]),
+                fmtnum(float(r["closure_anom_h_mean"])),
+                f"{float(r['p_exceed_500']):.3f}",
+                f"{float(r['p_exceed_800']):.3f}",
+                f"{float(r['p_exceed_2000']):.3f}",
+                f"{float(r['weekend_avail']):.3f}",
+            )
         )
     out += [r"\hline", r"\end{tabular}"]
     return "\n".join(out)
@@ -281,7 +329,13 @@ def table_dominant_factors() -> str:
     out = [r"\begin{tabular}{rllrr}", r"\hline", r"Cadence & Output & Factor & $S_T$ & 95\% half-width \\", r"\hline"]
     for _, r in d.iterrows():
         out.append(
-            f"{int(r['cadence'])} & {esc(r['output'])} & {esc(r['factor'])} & {float(r['ST']):.2f} & {float(r['ST_conf']):.2f} \\\\"
+            row(
+                int(r["cadence"]),
+                esc(r["output"]),
+                esc(r["factor"]),
+                f"{float(r['ST']):.2f}",
+                f"{float(r['ST_conf']):.2f}",
+            )
         )
     out += [r"\hline", r"\end{tabular}"]
     return "\n".join(out)
@@ -297,7 +351,14 @@ def table_emissions() -> str:
     ]
     for _, r in e.iterrows():
         out.append(
-            f"{esc(r['site'])} & {esc(r['species'])} & {int(r['launches_per_year'])} & {fmtnum(float(r['p05_t']))} & {fmtnum(float(r['median_t']))} & {fmtnum(float(r['p95_t']))} \\\\"
+            row(
+                esc(r["site"]),
+                esc(r["species"]),
+                int(r["launches_per_year"]),
+                fmtnum(float(r["p05_t"])),
+                fmtnum(float(r["median_t"])),
+                fmtnum(float(r["p95_t"])),
+            )
         )
     out += [r"\hline", r"\end{tabular}"]
     return "\n".join(out)

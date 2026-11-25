@@ -66,9 +66,12 @@ def inventory(
     f = inputs.f_stratosphere.sample(rng, n_samples)
     rows = []
     total: dict[str, FloatArray] = {s: np.zeros(n_samples) for s in inputs.ei_g_per_kg}
+    # One emission-index draw per species is shared by every site, since the
+    # sites fly the same vehicle; only the launch count differs.
+    ei_draw = {species: ei.sample(rng, n_samples) for species, ei in inputs.ei_g_per_kg.items()}
     for site in sites:
-        for species, ei in inputs.ei_g_per_kg.items():
-            e = site.launches_per_year * m * f * ei.sample(rng, n_samples) * 1e-3  # t
+        for species in inputs.ei_g_per_kg:
+            e = site.launches_per_year * m * f * ei_draw[species] * 1e-3  # t
             total[species] += e
             rows.append(_row(site.name, species, site.launches_per_year, e))
     n_fleet = sum(s.launches_per_year for s in sites)

@@ -51,7 +51,8 @@ def main() -> None:
                     )
     fig.colorbar(im, ax=axes, shrink=0.7, pad=0.02, label="total-order Sobol index $S_T$")
     fig.suptitle(
-        "Dominant uncertainties by metric and cadence (campaign timing on business days; inputs sampled over documented ranges)",
+        "Dominant uncertainties by metric and cadence "
+        "(campaign timing on business days; inputs sampled over documented ranges)",
         fontsize=7,
     )
     save(fig, "fig7_sobol_heatmap")

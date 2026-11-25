@@ -432,7 +432,11 @@ def _sobol_eval(args: tuple[SobolContext, FloatArray, list[np.random.SeedSequenc
     rows = []
     for i, (row, s) in enumerate(zip(x, seeds, strict=True)):
         v = dict(zip(names, row, strict=True))
-        rng = np.random.default_rng(s)
+        # The random seed is an explicit factor so that Monte Carlo noise is
+        # attributed to its own index instead of inflating the total-order
+        # indices of the model inputs (common random numbers across the
+        # Saltelli matrices).
+        rng = np.random.default_rng(int(v["random_seed"])) if "random_seed" in v else np.random.default_rng(s)
         closures = replace(
             ctx.base.closures,
             launch_mean_h=float(v.get("closure_launch_mean_h", ctx.base.closures.launch_mean_h)),

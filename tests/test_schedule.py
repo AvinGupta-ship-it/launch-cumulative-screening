@@ -93,3 +93,32 @@ def test_infeasible_turnaround_is_flagged():
     p = ScheduleParams(n_launches=456, model="weekday_renewal", weekday_only=True, n_pads=1, turnaround_min_days=2.0)
     real = generate(p, np.random.default_rng(1), cal)
     assert not real.feasible
+
+
+def test_generate_without_scrubs_or_static_fires() -> None:
+    from dataclasses import replace
+
+    from launchcum.opcalendar import build_calendar
+    from launchcum.schedule import TYPE_CODE, ScheduleParams, generate
+
+    p = replace(ScheduleParams(n_launches=30.0), scrub_probability=0.0, static_fires_per_launch=0.0)
+    real = generate(p, np.random.default_rng(3), build_calendar(2030))
+    assert not np.any(real.type_code == TYPE_CODE["scrub"])
+    assert not np.any(real.type_code == TYPE_CODE["static_fire"])
+    assert np.all(np.diff(real.t) >= 0)
+
+
+def test_scrub_attempts_recede_in_order_and_landings_follow_launches() -> None:
+    from dataclasses import replace
+
+    from launchcum.opcalendar import build_calendar
+    from launchcum.schedule import TYPE_CODE, ScheduleParams, generate
+
+    p = replace(ScheduleParams(n_launches=200.0), scrub_probability=0.5)
+    real = generate(p, np.random.default_rng(5), build_calendar(2030))
+    t_launch = real.t[real.type_code == TYPE_CODE["launch"]]
+    t_ss = real.t[(real.type_code == TYPE_CODE["ss_landing"]) & ~real.external]
+    # every local Starship landing follows some launch by at least the minimum delay
+    assert np.all(t_ss >= t_launch.min() + p.ss_landing_delay_days_min)
+    t_sc = real.t[real.type_code == TYPE_CODE["scrub"]]
+    assert np.all(t_sc < t_launch.max())

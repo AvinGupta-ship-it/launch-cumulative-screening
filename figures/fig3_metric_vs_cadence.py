@@ -22,7 +22,7 @@ def main() -> None:
         (f"boom2|{COMMUNITY_EDGE}", "Booms > 2 psf, Port Isabel edge", 1.0, "linear"),
         (f"disturbed|{HABITAT}", "Disturbed fraction, habitat receptor (1 h recovery)", 1.0, "linear"),
         (f"longest_gap|{HABITAT}", "Longest undisturbed gap in season (days)", 1.0, "none"),
-        ("closure_h", "Access-restriction hours per year", 1.0, "linear"),
+        ("closure_h", "Access-restriction hours per year (operations)", 1.0, "linear"),
         ("weekend_avail", "Weekend/holiday daylight available (fraction)", 1.0, "none"),
     ]
     fig, axes = plt.subplots(3, 3, figsize=(7.2, 6.2))

@@ -88,7 +88,7 @@ class ScheduleParams:
     cluster_spread_days: float = 2.0
     p_sh_landing_local: float = 1.0
     p_ss_landing_local: float = 1.0
-    sh_landing_delay_min: float = 7.0
+    sh_landing_delay_min: float = 10.0  # 2025 Tiered EA p. 25: about 10 minutes after launch
     ss_landing_delay_days_min: float = 0.04
     ss_landing_delay_days_max: float = 3.0
     n_external_landings: float = 0.0
@@ -231,7 +231,8 @@ def generate(params: ScheduleParams, rng: np.random.Generator, cal: OpCalendar |
     n_l = launch_day.shape[0]
     launch_night = np.asarray(rng.random(n_l) < p.night_fraction, dtype=bool)
     t_launch = launch_day + draw_time_of_day(rng, launch_night) / 24.0
-    t_launch.sort()
+    order = np.argsort(t_launch, kind="stable")
+    t_launch, pads = t_launch[order], pads[order]
 
     # Super Heavy landings a few minutes after lift-off.
     sh_mask = np.asarray(rng.random(n_l) < p.p_sh_landing_local, dtype=bool)
@@ -243,6 +244,8 @@ def generate(params: ScheduleParams, rng: np.random.Generator, cal: OpCalendar |
     ss_day = np.floor(t_launch[ss_mask] + delay)
     ss_night = np.asarray(rng.random(n_ss) < p.night_fraction, dtype=bool)
     t_ss = ss_day + draw_time_of_day(rng, ss_night) / 24.0
+    # A landing drawn earlier in the day than its launch moves to the same time next day.
+    t_ss = np.where(t_ss < t_launch[ss_mask] + p.ss_landing_delay_days_min, t_ss + 1.0, t_ss)
     # Landings of vehicles launched from other sites.
     n_ext = int(rng.poisson(p.n_external_landings)) if p.n_external_landings > 0 else 0
     if p.external_weekday_only:
@@ -266,8 +269,15 @@ def generate(params: ScheduleParams, rng: np.random.Generator, cal: OpCalendar |
     n_scrub_per = np.asarray(n_scrub_per, dtype=np.int64)
     sc_parent = np.repeat(np.arange(n_l), n_scrub_per)
     rlo, rhi = p.scrub_recycle_days
-    attempt_index = np.concatenate([np.arange(1, k + 1) for k in n_scrub_per]) if sc_parent.shape[0] else np.zeros(0)
-    t_sc = t_launch[sc_parent] - attempt_index * rng.uniform(rlo, rhi, size=sc_parent.shape[0])
+    # Each scrubbed attempt precedes the next attempt by an independent recycle interval.
+    recycle = rng.uniform(rlo, rhi, size=sc_parent.shape[0])
+    if recycle.shape[0]:
+        cum = np.cumsum(recycle)
+        group_start = np.cumsum(n_scrub_per) - n_scrub_per
+        base = np.where(group_start > 0, cum[np.maximum(group_start - 1, 0)], 0.0)
+        t_sc = t_launch[sc_parent] - (cum - np.repeat(base, n_scrub_per))
+    else:
+        t_sc = np.zeros(0)
 
     t_all = np.concatenate([t_launch, t_sh, t_ss, t_ext, t_sf, t_sc])
     codes = np.concatenate(

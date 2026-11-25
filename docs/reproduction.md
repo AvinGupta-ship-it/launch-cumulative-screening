@@ -31,8 +31,8 @@ python -m launchcum.pipeline run --config configs/paper.yaml   # full configurat
 ```
 
 The full configuration (10,000 realizations per case, Saltelli design with
-8,192 base samples and 16 factors at three cadences, 250 m grid) takes on the
-order of one to two hours on an 8-core laptop. Individual stages can be run
+8,192 base samples, 16 factors and the seed factor at three cadences, 250 m
+grid) takes about 15 minutes on an 8-core laptop. Individual stages can be run
 with `--only`, for example `--only verification e1_scaling`.
 
 Outputs are written to `results/<name>/` with a JSON sidecar per file holding

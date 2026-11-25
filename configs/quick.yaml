@@ -74,6 +74,7 @@ sobol:
     p_ss_landing_local: {low: 0.5, high: 1.0, source_rank: 5, note: "hypothetical share of Starship landings at the site"}
     recovery_days: {low: 0.0007, high: 1.0, source_rank: 3, note: "literature range: seconds to resume feeding (Collop et al. 2016) to hours (van der Kolk et al. 2020)"}
     window_days: {low: 0.02, high: 2.0, source_rank: 5, note: "hypothetical required undisturbed window"}
+    random_seed: {low: 0, high: 2147483647, source_rank: 0, note: "random-number seed of the realization; its index is the Monte Carlo share of the output variance, not a model input"}
 emissions:
   sites:
     - {name: starbase_phase2, launches_per_year: 456, source: "91 FR 65290"}

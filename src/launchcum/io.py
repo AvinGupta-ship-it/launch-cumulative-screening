@@ -73,7 +73,7 @@ class OperationsConfig(StrictModel):
     cluster_spread_days: float = Field(2.0, gt=0)
     p_sh_landing_local: float = Field(1.0, ge=0, le=1)
     p_ss_landing_local: float = Field(1.0, ge=0, le=1)
-    sh_landing_delay_min: float = Field(7.0, ge=0)
+    sh_landing_delay_min: float = Field(10.0, ge=0)
     ss_landing_delay_days_min: float = Field(0.04, ge=0)
     ss_landing_delay_days_max: float = Field(3.0, ge=0)
     n_external_landings: float = Field(0.0, ge=0)
@@ -144,7 +144,7 @@ class ThresholdConfig(StrictModel):
 class FactorRange(StrictModel):
     low: float
     high: float
-    source_rank: int = Field(ge=1, le=5)
+    source_rank: int = Field(ge=0, le=5, description="0 denotes the random seed, which is not a model input")
     note: str = ""
 
 

@@ -63,7 +63,8 @@ def main() -> None:
     ax.set_title("Cap divided by cadence vs recorded per-launch hours", fontsize=6.5)
     ax.legend(fontsize=5)
     fig.suptitle(
-        "Public-access restriction hours: Monte Carlo distributions (hypothetical per-event closure parameters bracketing the FAA record)",
+        "Public-access restriction hours: Monte Carlo distributions "
+        "(hypothetical per-event closure parameters bracketing the FAA record)",
         fontsize=7,
     )
     fig.tight_layout()

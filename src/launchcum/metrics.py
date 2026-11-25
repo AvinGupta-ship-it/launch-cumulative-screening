@@ -295,17 +295,25 @@ class AccessResult:
     protected_holiday_hours_closed: float
 
 
-def _hourly_closed_mask(start_days: FloatArray, hours: FloatArray, n_days: int) -> BoolArray:
+def _hourly_closed_fraction(start_days: FloatArray, hours: FloatArray, n_days: int) -> FloatArray:
+    """Fraction of each clock hour of the year covered by the union of closure windows."""
     n_h = n_days * 24
-    closed = np.zeros(n_h, dtype=bool)
-    s = np.floor(start_days * 24.0).astype(np.int64)
-    e = np.ceil((start_days + hours / 24.0) * 24.0).astype(np.int64)
-    for a, b in zip(s, e, strict=True):
-        a = max(a, 0)
-        b = min(b, n_h)
-        if b > a:
-            closed[a:b] = True
-    return closed
+    frac = np.zeros(n_h)
+    a_h = np.clip(start_days * 24.0, 0.0, float(n_h))
+    b_h = np.clip((start_days + hours / 24.0) * 24.0, 0.0, float(n_h))
+    ms, me = merge_intervals(a_h, b_h)
+    for a, b in zip(ms, me, strict=True):
+        if b <= a:
+            continue
+        i0 = int(np.floor(a))
+        i1 = int(np.ceil(b))
+        if i1 - i0 == 1:
+            frac[i0] += b - a
+            continue
+        frac[i0] += (i0 + 1) - a
+        frac[i0 + 1 : i1 - 1] += 1.0
+        frac[i1 - 1] += b - (i1 - 1)
+    return np.minimum(frac, 1.0)
 
 
 def access_metrics(real: Realization, cal: OpCalendar, apply_pea_measures: bool = False) -> AccessResult:
@@ -326,7 +334,7 @@ def access_metrics(real: Realization, cal: OpCalendar, apply_pea_measures: bool 
         blocked = np.asarray([bool(no_go[a : b + 1].any()) for a, b in zip(d0, d1, strict=True)], dtype=bool)
         start, hours = start[~blocked], hours[~blocked]
     total = union_length(start, start + hours / 24.0, 0.0, float(cal.n_days)) * 24.0
-    closed = _hourly_closed_mask(start, hours, cal.n_days)
+    closed = _hourly_closed_fraction(start, hours, cal.n_days)
     hour_of_day = np.arange(cal.n_days * 24) % 24
     day_idx = np.arange(cal.n_days * 24) // 24
     daylight = (hour_of_day >= NIGHT_END_H) & (hour_of_day < NIGHT_START_H)

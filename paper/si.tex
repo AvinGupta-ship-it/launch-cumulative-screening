@@ -13,6 +13,7 @@
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thefigure}{S\arabic{figure}}
 \renewcommand{\thesection}{S\arabic{section}}
+\emergencystretch=2em
 
 \title{Supporting information for: How impact metrics scale with operating frequency: a stochastic-scheduling framework for cumulative-effects screening of high-cadence launch and landing operations}
 \author{Avin Gupta}
@@ -43,22 +44,22 @@
 
 \paragraph{Exceedance days.} If $N_L$ exceeding events are placed independently and uniformly over $D$ eligible days, the number falling on a given day is approximately Poisson with mean $N_L/D$, so the probability that the day has at least one event is $1 - e^{-N_L/D}$ and the expected number of such days is $D(1 - e^{-N_L/D})$. The bound $D$ is 365 for unrestricted timing and the number of business days (\num{250} in the scenario year) for weekday-only launches; landings and static fires are not restricted.
 
-\paragraph{Coverage.} Events arrive as a Poisson process of rate $\lambda$ and each starts a disturbed interval of random length $\tau_i$ with mean $E[\tau]$. The union of intervals is the busy period of an $M/G/\infty$ queue; the number of intervals covering a fixed time is Poisson with mean $\lambda E[\tau]$, so the stationary probability of being disturbed is $1 - \exp(-\lambda E[\tau])$ \citep{daley2003}. Linear extrapolation gives $\lambda E[\tau]$, which exceeds the exact value by $\lambda E[\tau] - 1 + e^{-\lambda E[\tau]} \approx (\lambda E[\tau])^2/2$ for small arguments.
+\paragraph{Coverage.} Events arrive as a Poisson process of rate $\lambda$ and each starts a disturbed interval of random length $\tau_i$ with mean $E[\tau]$. The union of intervals is the busy period of an $M/G/\infty$ queue; the number of intervals covering a fixed time is Poisson with mean $\lambda E[\tau]$, so the stationary probability of being disturbed is $1 - \exp(-\lambda E[\tau])$ \citep{daley2003,hall1988}. The season window over which coverage and interval metrics are evaluated is 1 March to 31 August (days 59 to 243 of the scenario year), an illustrative six-month window. Linear extrapolation gives $\lambda E[\tau]$, which exceeds the exact value by $\lambda E[\tau] - 1 + e^{-\lambda E[\tau]} \approx (\lambda E[\tau])^2/2$ for small arguments.
 
 \paragraph{Undisturbed windows.} With fixed recovery time $\tau$ an undisturbed window of length $w$ requires a gap of at least $w + \tau$ between consecutive events. For a Poisson process the gaps are exponential; with approximately $\lambda S$ gaps in a season of length $S$ the probability that none exceeds $w + \tau$ is approximately $\exp\{-\lambda S e^{-\lambda(w+\tau)}\}$, a Gumbel-type asymptotic that is accurate when $\lambda S$ is large. The simulation does not rely on this approximation.
 
 \section{Digitization method and residuals}
 
-Pages of the noise appendix were rasterized at 300 dpi with PyMuPDF. The map frame was located from the long horizontal rules, the legend swatches from saturated horizontal segments in the legend box in row-major order, and the scale bar from the longest dark run shorter than the box border (\num{58} pixels per mile on the zoomed maps). Pixels within an RGB distance of 55 of a swatch colour were assigned to that contour after removing solid fills (pixels whose $15\times15$ neighbourhood was mostly matching). The pad was the centroid of the innermost contour. Pixels were binned into 16 azimuth sectors; the median radius per sector and the median over the overland sector (240--360\si{\degree}) are stored in \texttt{data/processed/digitized\_contours.csv}. Table S2 reports the residuals of the propagation law; the hybrid evaluator reproduces every digitized radius to within 1 dB by construction. The text extents that disagree with the maps are the launch SEL 100 dBA (8 miles in the text, \num{14.8} miles on the map) and 90 dBA (15 miles in the text, \num{27} miles on the map) contours.
+Pages of the noise appendix were rasterized at 300 dpi with PyMuPDF. The map frame was located from the long horizontal rules, the legend swatches from saturated horizontal segments in the legend box in row-major order, and the scale bar from the longest dark run shorter than the box border (\num{58} pixels per mile on the zoomed maps). Pixels within an RGB distance of 55 of a swatch colour were assigned to that contour after removing solid fills (pixels whose $15\times15$ neighbourhood was mostly matching). The pad was the centroid of the innermost contour. Pixels were binned into 16 azimuth sectors; the median radius per sector and the median over the overland sector (240--360\si{\degree}) are stored in \texttt{data/processed/digitized\_contours.csv}. Table S2 reports the residuals of the propagation law; the hybrid evaluator reproduces every digitized radius exactly by construction. The text extents that disagree with the maps are the launch SEL 100 dBA (8 miles in the text, \num{14.8} miles on the map) and 90 dBA (15 miles in the text, \num{27} miles on the map) contours.
 
 \section{Convergence studies}
 
-Monte Carlo standard errors of every headline quantity are listed in \texttt{monte\_carlo\_standard\_errors.csv}; the largest standard error relative to the mean is \valMcMaxSeFractionPct\%. Contour areas on the 250 m grid differ from those on the 125 m grid by at most \valConvPhaseTwoMaxRelPct\% (Phase 2 fields) and by \valConvDnlSixFiveRel~(relative, $L_{dn}$ 65 dB) and \valConvCdnlSixZeroRel~(CDNL 60 dB) for the verification fields. The Sobol estimator reproduces the analytical first- and total-order indices of the Ishigami function to within 0.06 at the sample size used in the test suite.
+Monte Carlo standard errors of every headline quantity are listed in \texttt{monte\_carlo\_standard\_}\allowbreak\texttt{errors.csv}; the largest standard error relative to the mean is \valMcMaxSeFractionPct\%. Contour areas on the 250 m grid differ from those on the 125 m grid by at most \valConvPhaseTwoMaxRelPct\% (Phase 2 fields) and by \valConvDnlSixFiveRel~(relative, $L_{dn}$ 65 dB) and \valConvCdnlSixZeroRel~(CDNL 60 dB) for the verification fields. The Sobol estimator reproduces the analytical first- and total-order indices of the Ishigami function to within 0.06 at the sample size used in the test suite.
 
 \section{Parameter ranges}
 
 \begin{table}[htbp]
-\caption{Sensitivity-analysis factors, ranges, source rank and notes. Rank 5 denotes a hypothetical range.}
+\caption{Sensitivity-analysis factors, ranges, source rank and notes. Rank 5 denotes a hypothetical range; rank 0 is the random-number seed of the realization, included as a factor so that Monte Carlo noise is attributed to its own index.}
 \centering\scriptsize
 \tableFactorRanges
 \end{table}
@@ -78,7 +79,7 @@ Monte Carlo standard errors of every headline quantity are listed in \texttt{mon
 \end{table}
 
 \begin{table}[htbp]
-\caption{Factors with total-order Sobol index above 0.05, by output and cadence.}
+\caption{Factors with total-order Sobol index above 0.05, by output and cadence. Rows for the random seed give the Monte Carlo share of the output variance.}
 \centering\scriptsize
 \tableDominantFactors
 \end{table}
