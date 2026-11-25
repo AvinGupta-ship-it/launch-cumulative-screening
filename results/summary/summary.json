@@ -1,32 +1,32 @@
 {
   "provenance": {
-    "created_utc": "2026-11-25T22:09:48+00:00",
-    "git_commit": "2357cb4ac862ac710d15da0eebf7b849d2bde527",
+    "created_utc": "2026-11-25T22:41:34+00:00",
+    "git_commit": "e3fa984429d7662f9806bc4429094c56d1ddd6d3",
     "config_hash": "96d0b3fa67ebb6ba4b9318791574695c1fd0a8ff7d756d5a5b3936ff712750ef",
     "config_files": [
       "configs/paper.yaml",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/configs/scenario_existing.yaml",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/configs/scenario_phase1.yaml",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/configs/scenario_phase2.yaml",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/configs/scenario_phase2_clustered.yaml",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/configs/scenario_phase2_hypothetical_upscaled_vehicle.yaml"
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/configs/scenario_existing.yaml",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/configs/scenario_phase1.yaml",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/configs/scenario_phase2.yaml",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/configs/scenario_phase2_clustered.yaml",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/configs/scenario_phase2_hypothetical_upscaled_vehicle.yaml"
     ],
     "input_checksums": {
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/processed/receptors.csv": "15e8f91e94ec8c43599cb44554f9af73d24f68d37766b40cdef83770d7bed4e5",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/footprint_points_entry_a.csv": "5736e821cfaf8ef392e3feddebda3e33db1d58fa46c5e3aaa2764eae24c65e94",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/per_operation_values_entry_a.csv": "ac67acb928c80358a318fb5e3696bdb7cdb0b7118aa7edb58e1e338531fbfac1",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/closure_record_entry_a.csv": "41953c23ece18b61bd2770d0ddd667e4eff8a225402fe3a6becb1ea2f7fa0275",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/closure_record_entry_b.csv": "41953c23ece18b61bd2770d0ddd667e4eff8a225402fe3a6becb1ea2f7fa0275",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/emission_rates_table3_entry_a.csv": "f8bc3e2bff6e079bea86b695600cf7180783c532fa0751ce49e023a0cb2a4250",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/emission_rates_table3_entry_b.csv": "f8bc3e2bff6e079bea86b695600cf7180783c532fa0751ce49e023a0cb2a4250",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/footprint_points_entry_b.csv": "5736e821cfaf8ef392e3feddebda3e33db1d58fa46c5e3aaa2764eae24c65e94",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/ghg_table4_entry_a.csv": "48c4a74f2c81953a351292f045b8acd7f46d16f39bab1b6b20a87769b8a4f244",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/ghg_table4_entry_b.csv": "48c4a74f2c81953a351292f045b8acd7f46d16f39bab1b6b20a87769b8a4f244",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/per_operation_values_entry_b.csv": "ac67acb928c80358a318fb5e3696bdb7cdb0b7118aa7edb58e1e338531fbfac1",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/scenario_definitions_entry_a.csv": "9a5d91792b34332b0a2e44cafca89435f9f637f441bc7cb91450b7c36b48c053",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/scenario_definitions_entry_b.csv": "9a5d91792b34332b0a2e44cafca89435f9f637f441bc7cb91450b7c36b48c053",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/verification_targets_entry_a.csv": "b5d9b06210a6d1ba0d066020342d6bc89a1453b519cc2d423345366e7db4569f",
-      "/Users/avingupta/Documents/research/launch-cumulative-screening/data/transcribed/verification_targets_entry_b.csv": "b5d9b06210a6d1ba0d066020342d6bc89a1453b519cc2d423345366e7db4569f"
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/processed/receptors.csv": "15e8f91e94ec8c43599cb44554f9af73d24f68d37766b40cdef83770d7bed4e5",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/footprint_points_entry_a.csv": "5736e821cfaf8ef392e3feddebda3e33db1d58fa46c5e3aaa2764eae24c65e94",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/per_operation_values_entry_a.csv": "ac67acb928c80358a318fb5e3696bdb7cdb0b7118aa7edb58e1e338531fbfac1",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/closure_record_entry_a.csv": "41953c23ece18b61bd2770d0ddd667e4eff8a225402fe3a6becb1ea2f7fa0275",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/closure_record_entry_b.csv": "41953c23ece18b61bd2770d0ddd667e4eff8a225402fe3a6becb1ea2f7fa0275",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/emission_rates_table3_entry_a.csv": "f8bc3e2bff6e079bea86b695600cf7180783c532fa0751ce49e023a0cb2a4250",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/emission_rates_table3_entry_b.csv": "f8bc3e2bff6e079bea86b695600cf7180783c532fa0751ce49e023a0cb2a4250",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/footprint_points_entry_b.csv": "5736e821cfaf8ef392e3feddebda3e33db1d58fa46c5e3aaa2764eae24c65e94",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/ghg_table4_entry_a.csv": "48c4a74f2c81953a351292f045b8acd7f46d16f39bab1b6b20a87769b8a4f244",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/ghg_table4_entry_b.csv": "48c4a74f2c81953a351292f045b8acd7f46d16f39bab1b6b20a87769b8a4f244",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/per_operation_values_entry_b.csv": "ac67acb928c80358a318fb5e3696bdb7cdb0b7118aa7edb58e1e338531fbfac1",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/scenario_definitions_entry_a.csv": "9a5d91792b34332b0a2e44cafca89435f9f637f441bc7cb91450b7c36b48c053",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/scenario_definitions_entry_b.csv": "9a5d91792b34332b0a2e44cafca89435f9f637f441bc7cb91450b7c36b48c053",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/verification_targets_entry_a.csv": "b5d9b06210a6d1ba0d066020342d6bc89a1453b519cc2d423345366e7db4569f",
+      "/private/tmp/claude-501/-Users-avingupta-Documents-research-launch-cumulative-screening/abb4ccc6-c131-4953-ae52-42603cbdf947/scratchpad/clone/data/transcribed/verification_targets_entry_b.csv": "b5d9b06210a6d1ba0d066020342d6bc89a1453b519cc2d423345366e7db4569f"
     },
     "package_versions": {
       "python": "3.12.14",
@@ -748,6 +748,6 @@
     "n_receptors": 19,
     "grid_cell_m": 250.0,
     "grid_half_width_km": 30.0,
-    "runtime_s": 1131.1359751224518
+    "runtime_s": 1232.3237519264221
   }
 }
