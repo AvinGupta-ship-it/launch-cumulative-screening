@@ -66,7 +66,7 @@ def main() -> None:
             markeredgecolor="white",
             markeredgewidth=0.4,
         )
-        if r["kind"] in ("community", "park", "critical_habitat", "refuge") and r["r_km"] < 32:
+        if r["kind"] in ("community", "park") and r["r_km"] < 32:
             ax.annotate(
                 r["name"].replace(" (near pad)", "").replace(" (nearest)", ""),
                 (r["x"], r["y"]),

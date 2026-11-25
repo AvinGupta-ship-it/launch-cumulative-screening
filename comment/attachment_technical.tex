@@ -40,7 +40,7 @@ Single-event $L_{A\max}$ and sound exposure level contours for launches, landing
 
 \section{Metric classes}
 
-Table~2 lists the metric classes, definitions and closed forms under Poisson timing. The simulation reproduces every closed form: the night-share term of DNL to within \valEThreeNightCfMaxabsdiffDb~dB, the Poisson coverage $1 - \exp(-\lambda E[\tau])$ to within \valEOneCoverageCfMaxabsdiff, and the Ishigami test of the sensitivity estimator to within 0.06.
+Table~2 lists the metric classes, definitions and closed forms under Poisson timing. The simulation reproduces every closed form: the night-share term of DNL to within \valEThreeNightCfMaxabsdiffDb~dB, the Poisson coverage $1 - \exp(-\lambda E[\tau])$ to within \valEOneCoverageCfMaxabsdiff~(the simulated value lies below the closed form because booster landings follow launches within minutes), and the Ishigami test of the sensitivity estimator to within 0.06.
 
 \begin{table}[htbp]
 \caption{Metric classes, definitions and Poisson closed forms.}
@@ -50,7 +50,7 @@ Table~2 lists the metric classes, definitions and closed forms under Poisson tim
 
 \section{Verification against the 2025 Tiered EA}
 
-With the EA's scenario (22 daytime and 3 night launches, 22 daytime landings of each vehicle, 11 static fires; 44 daytime booms for CDNL) the model reproduces the DNL 65 dB extent (\valVerifDnlSixFiveDbContourExtentMiles~miles against 3--3.5 stated and \valVerifDnlSixFiveDbOverlandContourRadiusDigitizedFigureTwoOneMiles~digitized), the CDNL 60 dB extent (\valVerifCdnlSixZeroDbContourExtentMiles~miles against about 5 stated) and the emission totals (Table~3). Contour areas change by at most \valConvPhaseTwoMaxRelPct\% between 250 m and 125 m grids.
+With the EA's scenario (22 daytime and 3 night launches, 22 daytime landings of each vehicle, 11 static fires; 44 daytime booms for CDNL) the model reproduces the DNL 65 dB extent (\valVerifDnlSixFiveDbContourExtentMiles~miles against 3--3.5 stated and \valVerifDnlSixFiveDbOverlandContourRadiusDigitizedFigureTwoOneMiles~digitized), the CDNL 60 dB extent to within 20\% (\valVerifCdnlSixZeroDbContourExtentMiles~miles against about 5 stated) and the emission totals (Table~3). Contour areas change by at most \valConvPhaseTwoMaxRelPct\% between 250 m and 125 m grids.
 
 \begin{table}[htbp]
 \caption{Verification against values stated in the 2025 Tiered EA.}
@@ -94,7 +94,7 @@ Figure~\ref{fig:closures} shows annual access-restriction hours under three per-
 
 \section{Disturbance-coverage regimes}
 
-Figure~\ref{fig:coverage} shows, at the piping plover critical-habitat receptor, the disturbed fraction of a season, the error of linear extrapolation and the probability that no undisturbed window of a given length occurs, over recovery times from 1 min to 2 d. Linear extrapolation overstates coverage by more than 10\% once $\lambda E[\tau]$ exceeds about 0.2, which at 456 launches per year (disturbing-event rate \valEFiveWeekdayRatePerDayNFourFiveSix~per day) corresponds to a recovery time of about \valEFiveWeekdayTauOneZeroPctH~h. With a one-hour recovery time the disturbed fraction is \valEFiveWeekdayDisturbedTauOneH; with one day it is \valEFiveWeekdayDisturbedTauTwoFourH. Recovery times for the species of concern at this site have not been published; the literature values used to set the sweep range are seconds to minutes to resume feeding after pedestrian disturbance \citep{collop2016}, nest return within an hour \citep{weston2011}, and return to an area within hours after aircraft disturbance \citep{vanderkolk2020}.
+Figure~\ref{fig:coverage} shows, at the piping plover critical-habitat receptor, the disturbed fraction of a season, the error of linear extrapolation and the probability that no undisturbed window of a given length occurs, over recovery times from 1 min to 2 d. Linear (per-event) extrapolation overstates the simulated coverage by more than 10\% for recovery times of about \valEFiveWeekdayTauOneZeroPctH~h or longer at 456 launches per year under weekday timing (disturbing-event rate \valEFiveWeekdayRatePerDayNFourFiveSix~per day), through the saturation of the closed form and the pairing of launches with the landings that follow them. With a one-hour recovery time the disturbed fraction is \valEFiveWeekdayDisturbedTauOneH; with one day it is \valEFiveWeekdayDisturbedTauTwoFourH. Recovery times for the species of concern at this site have not been published; the literature values used to set the sweep range are seconds to minutes to resume feeding after pedestrian disturbance \citep{collop2016}, nest return within an hour \citep{weston2011}, and return to an area within hours after aircraft disturbance \citep{vanderkolk2020}.
 
 \begin{figure}[htbp]
 \centering
@@ -105,7 +105,7 @@ Figure~\ref{fig:coverage} shows, at the piping plover critical-habitat receptor,
 
 \section{Dominant uncertainties}
 
-Figure~\ref{fig:sobol} shows total-order Sobol indices for nine outputs and sixteen inputs at 25, 100 and 456 launches per year (\valESixNEvaluations~evaluations per cadence). At 456 launches per year the vehicle-variant level offset dominates DNL and events above 100 dBA (top factor \valESixTopLdnNFourFiveSix); the boom factor and external landing fraction dominate boom counts; the recovery time dominates the disturbed fraction ($S_T = \valESixTopstDisturbedNFourFiveSix$); the closure-window mean and anomaly probability dominate closure hours and weekend availability. Night share matters for DNL at every cadence.
+Figure~\ref{fig:sobol} shows total-order Sobol indices for nine outputs and sixteen inputs at 25, 100 and 456 launches per year (\valESixNEvaluations~evaluations per cadence). At 456 launches per year the vehicle-variant level offset dominates DNL and events above 100 dBA (top factor \valESixTopLdnNFourFiveSix); the external landing fraction and the share of Starship landings at the site dominate boom counts and exposure days, and night share and the boom factor dominate CDNL; the recovery time dominates the disturbed fraction ($S_T = \valESixTopstDisturbedNFourFiveSix$); the closure-window mean dominates closure hours (with the anomaly probability) and weekend availability (with the scrub probability). Night share matters for DNL at every cadence.
 
 \begin{figure}[htbp]
 \centering

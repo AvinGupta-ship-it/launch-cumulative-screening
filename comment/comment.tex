@@ -59,7 +59,7 @@ The technical attachment classifies the metrics in the record by their aggregati
 
 \subsection{Verification against the FAA record}
 
-Using the FAA's own single-event contours digitized from Appendix B of the 2025 Tiered EA and the Desk Reference conversion from overpressure to C-weighted level, the screening model reproduces the 2025 record's DNL 65 dB contour extent (\valVerifDnlSixFiveDbContourExtentMiles~miles against 3 to 3.5 stated) and CDNL 60 dB contour extent (\valVerifCdnlSixZeroDbContourExtentMiles~miles against about 5 stated) for the 25-operation scenario, and its annual emission totals (Attachment Table 4). The scaling results below therefore start from a verified reproduction of the agency's own cumulative-noise construction.
+Using the FAA's own single-event contours digitized from Appendix B of the 2025 Tiered EA and the Desk Reference conversion from overpressure to C-weighted level, the screening model reproduces the 2025 record's DNL 65 dB contour extent (\valVerifDnlSixFiveDbContourExtentMiles~miles against 3 to 3.5 stated and 2.9 digitized from the record's DNL map) and, within 20 percent, its CDNL 60 dB contour extent (\valVerifCdnlSixZeroDbContourExtentMiles~miles against about 5 stated) for the 25-operation scenario, and its annual emission totals (Attachment Table 4). The scaling results below therefore start from a verified reproduction of the agency's own cumulative-noise construction.
 
 \subsection{Scaling results}
 
@@ -81,11 +81,11 @@ With the mean of the per-launch access-restriction hours recorded for Flights 1 
 
 \subsection{Disturbance coverage}
 
-At the piping plover critical-habitat receptor, the disturbed fraction of a season follows the closed form $1 - \exp(-\lambda E[\tau])$ in the event rate $\lambda$ and mean recovery time $\tau$. Linear (per-event) extrapolation overstates coverage by more than 10 percent once $\lambda E[\tau]$ exceeds about 0.2, which at 456 launches per year corresponds to recovery times of about \valEFiveWeekdayTauOneZeroPctH~hours or more. With a one-hour recovery time the disturbed fraction is \valEFiveWeekdayDisturbedTauOneH; with one day it is \valEFiveWeekdayDisturbedTauTwoFourH. Recovery times for the species and stressors at this site have not been published; the results are response surfaces in two unknown parameters.
+At the piping plover critical-habitat receptor, the disturbed fraction of a season follows the closed form $1 - \exp(-\lambda E[\tau])$ in the event rate $\lambda$ and mean recovery time $\tau$. Linear (per-event) extrapolation overstates the simulated coverage by more than 10 percent for recovery times of about \valEFiveWeekdayTauOneZeroPctH~hours or longer at 456 launches per year, through the saturation of the closed form and the pairing of launches with the landings that follow them. With a one-hour recovery time the disturbed fraction is \valEFiveWeekdayDisturbedTauOneH; with one day it is \valEFiveWeekdayDisturbedTauTwoFourH. Recovery times for the species and stressors at this site have not been published; the results are response surfaces in two unknown parameters.
 
 \subsection{Sensitivity}
 
-Total-order Sobol indices over sixteen inputs show that at 456 launches per year the noise metrics are controlled by vehicle-configuration scaling and night share, the boom counts by the boom factor and the share of landings from other sites, the disturbed fraction by the recovery time, and the closure and availability metrics by the per-launch closure duration and anomaly frequency (Attachment Figure 7). These are the inputs on which PEIS sensitivity analyses would be most informative.
+Total-order Sobol indices over sixteen inputs show that at 456 launches per year the noise metrics are controlled by vehicle-configuration scaling and night share, the boom counts and exposure days by the share of landings from other sites and the share of Starship landings at the site, CDNL by night share and the boom factor, the disturbed fraction by the recovery time, and the closure and availability metrics by the per-launch closure duration, anomaly frequency and scrub frequency (Attachment Figure 7). These are the inputs on which PEIS sensitivity analyses would be most informative.
 
 \section{Recommendations tied to resource areas and PEIS analyses}
 

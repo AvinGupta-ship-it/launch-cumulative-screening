@@ -35,7 +35,7 @@ refs:
 	$(PY) scripts/check_refs.py paper/references.bib
 
 figures:
-	for f in figures/fig*.py; do $(PY) $$f; done
+	for f in figures/fig*.py figures/tables.py; do $(PY) $$f; done
 
 paper:
 	cd paper && latexmk -pdf -interaction=nonstopmode manuscript.tex
