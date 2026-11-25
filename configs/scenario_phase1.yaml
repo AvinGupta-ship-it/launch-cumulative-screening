@@ -1,0 +1,15 @@
+name: scenario_phase1
+description: >
+  Phase 1 of the Proposed Action: 100 launches and 200 landings per year, any day or time; PEIS noise
+  assumption of half the operations at night (91 FR 65290). Homogeneous Poisson timing.
+source: 91 FR 65289 (FR Doc 2026-20963)
+year: 2030
+operations:
+  n_launches: 100
+  model: poisson
+  weekday_only: false
+  night_fraction: 0.5
+  n_pads: 1
+  static_fires_per_launch: 0.2
+  scrub_probability: 0.15
+  hypothetical: [static_fires_per_launch, scrub_probability, n_pads]

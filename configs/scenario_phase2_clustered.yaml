@@ -1,0 +1,17 @@
+name: scenario_phase2_clustered
+description: >
+  Phase 2 count with campaign-style clustering: Neyman-Scott process with 60 campaigns per year of
+  mean size 7.6 launches and 2-day spread, restricted to business days (cluster parameters hypothetical).
+source: 91 FR 65289 (FR Doc 2026-20963); clustering parameters hypothetical
+year: 2030
+operations:
+  n_launches: 456
+  model: campaign
+  weekday_only: true
+  night_fraction: 0.5
+  n_pads: 2
+  cluster_rate_per_year: 60
+  cluster_spread_days: 2.0
+  static_fires_per_launch: 0.2
+  scrub_probability: 0.15
+  hypothetical: [cluster_rate_per_year, cluster_spread_days, n_pads, static_fires_per_launch, scrub_probability]

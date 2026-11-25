@@ -1,0 +1,9 @@
+quantity,value,value_hi,unit,source,page,quote
+dnl65_extent_miles,3.0,3.5,mile,2025 Tiered EA Appendix B (KBR TN 23-05),PDF p36 (printed 30),"Overland, the DNL 65 contour extends approximately 3 to 3.5 miles from Starbase to the north, west and south"
+cdnl60_extent_miles,5,,mile,2025 Tiered EA,PDF p36 (printed 28),"The 60 dB CDNL contour extends approximately 5 miles from the VLA"
+cdnl_basis_booms,44,,count,2025 Tiered EA Appendix B (Sonic Boom Analysis),PDF p57,"The CDNL contours were calculated using 44 total booms (22 daytime Super Heavy Booms, 22 daytime Starship booms)"
+dnl_basis_night_launches,3,,count,2025 Tiered EA Appendix B (KBR TN 23-05),PDF p36 (printed 30),"25 Starship and Booster orbital launches (22 daytime / 3 Nighttime)"
+nox_tpy,98.03,,short ton per year,2025 Tiered EA Table 3,PDF p28 (printed 20),"Total ... 45.00 98.03"
+co_tpy,45.00,,short ton per year,2025 Tiered EA Table 3,PDF p28 (printed 20),"Total ... 45.00 98.03"
+co2e_t,97342,,metric ton per year,2025 Tiered EA Table 4,PDF p30 (printed 22),"Total 43,892 97,342"
+deluge_per_operation_gal,422000,,gallon,2025 Tiered EA,PDF p47 (printed 39),"a maximum of approximately 422,000 gallons per operation"

@@ -1,0 +1,22 @@
+name: scenario_phase2_hypothetical_upscaled_vehicle
+description: >
+  HYPOTHETICAL. Phase 2 operations with per-event footprints scaled to represent a louder future vehicle
+  variant: +6 dB on all noise levels and 1.5 times the boom overpressure. These factors are not taken from
+  any FAA document; they test the robustness of metric scaling to vehicle changes (experiment E7).
+hypothetical: true
+source: hypothetical; operations as in scenario_phase2
+year: 2030
+operations:
+  n_launches: 456
+  model: weekday_renewal
+  weekday_only: true
+  night_fraction: 0.5
+  n_pads: 2
+  turnaround_min_days: 0.5
+  static_fires_per_launch: 0.2
+  scrub_probability: 0.15
+  hypothetical: [n_pads, turnaround_min_days, static_fires_per_launch, scrub_probability]
+footprints:
+  level_offset_db: 6.0
+  boom_scale: 1.5
+  hypothetical: [level_offset_db, boom_scale]

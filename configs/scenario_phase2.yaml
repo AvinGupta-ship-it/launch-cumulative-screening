@@ -1,0 +1,18 @@
+name: scenario_phase2
+description: >
+  Phase 2 of the Proposed Action: 456 launches and 912 landings per year, launches Monday to Friday
+  only, half of operations at night (91 FR 65290). Weekday renewal model with two pads and a minimum
+  same-pad turnaround of 0.5 days (hypothetical operational parameters).
+source: 91 FR 65289 (FR Doc 2026-20963)
+year: 2030
+operations:
+  n_launches: 456
+  model: weekday_renewal
+  weekday_only: true
+  night_fraction: 0.5
+  n_pads: 2
+  turnaround_min_days: 0.5
+  gamma_shape: 2.0
+  static_fires_per_launch: 0.2
+  scrub_probability: 0.15
+  hypothetical: [n_pads, turnaround_min_days, gamma_shape, static_fires_per_launch, scrub_probability]

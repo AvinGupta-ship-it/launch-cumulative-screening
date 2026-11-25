@@ -1,0 +1,40 @@
+# environments and caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+*.egg-info/
+build/
+dist/
+
+# large raw inputs fetched on demand (see data/MANIFEST.yaml)
+data/raw/gis/
+data/raw/faa/2022_final_pea_starship_super_heavy.pdf
+data/processed/_tmp_place/
+
+# generated outputs (small summaries are committed under results/summary)
+results/*
+!results/summary/
+!results/summary/**
+
+# LaTeX build files
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.fdb_latexmk
+paper/*.fls
+paper/*.log
+paper/*.out
+paper/*.synctex.gz
+paper/*.toc
+comment/*.aux
+comment/*.bbl
+comment/*.blg
+comment/*.fdb_latexmk
+comment/*.fls
+comment/*.log
+comment/*.out
+comment/*.synctex.gz

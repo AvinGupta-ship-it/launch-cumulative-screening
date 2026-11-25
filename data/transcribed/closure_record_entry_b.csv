@@ -1,0 +1,7 @@
+flight,date,launch_hours,anomaly_hours,source,page,quote
+Flight 1,2023-04-20,24.5,48,2025 Tiered EA,PDF p43 (printed 35),"For the April 20, 2023 launch, there were approximately 24.5 access restriction hours for the launch, and 48 hours of access restriction for anomaly response activities"
+Flight 2,2023-11-18,10.5,0,2025 Tiered EA,PDF p43 (printed 35),"For the second test flight on November 18, 2023, there were approximately 10.5 access restriction hours for launch and none for anomaly response activities"
+Flight 3,,8.75,,2025 Tiered EA,PDF p43 (printed 35),"Flight 3 used approximately 8.75 restriction hours"
+Flight 4,,7.75,,2025 Tiered EA,PDF p43 (printed 35),"Flight 4 used approximately 7.75 access restriction hours"
+2022 PEA assumption per orbital launch,,100,,2025 Tiered EA,PDF p43 (printed 35),"The 2022 PEA assumed approximately 100 hours of access restrictions for each orbital launch event and 500 hours of access restrictions annually"
+Expected upper bound per campaign,,20,,2025 Tiered EA,PDF p19 (printed 11),"SpaceX is expected to need less than 20 hours of access restrictions per launch campaign, including landings"

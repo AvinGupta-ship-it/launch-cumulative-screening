@@ -1,0 +1,91 @@
+name: quick
+seed: 20261207
+scenarios:
+  - scenario_existing.yaml
+  - scenario_phase1.yaml
+  - scenario_phase2.yaml
+  - scenario_phase2_clustered.yaml
+  - scenario_phase2_hypothetical_upscaled_vehicle.yaml
+receptors: data/processed/receptors.csv
+footprint_points: data/transcribed/footprint_points_entry_a.csv
+per_operation: data/transcribed/per_operation_values_entry_a.csv
+results_dir: results/quick
+pad_lon: -97.15456
+pad_lat: 25.99630
+pad_source: OpenStreetMap way 759249805 (apron) centroid; see data/MANIFEST.yaml
+monte_carlo:
+  n_realizations: 200
+  se_target_fraction: 0.02
+  n_workers: 8
+grid:
+  half_width_km: 30
+  cell_m: 1000
+  convergence_cell_m: 500
+thresholds:
+  lamax_db: [90, 100, 110, 115]
+  psf: [1, 2, 4, 6]
+  ldn_db: 65
+  cdnl_db: 60
+  disturbance_lamax_db: 90
+experiments:
+  cadences: [25, 50, 100, 200, 456]
+  external_landing_fractions: [0.0, 0.5, 1.0]
+  temporal_models: [poisson, weekday_renewal, campaign]
+  night_fractions: [0.0, 0.12, 0.2, 0.3, 0.4, 0.5]
+  closure_caps_h: [500, 800, 2000]
+  closure_distributions:
+    record_flights_1_to_4:
+      launch_mean_h: 12.9
+      launch_cv: 0.55
+      hypothetical: [ss_landing_mean_h, static_fire_mean_h, scrub_fraction, lead_fraction, anomaly_probability]
+    expected_upper_20h:
+      launch_mean_h: 20.0
+      launch_cv: 0.3
+      hypothetical: [launch_cv, ss_landing_mean_h, static_fire_mean_h, scrub_fraction, lead_fraction, anomaly_probability]
+    recent_flights_2_to_4:
+      launch_mean_h: 9.0
+      launch_cv: 0.15
+      hypothetical: [ss_landing_mean_h, static_fire_mean_h, scrub_fraction, lead_fraction, anomaly_probability]
+  recovery_days: [0.0007, 0.002, 0.007, 0.02, 0.042, 0.083, 0.25, 0.5, 1.0, 2.0]
+  window_days: [0.0417, 0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 7.0]
+  season: [59, 243]
+  footprint_offsets_db: [0.0, 3.0, 6.0]
+  boom_scales: [1.0, 1.5, 2.0]
+  reference_cadence: 25
+sobol:
+  n_base: 32
+  n_boot: 20
+  cadences: [25, 100, 456]
+  report_threshold: 0.05
+  factors:
+    night_fraction: {low: 0.0, high: 0.5, source_rank: 1, note: "NOI assumes 0.5; existing licence 3 of 25 launches"}
+    scrub_probability: {low: 0.0, high: 0.4, source_rank: 5, note: "hypothetical"}
+    turnaround_min_days: {low: 0.25, high: 1.5, source_rank: 5, note: "hypothetical same-pad turnaround"}
+    n_pads: {low: 1.0, high: 2.999, source_rank: 5, note: "hypothetical; floored to integer"}
+    cluster_rate_per_year: {low: 20.0, high: 150.0, source_rank: 5, note: "hypothetical campaign count"}
+    cluster_spread_days: {low: 0.5, high: 5.0, source_rank: 5, note: "hypothetical"}
+    level_offset_db: {low: -3.0, high: 6.0, source_rank: 5, note: "hypothetical vehicle-variant scaling"}
+    boom_scale: {low: 0.7, high: 1.5, source_rank: 5, note: "hypothetical vehicle-variant scaling"}
+    closure_launch_mean_h: {low: 5.0, high: 25.0, source_rank: 1, note: "brackets the Flight 1-4 record (7.75-24.5 h)"}
+    closure_launch_cv: {low: 0.2, high: 0.8, source_rank: 5, note: "hypothetical"}
+    anomaly_probability: {low: 0.0, high: 0.1, source_rank: 5, note: "hypothetical"}
+    static_fires_per_launch: {low: 0.0, high: 0.5, source_rank: 5, note: "hypothetical"}
+    external_fraction: {low: 0.0, high: 1.0, source_rank: 1, note: "NOI: landings regardless of launch origin up to 912"}
+    p_ss_landing_local: {low: 0.5, high: 1.0, source_rank: 5, note: "hypothetical share of Starship landings at the site"}
+    recovery_days: {low: 0.0007, high: 1.0, source_rank: 3, note: "literature range: seconds to resume feeding (Collop et al. 2016) to hours (van der Kolk et al. 2020)"}
+    window_days: {low: 0.02, high: 2.0, source_rank: 5, note: "hypothetical required undisturbed window"}
+emissions:
+  sites:
+    - {name: starbase_phase2, launches_per_year: 456, source: "91 FR 65290"}
+    - {name: ksc_lc39a, launches_per_year: 44, source: "91 FR 5020"}
+    - {name: slc37, launches_per_year: 76, source: "90 FR 59094"}
+  propellant_per_launch_t: {low: 6000, high: 6750, source_rank: 1, note: "2025 Tiered EA p.63: 2,650 t Starship + 4,100 t Super Heavy capacity; lower bound allows partial loading"}
+  f_stratosphere: {low: 0.5, high: 0.8, source_rank: 3, note: "Ross & Sheaffer 2014 two-thirds rule; Ryan et al. 2022 78-79 percent above 15 km"}
+  emission_index_g_per_kg:
+    H2O: {low: 350, high: 446, source_rank: 3, note: "Barker et al. 2024 Table 1 methane 446; Ross & Sheaffer 2014 kerosene 350 as lower bracket"}
+    CO2: {low: 426, high: 637, source_rank: 3, note: "Barker et al. 2024 Table 1 methane 426 (pre-afterburning); kerosene 637 as upper bracket after CO oxidation"}
+    CO: {low: 0, high: 120, source_rank: 3, note: "Barker et al. 2024 Table 1 methane primary 120; afterburning oxidises most CO above 40 km"}
+    NOx: {low: 3, high: 33, source_rank: 3, note: "Ryan et al. 2022 Table 1 range across propellants; no methane-specific value located"}
+    BC: {low: 1, high: 20, source_rank: 3, note: "Barker et al. 2024 methane 5; Tsigaridis et al. 2024 7.5; Ross & Sheaffer 2014 kerosene 10-40; no measurement for methane engines"}
+  comparison_scenarios_bc_gg_per_yr: [10, 30, 100]
+  n_samples: 2000

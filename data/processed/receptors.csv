@@ -1,0 +1,20 @@
+name,lon,lat,kind,derivation,geoid,r_km,azimuth_deg
+Rufa red knot proposed critical habitat (nearest),-97.155384,25.999118,critical_habitat,point of the proposed habitat nearest the pad,,0.322885,344.387460
+Boca Chica State Park,-97.165540,25.997081,park,centroid of TPWD provisional boundary via TxDOT feature service polygon,,1.102759,273.692976
+Boca Chica Village,-97.180600,25.990661,community,population-weighted centroid of 2 populated 2020 blocks within 4 km of the pad (population 20),,2.681060,255.722055
+Piping plover critical habitat (near pad),-97.190044,26.008850,critical_habitat,centroid of designated habitat within 15 km of the pad,,3.814904,290.573409
+Lower Rio Grande Valley NWR (near pad),-97.191284,25.984929,refuge,centroid of refuge land within 10 km of the pad,,3.886846,250.287713
+Port Isabel (nearest edge),-97.204070,26.047922,community_edge,point of the TIGER/Line 2025 place polygon nearest the pad,4858892,7.567718,318.290448
+Isla Blanca Park,-97.159380,26.072274,park,centroid of USGS PAD-US polygon,,8.430987,355.910357
+South Padre Island (nearest edge),-97.165436,26.074367,community_edge,point of the TIGER/Line 2025 place polygon nearest the pad,4869140,8.717324,352.018622
+Laguna Atascosa NWR (nearest),-97.234553,26.067174,refuge,point of the refuge boundary nearest the pad,,11.214257,313.649063
+Brownsville (nearest edge),-97.277019,26.032327,community_edge,point of the TIGER/Line 2025 place polygon nearest the pad,4810768,12.892162,287.252043
+Laguna Heights (nearest edge),-97.255352,26.077885,community_edge,point of the TIGER/Line 2025 place polygon nearest the pad,4840300,13.544844,311.071986
+South Padre Island,-97.170703,26.120465,community,TIGER/Line 2025 place internal point,4869140,13.850890,352.494875
+Laguna Heights,-97.259307,26.080820,community,TIGER/Line 2025 place internal point,4840300,14.056523,310.983404
+Laguna Vista (nearest edge),-97.265977,26.075599,community_edge,point of the TIGER/Line 2025 place polygon nearest the pad,4840336,14.196342,307.446324
+Port Isabel,-97.309953,26.065827,community,TIGER/Line 2025 place internal point,4858892,17.356130,295.570534
+Laguna Vista,-97.296336,26.105907,community,TIGER/Line 2025 place internal point,4840336,18.674979,309.779859
+Los Fresnos (nearest edge),-97.450302,26.069641,community_edge,point of the TIGER/Line 2025 place polygon nearest the pad,4844116,30.694362,284.604296
+Brownsville,-97.480626,25.989404,community,TIGER/Line 2025 place internal point,4810768,32.654245,267.921955
+Los Fresnos,-97.488017,26.074062,community,TIGER/Line 2025 place internal point,4844116,34.467254,283.736947

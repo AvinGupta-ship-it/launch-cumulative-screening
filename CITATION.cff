@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: If you use this software or its results, please cite it as below.
+type: software
+title: "launch-cumulative-screening: a stochastic-scheduling framework for cumulative-effects screening of high-cadence launch and landing operations"
+version: 1.0.0
+date-released: "2026-12-07"
+authors:
+  - family-names: Gupta
+    given-names: Avin
+    email: iamavingupta@gmail.com
+license: BSD-3-Clause
+repository-code: https://github.com/avingupta/launch-cumulative-screening
+keywords:
+  - cumulative effects
+  - NEPA
+  - launch noise
+  - point processes
+  - sensitivity analysis
+preferred-citation:
+  type: article
+  title: "How impact metrics scale with operating frequency: a stochastic-scheduling framework for cumulative-effects screening of high-cadence launch and landing operations"
+  authors:
+    - family-names: Gupta
+      given-names: Avin
+  year: 2026
+  notes: Preprint; no journal acceptance or DOI is asserted.

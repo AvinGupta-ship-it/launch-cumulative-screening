@@ -1,0 +1,9 @@
+query_id,query,date,n_hits,status
+Q1_cumulative_launch_noise,"""cumulative"" AND (""launch noise"" OR ""rocket noise"") AND (""frequency"" OR ""cadence"")",2026-11-25,49,ok
+Q2_point_process_disturbance,"(""point process"" OR ""Poisson process"") AND (""disturbance"" AND ""wildlife"") AND (""recovery time"" OR ""return time"")",2026-11-25,12,ok
+Q3_coverage_process_disturbance,"(""coverage process"" OR ""busy period"" OR ""M/G/infinity"") AND (""disturbance"" OR ""noise events"")",2026-11-25,461,ok
+Q4_metric_scaling_cumulative_effects,"(""cumulative effects"" OR ""cumulative impact"") AND (""number of events"" OR ""event frequency"") AND (""NEPA"" OR ""environmental assessment"") AND (noise OR disturbance)",2026-11-25,50,ok
+Q5_launch_site_environmental_assessment_cadence,"(""launch cadence"" OR ""launch rate"" OR ""launches per year"") AND (""environmental impact"" OR ""environmental assessment"") AND (noise OR ""sonic boom"")",2026-11-25,77,ok
+Q6_sobol_cumulative_noise,"(""Sobol"" OR ""global sensitivity"") AND (""cumulative noise"" OR ""day-night average sound level"")",2026-11-25,29,ok
+Q7_sonic_boom_cumulative_cdnl,"(""sonic boom"" AND (""C-weighted day-night"" OR ""CDNL"") AND cumulative)",2026-11-25,6,ok
+Q8_repeated_disturbance_frequency_shorebirds,"(shorebird OR wader OR plover) AND (""disturbance frequency"" OR ""disturbance rate"") AND (foraging OR ""return"")",2026-11-25,141,ok

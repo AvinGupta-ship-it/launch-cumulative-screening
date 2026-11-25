@@ -1,0 +1,20 @@
+name: scenario_existing
+description: >
+  Currently licensed operations: 25 launches, 25 Super Heavy and 25 Starship landings per year, at most
+  3 night launches with night landings offshore only (2025 Tiered EA Table 1; 2025 FONSI/ROD).
+  Temporal model is homogeneous Poisson; night fraction 3/25.
+source: 2025 Final Tiered EA (FAA media 94346) and FONSI/ROD (FAA media 94336)
+year: 2030
+operations:
+  n_launches: 25
+  model: poisson
+  weekday_only: false
+  night_fraction: 0.12
+  n_pads: 1
+  static_fires_per_launch: 0.44
+  scrub_probability: 0.15
+  closures:
+    launch_mean_h: 12.9
+    launch_cv: 0.55
+    hypothetical: [ss_landing_mean_h, static_fire_mean_h, scrub_fraction, lead_fraction, anomaly_probability]
+  hypothetical: [static_fires_per_launch, scrub_probability, ss_landing_delay_days_min, ss_landing_delay_days_max]
