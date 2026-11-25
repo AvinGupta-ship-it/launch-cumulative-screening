@@ -337,7 +337,7 @@ class Runner:
                 continue
             g = sub0.groupby("cadence")[metric]
             mean = g.mean()
-            se = g.std(ddof=1) / np.sqrt(g.size())
+            se = pd.Series(g.std(ddof=1).to_numpy(float) / np.sqrt(g.size().to_numpy(float)), index=mean.index)
             y0 = float(mean.loc[ref])
             for n_l in e.cadences:
                 yn = mean.loc[n_l]
