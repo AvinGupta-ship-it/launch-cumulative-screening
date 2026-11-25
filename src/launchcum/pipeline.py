@@ -796,22 +796,23 @@ class Runner:
         # regime boundary: smallest recovery time at which the linear extrapolation overstates coverage by >10 percent
         top = max(e.cadences)
         for model in ("poisson", "weekday_renewal"):
+            mtag = model.replace("_renewal", "")
             s = summ.xs((HABITAT, model, top), level=("receptor", "model", "cadence"))
             over = (s["coverage_linear"] - s["disturbed"]) / s["disturbed"]
             crossing = s.index[(over > 0.10).to_numpy()]
-            self.values[f"e5_{model}_tau_10pct_h"] = float(crossing.min() * 24) if len(crossing) else float("nan")
-            self.values[f"e5_{model}_rate_per_day_n{int(top)}"] = float(
+            self.values[f"e5_{mtag}_tau_10pct_h"] = float(crossing.min() * 24) if len(crossing) else float("nan")
+            self.values[f"e5_{mtag}_rate_per_day_n{int(top)}"] = float(
                 rate.xs((HABITAT, model, top), level=("receptor", "model", "cadence")).iloc[0]
             )
             for tau in (1 / 24.0, 1.0):
                 nearest = s.index[int(np.argmin(np.abs(s.index.to_numpy(float) - tau)))]
                 r = s.loc[nearest]
-                self.values[f"e5_{model}_disturbed_tau{int(round(tau * 24))}h"] = float(r["disturbed"])
-                self.values[f"e5_{model}_linear_tau{int(round(tau * 24))}h"] = float(r["coverage_linear"])
+                self.values[f"e5_{mtag}_disturbed_tau{int(round(tau * 24))}h"] = float(r["disturbed"])
+                self.values[f"e5_{mtag}_linear_tau{int(round(tau * 24))}h"] = float(r["coverage_linear"])
                 for w in (0.25, 1.0, 7.0):
                     col = f"has_window|{w:g}"
                     if col in s:
-                        self.values[f"e5_{model}_haswindow_w{int(round(w * 24))}h_tau{int(round(tau * 24))}h"] = float(
+                        self.values[f"e5_{mtag}_haswindow_w{int(round(w * 24))}h_tau{int(round(tau * 24))}h"] = float(
                             r[col]
                         )
 
@@ -928,7 +929,7 @@ class Runner:
         tab = ex.e8_emissions(self.cfg, rng)
         write_csv(tab, self.out / "e8_emissions.csv", self.prov())
         for r in tab.to_dict("records"):
-            tag = f"{r['site']}_{r['species']}"
+            tag = f"{r['site']}_{str(r['species']).lower()}"
             self.values[f"e8_{tag}_median_t"] = float(r["median_t"])
             self.values[f"e8_{tag}_p05_t"] = float(r["p05_t"])
             self.values[f"e8_{tag}_p95_t"] = float(r["p95_t"])
@@ -940,6 +941,7 @@ class Runner:
     # ------------------------------------------------------------------
     def finish(self) -> None:
         self.log("writing summary and LaTeX values")
+        self.values.update(derived_values(self.values, self.out))
         self.values["pipeline_name"] = self.cfg.name
         self.values["seed"] = self.cfg.seed
         self.values["n_receptors"] = len(self.receptors.names)
@@ -976,6 +978,38 @@ class Runner:
 
 def _num(x: object) -> float:
     return float(str(x))
+
+
+def derived_values(values: dict[str, Any], out: Path) -> dict[str, Any]:
+    """Quantities derived from saved values and summaries (percentages, deltas, aliases)."""
+    d: dict[str, Any] = {}
+    for k, v in list(values.items()):
+        if k.startswith("e1_relerr_") and isinstance(v, float) and np.isfinite(v):
+            d["e1_relerr_pct_" + k[len("e1_relerr_") :]] = 100.0 * v
+        if k.startswith("e1_sim_") and ("e1_err_" + k[len("e1_sim_") :]) in values:
+            d["e1_lin_" + k[len("e1_sim_") :]] = float(v) + float(values["e1_err_" + k[len("e1_sim_") :]])
+        if k.startswith("e5_weekday_renewal_"):
+            d["e5_weekday_" + k[len("e5_weekday_renewal_") :]] = v
+        if k.startswith("e8_") and k != k.lower():
+            d[k.lower()] = v
+    if "mc_max_se_fraction" in values:
+        d["mc_max_se_fraction_pct"] = 100.0 * float(values["mc_max_se_fraction"])
+    if "conv_phase2_max_rel" in values:
+        d["conv_phase2_max_rel_pct"] = 100.0 * abs(float(values["conv_phase2_max_rel"]))
+    if "e1_ext_ldn_portisabel_1" in values and "e1_ext_ldn_portisabel_0" in values:
+        d["e1_ext_ldn_delta_db"] = float(values["e1_ext_ldn_portisabel_1"]) - float(values["e1_ext_ldn_portisabel_0"])
+    for key in ("e5_weekday_haswindow_w24h_tau1h", "e5_poisson_haswindow_w24h_tau1h"):
+        src = values.get(key, d.get(key))
+        if src is not None:
+            d[key.replace("haswindow_w24h", "haswindow_complement_w1_day")] = 1.0 - float(src)
+    e1 = out / "e1_raw.parquet"
+    if e1.exists():
+        raw = pd.read_parquet(e1, columns=["cadence", "external_fraction", "weekend_avail", "summer_avail"])
+        sub = raw[raw["external_fraction"] == 0.0].groupby("cadence")[["weekend_avail", "summer_avail"]].mean()
+        for n_l, row in sub.iterrows():
+            d[f"e1_n{int(_num(n_l))}_weekend_avail"] = float(row["weekend_avail"])
+            d[f"e1_n{int(_num(n_l))}_summer_avail"] = float(row["summer_avail"])
+    return d
 
 
 def macro_name(key: str) -> str:
@@ -1024,8 +1058,15 @@ def main(argv: list[str] | None = None) -> int:
     run = sub.add_parser("run", help="run the full pipeline")
     run.add_argument("--config", type=Path, required=True)
     run.add_argument("--only", nargs="*", default=None, help="subset of stages, e.g. verification e1_scaling")
+    der = sub.add_parser("derive", help="recompute derived values and values.tex from a finished run")
+    der.add_argument("--config", type=Path, required=True)
     args = ap.parse_args(argv)
     r = Runner(args.config)
+    if args.cmd == "derive":
+        prev = json.loads((r.out / "summary.json").read_text(encoding="utf-8"))["data"]
+        r.values.update(prev)
+        r.finish()
+        return 0
     if args.only:
         r.inputs_and_fits()
         for stage in args.only:

@@ -1,0 +1,147 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{siunitx}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{csvsimple}
+\graphicspath{{figures/}}
+\input{generated/values.tex}
+\input{generated/tables.tex}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thesection}{S\arabic{section}}
+
+\title{Supporting information for: How impact metrics scale with operating frequency: a stochastic-scheduling framework for cumulative-effects screening of high-cadence launch and landing operations}
+\author{Avin Gupta}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Receptors and footprint inputs}
+
+\begin{table}[htbp]
+\caption{Receptors used in the analysis (distance and azimuth from the pad reference point). Derivations are given in \texttt{data/processed/receptors.csv}.}
+\centering\footnotesize
+\begin{tabular}{lrrl}
+\toprule
+Receptor & $r$ (km) & azimuth (deg) & kind \\
+\midrule
+\csvreader[late after line=\\, respect underscore=true, respect percent=true]{../results/summary/receptors_used.csv}{name=\name, r_km=\rkm, azimuth_deg=\az, kind=\kind}{\name & \rkm & \az & \kind}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Per-operation inputs and footprint fits. Digitized contour radii are honoured exactly by monotone interpolation; the law parameters $L_0$ and $\alpha$ describe the extrapolation beyond the outermost contour and their residuals against all points are reported in \texttt{footprint\_fit\_residuals.csv}.}
+\centering\scriptsize
+\tablePerOperation
+\end{table}
+
+\section{Derivations of the closed forms}
+
+\paragraph{Energy-averaged level.} With $N$ events of identical sound exposure level $L_{AE}$ at a receptor, a fraction $f_n$ at night, $10^{L_{dn}/10} = N[(1-f_n) + 10 f_n]\,10^{L_{AE}/10}/T_s$, so that the change between two cadences and night fractions is $10\log_{10}(N_2/N_1) + 10\log_{10}[(1+9f_{n,2})/(1+9f_{n,1})]$. With several event types the same decomposition holds for each type and the total is the energy sum.
+
+\paragraph{C-weighted day-night level.} The Desk Reference form $\mathrm{CDNL} = \mathrm{CSEL} + 10\log_{10}(N_d + 10N_n) - 49.4$ applies to daily counts; with annual counts the daily counts are $N/365$ and the expression equals $10\log_{10}[\sum_i 10^{(\mathrm{CSEL}_i + 10\,\mathbb{1}_{n,i})/10}/(365\times 86400)]$ up to the rounding of $10\log_{10}(86400) = 49.37$ to 49.4.
+
+\paragraph{Exceedance days.} If $N_L$ exceeding events are placed independently and uniformly over $D$ eligible days, the number falling on a given day is approximately Poisson with mean $N_L/D$, so the probability that the day has at least one event is $1 - e^{-N_L/D}$ and the expected number of such days is $D(1 - e^{-N_L/D})$. The bound $D$ is 365 for unrestricted timing and the number of business days (\num{250} in the scenario year) for weekday-only launches; landings and static fires are not restricted.
+
+\paragraph{Coverage.} Events arrive as a Poisson process of rate $\lambda$ and each starts a disturbed interval of random length $\tau_i$ with mean $E[\tau]$. The union of intervals is the busy period of an $M/G/\infty$ queue; the number of intervals covering a fixed time is Poisson with mean $\lambda E[\tau]$, so the stationary probability of being disturbed is $1 - \exp(-\lambda E[\tau])$ \citep{daley2003}. Linear extrapolation gives $\lambda E[\tau]$, which exceeds the exact value by $\lambda E[\tau] - 1 + e^{-\lambda E[\tau]} \approx (\lambda E[\tau])^2/2$ for small arguments.
+
+\paragraph{Undisturbed windows.} With fixed recovery time $\tau$ an undisturbed window of length $w$ requires a gap of at least $w + \tau$ between consecutive events. For a Poisson process the gaps are exponential; with approximately $\lambda S$ gaps in a season of length $S$ the probability that none exceeds $w + \tau$ is approximately $\exp\{-\lambda S e^{-\lambda(w+\tau)}\}$, a Gumbel-type asymptotic that is accurate when $\lambda S$ is large. The simulation does not rely on this approximation.
+
+\section{Digitization method and residuals}
+
+Pages of the noise appendix were rasterized at 300 dpi with PyMuPDF. The map frame was located from the long horizontal rules, the legend swatches from saturated horizontal segments in the legend box in row-major order, and the scale bar from the longest dark run shorter than the box border (\num{58} pixels per mile on the zoomed maps). Pixels within an RGB distance of 55 of a swatch colour were assigned to that contour after removing solid fills (pixels whose $15\times15$ neighbourhood was mostly matching). The pad was the centroid of the innermost contour. Pixels were binned into 16 azimuth sectors; the median radius per sector and the median over the overland sector (240--360\si{\degree}) are stored in \texttt{data/processed/digitized\_contours.csv}. Table S2 reports the residuals of the propagation law; the hybrid evaluator reproduces every digitized radius to within 1 dB by construction. The text extents that disagree with the maps are the launch SEL 100 dBA (8 miles in the text, \num{14.8} miles on the map) and 90 dBA (15 miles in the text, \num{27} miles on the map) contours.
+
+\section{Convergence studies}
+
+Monte Carlo standard errors of every headline quantity are listed in \texttt{monte\_carlo\_standard\_errors.csv}; the largest standard error relative to the mean is \valMcMaxSeFractionPct\%. Contour areas on the 250 m grid differ from those on the 125 m grid by at most \valConvPhaseTwoMaxRelPct\% (Phase 2 fields) and by \valConvDnlSixFiveRel~(relative, $L_{dn}$ 65 dB) and \valConvCdnlSixZeroRel~(CDNL 60 dB) for the verification fields. The Sobol estimator reproduces the analytical first- and total-order indices of the Ishigami function to within 0.06 at the sample size used in the test suite.
+
+\section{Parameter ranges}
+
+\begin{table}[htbp]
+\caption{Sensitivity-analysis factors, ranges, source rank and notes. Rank 5 denotes a hypothetical range.}
+\centering\scriptsize
+\begin{tabular}{lrrrl}
+\toprule
+Factor & low & high & rank & note \\
+\midrule
+\csvreader[late after line=\\, respect underscore=true, respect percent=true]{../results/summary/e6_factor_ranges.csv}{name=\fname, low=\lo, high=\hi, source_rank=\rk, note=\nt}{\fname & \lo & \hi & \rk & \nt}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Additional results}
+
+\begin{table}[htbp]
+\caption{Differences between temporal models at fixed count (bootstrap 95\% intervals), from \texttt{e2\_differences.csv}.}
+\centering\scriptsize
+\begin{tabular}{rllrrrr}
+\toprule
+Cadence & Model & Metric & Mean & Diff vs Poisson & CI low & CI high \\
+\midrule
+\csvreader[late after line=\\, respect underscore=true, respect percent=true, filter expr={test{\ifnumequal{\thecsvinputline}{1}}} ]{../results/summary/e2_differences.csv}{cadence=\cad, model=\mdl, metric=\met, mean=\mn, diff_vs_poisson=\df, ci_lo=\cl, ci_hi=\ch}{\cad & \mdl & \met & \mn & \df & \cl & \ch}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Probability that annual access-restriction hours exceed each cap, by per-launch closure distribution and cadence (Monte Carlo standard errors in the CSV).}
+\centering\scriptsize
+\begin{tabular}{lrrrrrr}
+\toprule
+Distribution & Cadence & Mean h & $P(H>500)$ & $P(H>800)$ & $P(H>2000)$ & Weekend avail. \\
+\midrule
+\csvreader[late after line=\\, respect underscore=true, respect percent=true]{../results/summary/e4_cap_probabilities.csv}{distribution=\dist, cadence=\cad, closure_anom_h_mean=\mh, p_exceed_500=\pa, p_exceed_800=\pb, p_exceed_2000=\pc, weekend_avail=\wa}{\dist & \cad & \mh & \pa & \pb & \pc & \wa}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Factors with total-order Sobol index above 0.05, by output and cadence.}
+\centering\scriptsize
+\begin{tabular}{rllrr}
+\toprule
+Cadence & Output & Factor & $S_T$ & 95\% half-width \\
+\midrule
+\csvreader[late after line=\\, respect underscore=true, respect percent=true]{../results/summary/e6_dominant_factors.csv}{cadence=\cad, output=\outp, factor=\fac, ST=\st, ST_conf=\stc}{\cad & \outp & \fac & \st & \stc}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Fleet emissions above the tropopause (tonnes per year; median and 5th--95th percentiles of the input ranges).}
+\centering\scriptsize
+\begin{tabular}{llrrrr}
+\toprule
+Site & Species & Launches/yr & p05 & median & p95 \\
+\midrule
+\csvreader[late after line=\\, respect underscore=true, respect percent=true]{../results/summary/e8_emissions.csv}{site=\site, species=\sp, launches_per_year=\lpy, p05_t=\pa, median_t=\pm, p95_t=\pb}{\site & \sp & \lpy & \pa & \pm & \pb}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{fig1_site_map}
+\caption{Study domain with receptors, refuges, critical habitat, parks and expected-count cumulative-noise contours.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{fig2_aggregation_classes}
+\caption{Schematic scaling of the four aggregation classes under Poisson operations.}
+\end{figure}
+
+\section{Literature-search protocol}
+
+The gap statement rests on the queries recorded in \texttt{results/summary/literature\_search.md}, run against the OpenAlex works endpoint on the date recorded there with relevance sorting and the first 25 results inspected. Query strings are written in Boolean form so that they can be rerun on Web of Science or Scopus, which were not available. No retrieved work combined a calendar-resolved operations model with the aggregation classes of launch-site NEPA metrics; the closest works treat single-event launch acoustics, global rocket emissions, or disturbance responses to individual stimuli.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}

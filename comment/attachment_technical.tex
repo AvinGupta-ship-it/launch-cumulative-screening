@@ -1,0 +1,127 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage[section]{placeins}
+\graphicspath{{../paper/figures/}}
+\input{../paper/generated/values.tex}
+\input{../paper/generated/tables.tex}
+\input{date.tex}
+\setlength{\parskip}{4pt}
+\hypersetup{colorlinks=true, urlcolor=blue!50!black, linkcolor=black, citecolor=black}
+
+\title{Technical attachment: methods, results and figures\\[4pt]
+\large Scoping comment on Docket FAA-2026-12808 (91 FR 65289; 91 FR 72611)}
+\author{Avin Gupta, independent researcher\\\texttt{iamavingupta@gmail.com}}
+\date{\commentDate}
+
+\begin{document}
+\maketitle
+
+\noindent This attachment condenses a reproducible screening study whose code, configurations, transcribed inputs and outputs are in the repository \texttt{launch-cumulative-screening}. The study examines how the cumulative-effect metrics used in the FAA's existing record for the Boca Chica launch site behave when the number of operations increases from 25 to 100 to 456 launches per year. It uses only public documents and makes no claim about actual impacts at the site. Where parameters are not taken from a cited source they are hypothetical and are labelled so. The four levels of evidence are distinguished throughout: numerical correctness (closed-form tests), model verification (reproduction of the FAA's 2025 cumulative-noise results), empirical validity (not established for ecological outputs) and regulatory applicability (each result is tied to a PEIS analysis in the comment).
+
+\section{Operations model}
+
+Operations in a scenario year are events on the calendar with marks for type (launch, Super Heavy landing, Starship landing, static fire, scrub), period (day 07:00--22:00, night 22:00--07:00 as in the notice of intent), origin and pad. Three timing models are compared: homogeneous Poisson; weekday-only renewal with a minimum same-pad turnaround (number of pads and turnaround hypothetical); and campaign-style clustering (Neyman--Scott, parameters hypothetical). Each launch spawns a Super Heavy landing minutes later and a Starship landing hours to days later; landings of vehicles launched elsewhere arrive independently up to the 912 per year analyzed in the notice. Each launch, Starship landing, static fire and scrub carries an access-restriction window; the launch-window mean (\valRecordMeanLaunchClosureH~h) is the mean of the per-launch hours recorded in the 2025 Tiered EA for Flights 1--4 (24.5, 10.5, 8.75, 7.75 h), and all other closure parameters are hypothetical. Every configuration uses \valMcNRealizations~simulated years.
+
+\section{Per-event inputs from the FAA record}
+
+Single-event $L_{A\max}$ and sound exposure level contours for launches, landings and static fires were digitized from the maps in Appendix B of the 2025 Tiered EA (KBR TN 23-05) by colour matching at 300 dpi with the printed scale bar; contour radii over the overland sector containing the receptors are honoured exactly by monotone interpolation, and a fitted propagation law extends them beyond the outermost contour. Sonic-boom overpressures follow a power law through the contour extents stated in the EA (6, 4, 2, 1 psf at 10, 15, 27, 28 miles for Super Heavy landings; 4 psf at the southern tip of South Padre Island and 1 psf at 24 miles for Starship landings), capped at 21 and 4 psf. Boom levels are converted to C-weighted sound exposure levels with the FAA Desk Reference relations $L_{pk} = 127.6 + 20\log_{10}p$ and $\mathrm{CSEL} = L_{pk} - 26$. Per-operation emissions are the EA's Table 3 and Table 4 totals divided by the stated counts; deluge water is 422,000 gallons per launch, booster landing or booster static fire. Table~1 lists the inputs and fits. Two statements in the EA text disagree with its own maps: the SEL 100 and 90 dBA contours are stated to extend about 8 and 15 miles but the maps show about \num{14.8} and \num{27} miles over land; the maps were used.
+
+\begin{table}[htbp]
+\caption{Per-operation inputs and footprint fits.}
+\centering\scriptsize
+\tablePerOperation
+\end{table}
+
+\section{Metric classes}
+
+Table~2 lists the metric classes, definitions and closed forms under Poisson timing. The simulation reproduces every closed form: the night-share term of DNL to within \valEThreeNightCfMaxabsdiffDb~dB, the Poisson coverage $1 - \exp(-\lambda E[\tau])$ to within \valEOneCoverageCfMaxabsdiff, and the Ishigami test of the sensitivity estimator to within 0.06.
+
+\begin{table}[htbp]
+\caption{Metric classes, definitions and Poisson closed forms.}
+\centering\scriptsize
+\tableMetricDefinitions
+\end{table}
+
+\section{Verification against the 2025 Tiered EA}
+
+With the EA's scenario (22 daytime and 3 night launches, 22 daytime landings of each vehicle, 11 static fires; 44 daytime booms for CDNL) the model reproduces the DNL 65 dB extent (\valVerifDnlSixFiveDbContourExtentMiles~miles against 3--3.5 stated and \valVerifDnlSixFiveDbOverlandContourRadiusDigitizedFigureTwoOneMiles~digitized), the CDNL 60 dB extent (\valVerifCdnlSixZeroDbContourExtentMiles~miles against about 5 stated) and the emission totals (Table~3). Contour areas change by at most \valConvPhaseTwoMaxRelPct\% between 250 m and 125 m grids.
+
+\begin{table}[htbp]
+\caption{Verification against values stated in the 2025 Tiered EA.}
+\centering\scriptsize
+\tableVerification
+\end{table}
+
+\section{Scaling with cadence and the effect of timing}
+
+Figure~\ref{fig:scaling} and Table~4 show the behaviour of each metric class between 25 and 456 launches per year with half of operations at night. Additive, number-above and energy-averaged metrics follow their closed forms. Days with an event above 90 dBA at the South Padre Island edge are \valEOneSimDaysNineZeroSouthPadreIslandNearestEdge~at 456 launches (\valEOneRelerrPctDaysNineZeroSouthPadreIslandNearestEdge\% departure from linear extrapolation). Weekend and holiday daylight availability falls from \valEOneNTwoFiveWeekendAvail~to \valEOneNFourFiveSixWeekendAvail. Landings of externally launched vehicles up to 912 per year raise booms above 1 psf at the Port Isabel edge from \valEOneExtBoomOnePortisabelZero~to \valEOneExtBoomOnePortisabelOne~and change DNL by \valEOneExtLdnDeltaDb~dB. At fixed count, Poisson, weekday and campaign timing give exposure days at the South Padre Island edge of \valETwoPoissonDaysNineZeroSpi, \valETwoWeekdayDaysNineZeroSpi~and \valETwoCampaignDaysNineZeroSpi, weekend availability of \valETwoPoissonWeekendAvail~and \valETwoWeekdayWeekendAvail, and longest undisturbed gaps at the habitat receptor of \valETwoPoissonLongestGapHabitatH, \valETwoWeekdayLongestGapHabitatH~and \valETwoCampaignLongestGapHabitatH~hours.
+
+\begin{table}[htbp]
+\caption{Aggregation errors at 456 launches per year relative to extrapolation from 25.}
+\centering\scriptsize
+\tableAggregationErrors
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{fig3_metric_vs_cadence}
+\caption{Metrics against cadence (Poisson timing, 50\% night, no external landings). Shaded bands are 95\% Monte Carlo intervals; dashed lines are linear or energy-average extrapolations from 25 launches per year.}
+\label{fig:scaling}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{fig4_ldn_maps}
+\caption{Expected-count DNL fields from the digitized single-event SEL footprints at 25, 100 and 456 launches per year, and at 456 with the existing 12\% night share. The DNL 65 dB areas are \valAreaExistingLdnSixFiveKmTwo, \valAreaPhaseOneLdnSixFiveKmTwo, \valAreaPhaseTwoLdnSixFiveKmTwo~and \valAreaPhaseTwoFnZeroOneTwoLdnSixFiveKmTwo~km$^2$.}
+\end{figure}
+
+\section{Closure caps and cadence}
+
+Figure~\ref{fig:closures} shows annual access-restriction hours under three per-launch distributions bracketing the record. With the record mean, expected hours are \valEFourRecordFlightsOneToFourNOneZeroZeroClosureH~at 100 and \valEFourRecordFlightsOneToFourNFourFiveSixClosureH~at 456 launches per year; the probability of exceeding 2,000 h at 456 launches is \valEFourRecordFlightsOneToFourNFourFiveSixPexceedTwoZeroZeroZero. The per-launch budgets implied by the caps at 456 launches are \valBudgetPerLaunchTwoZeroZeroZeroNFourFiveSixH~h (2,000 h) and \valBudgetPerLaunchFiveZeroZeroNFourFiveSixH~h (500 h). Applying the 2022 PEA holiday and summer-weekend measures to the weekday schedule leaves \valEFourRecordWeekdayPhaseTwoPeaMeasuresNFourFiveSixSummerAvail~of summer daylight available against \valEFourRecordWeekdayPhaseTwoNFourFiveSixSummerAvail~without them.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{fig6_closure_distributions}
+\caption{Annual access-restriction hours: Monte Carlo distributions (left), expected hours against cadence for three per-launch distributions (centre) and the per-launch budget implied by each cap against recorded per-launch hours (right). Closure parameters other than the launch mean are hypothetical.}
+\label{fig:closures}
+\end{figure}
+
+\section{Disturbance-coverage regimes}
+
+Figure~\ref{fig:coverage} shows, at the piping plover critical-habitat receptor, the disturbed fraction of a season, the error of linear extrapolation and the probability that no undisturbed window of a given length occurs, over recovery times from 1 min to 2 d. Linear extrapolation overstates coverage by more than 10\% once $\lambda E[\tau]$ exceeds about 0.2, which at 456 launches per year (disturbing-event rate \valEFiveWeekdayRatePerDayNFourFiveSix~per day) corresponds to a recovery time of about \valEFiveWeekdayTauOneZeroPctH~h. With a one-hour recovery time the disturbed fraction is \valEFiveWeekdayDisturbedTauOneH; with one day it is \valEFiveWeekdayDisturbedTauTwoFourH. Recovery times for the species of concern at this site have not been published; the literature values used to set the sweep range are seconds to minutes to resume feeding after pedestrian disturbance \citep{collop2016}, nest return within an hour \citep{weston2011}, and return to an area within hours after aircraft disturbance \citep{vanderkolk2020}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{fig5_coverage_surfaces}
+\caption{Coverage and interval metrics at the critical-habitat receptor as functions of recovery time and required window (events above 90 dBA or 1 psf). Dotted lines are the Poisson closed form.}
+\label{fig:coverage}
+\end{figure}
+
+\section{Dominant uncertainties}
+
+Figure~\ref{fig:sobol} shows total-order Sobol indices for nine outputs and sixteen inputs at 25, 100 and 456 launches per year (\valESixNEvaluations~evaluations per cadence). At 456 launches per year the vehicle-variant level offset dominates DNL and events above 100 dBA (top factor \valESixTopLdnNFourFiveSix); the boom factor and external landing fraction dominate boom counts; the recovery time dominates the disturbed fraction ($S_T = \valESixTopstDisturbedNFourFiveSix$); the closure-window mean and anomaly probability dominate closure hours and weekend availability. Night share matters for DNL at every cadence.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{fig7_sobol_heatmap}
+\caption{Total-order Sobol indices by output, input and cadence. Hypothetical input ranges are identified in the repository factor table.}
+\label{fig:sobol}
+\end{figure}
+
+\section{Fleet stratospheric emissions}
+
+For 456 launches per year at Starbase, 44 at Launch Complex 39A and 76 at Space Launch Complex 37 (\valEEightFleetLaunches~per year), with propellant 6,000--6,750 t per launch (2025 Tiered EA capacities), a stratospheric fraction of 0.5--0.8 \citep{ross2014,ryan2022} and emission indices from \citet{barker2024}, \citet{ross2014}, \citet{ryan2022} and \citet{tsigaridis2024}, median annual black carbon above the tropopause is \valEEightFleetTotalBcMedianT~t (5th--95th percentile \valEEightFleetTotalBcPZeroFiveT--\valEEightFleetTotalBcPNineFiveT~t), which is \valEEightBcFleetOverOneZeroGgMedian~of the 10 Gg/yr scenario of \citet{maloney2022}; median water vapour is \valEEightFleetTotalHTwooMedianT~t. The intervals are wide because emission indices for methane-oxygen engines have not been measured. No atmospheric modelling is performed.
+
+\section{Limitations}
+
+Footprints are the FAA's modelled contours for the 2024 vehicle configuration, digitized with reported residuals. Operational patterns within the caps, species-specific recovery times, and per-event closure durations beyond four recorded launches are unknown and enter as labelled hypothetical ranges. No validation of ecological response is possible from public data. None of the results estimates the actual impact of the Proposed Action.
+
+\bibliographystyle{plainnat}
+\bibliography{../paper/references}
+\end{document}

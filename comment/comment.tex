@@ -1,0 +1,122 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\input{../paper/generated/values.tex}
+\input{../paper/generated/tables.tex}
+\input{date.tex}
+\setlength{\parskip}{4pt}
+\hypersetup{colorlinks=true, urlcolor=blue!50!black, linkcolor=black}
+
+\begin{document}
+
+\noindent\textbf{Scoping comment on the Notice of Intent to Prepare a Programmatic Environmental Impact Statement for the Proposed SpaceX Starship-Super Heavy Launch and Landing Operations at the Boca Chica Launch Site at Starbase, Texas, and Expansion of Starship Landing and Expenditure Locations}
+
+\noindent Docket No.\ FAA-2026-12808; 91 FR 65289 (October 14, 2026, FR Doc.\ 2026-20963), updated by 91 FR 72611 (November 10, 2026, FR Doc.\ 2026-22898)
+
+\noindent Submitted via Regulations.gov to the Federal Aviation Administration, Office of Commercial Space Transportation
+
+\noindent Date: \commentDate
+
+\noindent Commenter: Avin Gupta, independent researcher (no institutional affiliation, no funding, no competing interests). Contact: iamavingupta@gmail.com
+
+\noindent Attachment: \textit{Technical attachment: methods, results and figures} (\texttt{attachment\_technical.pdf})
+
+\section{Commenter and docket}
+
+I am an independent researcher submitting this comment on the scope and content of the PEIS during the scoping period, which the FAA extended to December 7, 2026 (91 FR 72611). The comment responds to the FAA's request for comments ``on alternatives and impacts and on relevant information, studies, or analyses with respect to the proposed agency action'' (91 FR 65289). It is based on a computational screening study that uses only public documents in the FAA's own record: the notice of intent, the FAA scoping presentation, the 2025 Final Tiered Environmental Assessment and its noise appendix, the 2025 Mitigated FONSI/ROD, the 2026 Tiered EA, and the FAA Order 1050.1F Desk Reference. The study, its code and its inputs are reproducible from the technical attachment. The study does not estimate the actual impacts of the Proposed Action; it examines how the metrics used in the existing record behave when the number of operations increases from 25 to 100 to 456 launches per year, and it identifies analyses and disclosures that would allow the PEIS to characterize that increase. Every recommendation below is a request for analysis, disclosure or clarification in the PEIS.
+
+\section{Summary of recommendations}
+
+\begin{enumerate}[leftmargin=*, itemsep=2pt]
+\item \textbf{Noise and noise-compatible land use.} Report, in addition to DNL and CDNL, metrics from each aggregation class at named receptors: number of events above fixed $L_{A\max}$ levels, number of days per year with at least one such event, night-time counts, and sonic-boom counts above 1, 2, 4 and 6 psf. The energy-averaged metrics change predictably with the count and night share; the day-count and night-count metrics do not, and they are the metrics on which the three cadence levels differ most (Attachment Sections 3 and 4, Figures 3 and 4, Table 5).
+\item \textbf{Noise.} Disclose the night-share assumption separately from the count. Of the change in DNL between 25 and 456 launches with half of operations at night, \valCfCountTermTwoFiveFourFiveSixDb~dB is due to the count and \valCfNightTermZeroOneTwoZeroFiveDb~dB to the change in night share from the existing 3 of 25 launches; the PEIS can state both terms and present the DNL contours with and without the 50 percent night assumption.
+\item \textbf{Noise; biological resources; coastal resources.} Analyze the temporal distribution of operations, not only annual totals: the weekday-only restriction in Phase 2, campaign-style clustering, and the spacing of landings. Interval metrics (days with events, longest undisturbed interval, availability of weekend daylight) depend on the distribution while count-based metrics do not (Attachment Section 5).
+\item \textbf{Section 4(f), Section 6(f), coastal resources, land use, socioeconomics.} State the per-operation access-restriction duration assumed for launches, landings, static fires and scrubs, and show that the 2,000 hours per year the PEIS will analyze is consistent with the proposed cadence. At 456 launches per year, 2,000 hours corresponds to \valBudgetPerLaunchTwoZeroZeroZeroNFourFiveSixH~hours per launch; the 2025 Tiered EA records 7.75 to 24.5 hours per launch for Flights 1 to 4 (Attachment Section 6, Figure 6). Report the distribution of closure hours by weekday, weekend and holiday, and by season, in addition to the annual total.
+\item \textbf{Biological resources.} For disturbance-sensitive species in the adjacent refuge and critical habitat, analyze the fraction of time in a disturbed state and the availability of undisturbed intervals as functions of recovery time, and disclose the recovery times assumed and their sources. The screening study shows that whether per-event and cumulative assessments agree depends on the product of event rate and recovery time, which is unmeasured at this site (Attachment Section 7, Figure 5).
+\item \textbf{Noise; biological resources.} Include landings of vehicles launched from other sites (up to 912 landings per year regardless of launch origin) explicitly in the event counts, boom counts and day-count metrics; they change these metrics without changing the launch count (Attachment Section 4).
+\item \textbf{All resource areas.} Include targeted sensitivity analyses: night share and vehicle configuration for noise metrics; closure practice and anomaly frequency for access metrics; recovery times for biological coverage metrics. The global sensitivity analysis in the attachment identifies which inputs control which metrics at each cadence (Attachment Section 8, Figure 7).
+\item \textbf{Alternatives.} Evaluate Phase 1 (100 launches per year) as a distinct alternative and consider an alternative with a cap on night operations, because the metrics above distinguish these from Phase 2 and from each other; the notice identifies only the Proposed Action and No Action.
+\item \textbf{Cumulative effects; air quality.} Disclose the combined annual stratospheric emissions of water vapour, carbon dioxide, nitrogen oxides and black carbon from Starship-Super Heavy operations across Starbase, Launch Complex 39A and Space Launch Complex 37, with the emission indices and stratospheric fractions assumed, since measured emission indices for methane-oxygen engines have not been published (Attachment Section 9).
+\item \textbf{Record.} Reconcile two inconsistencies in the 2025 Tiered EA that the PEIS will otherwise inherit: the sound exposure level contour extents stated in the text (8 and 15 miles) differ from the contour maps in Appendix B (about 15 and 27 miles over land), and some structural-damage contours are labelled as A-weighted. Publish the modelled single-event contours as data tables rather than maps only.
+\end{enumerate}
+
+\section{The cadence increase as described in the notice}
+
+The notice states that SpaceX is currently authorized to conduct up to 25 launches and 50 landings per year; that Phase 1 would include up to 100 launches and 200 landings at any day or time; that Phase 2 would include up to 456 launches and 912 landings, with launches Monday through Friday only; that the landing thresholds apply regardless of launch origin; and that for the PEIS noise analysis half of launches and landings are assumed to occur at night (10 p.m. to 7 a.m.) (91 FR 65290). The FAA scoping presentation states that the PEIS will analyze up to 2,000 hours per year of operational public access restrictions. The existing record (2025 Tiered EA and FONSI/ROD) was built from single-event footprints for one launch, one landing of each vehicle and one static fire; from annual emission totals at 25 launches; from a per-operation deluge volume; and from annual caps of 500 hours for operations and 300 hours for anomalies on access restrictions. Its cumulative noise analysis used DNL for 25 launches with 3 at night and CDNL for 44 daytime booms.
+
+The question this comment addresses is which metrics, analyses and alternatives allow the PEIS to characterize the change from that record to the proposed cadence. The question is methodological: how each metric aggregates over events determines whether the per-event construction remains informative when the frequency increases by a factor of 18.
+
+\section{Analysis}
+
+\subsection{Aggregation classes}
+
+The technical attachment classifies the metrics in the record by their aggregation operator. Additive metrics (water volume, emissions) scale linearly with the count. Energy-averaged metrics (DNL, CDNL) increase by $10\log_{10}$ of the count ratio plus a night-share term. Number-above metrics (events above a level, booms above an overpressure) scale linearly. Exceedance-day metrics (days with at least one event) cannot exceed the number of eligible days and saturate. Coverage metrics (fraction of time a receptor is disturbed) saturate once events arrive faster than the receptor recovers. Interval metrics (longest undisturbed gap, availability of a window of given length) and access-availability metrics (weekend and holiday daylight hours not under closure) depend on the spacing of events. The attachment gives the closed forms and verifies the simulation against them.
+
+\subsection{Verification against the FAA record}
+
+Using the FAA's own single-event contours digitized from Appendix B of the 2025 Tiered EA and the Desk Reference conversion from overpressure to C-weighted level, the screening model reproduces the 2025 record's DNL 65 dB contour extent (\valVerifDnlSixFiveDbContourExtentMiles~miles against 3 to 3.5 stated) and CDNL 60 dB contour extent (\valVerifCdnlSixZeroDbContourExtentMiles~miles against about 5 stated) for the 25-operation scenario, and its annual emission totals (Attachment Table 4). The scaling results below therefore start from a verified reproduction of the agency's own cumulative-noise construction.
+
+\subsection{Scaling results}
+
+With the FAA's per-event values and half of operations at night, between 25 and 456 launches per year (Attachment Table 5, Figure 3):
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+\item DNL at the nearest edge of Port Isabel rises by the closed-form amount, and the number of events above 100 dBA $L_{A\max}$ there and the number of booms above 2 psf scale linearly, as expected.
+\item The number of days per year with an event above 90 dBA at the nearest edge of South Padre Island is \valEOneSimDaysNineZeroSouthPadreIslandNearestEdge~at 456 launches, against \valEOneNTwoFiveDaysNineZeroSpi~at 25; linear extrapolation overstates it by \valEOneRelerrPctDaysNineZeroSouthPadreIslandNearestEdge~percent. At the proposed cadence nearly every eligible day has an event, and the characterizing quantity becomes the number of events per exposed day.
+\item The fraction of weekend and holiday daylight hours free of access restrictions falls from \valEOneNTwoFiveWeekendAvail~to \valEOneNFourFiveSixWeekendAvail~under hypothetical closure parameters bracketing the record; this quantity has no per-operation analogue.
+\item Allowing landings of vehicles launched elsewhere up to 912 per year raises booms above 1 psf at the Port Isabel edge from \valEOneExtBoomOnePortisabelZero~to \valEOneExtBoomOnePortisabelOne~per year while changing DNL by \valEOneExtLdnDeltaDb~dB.
+\end{itemize}
+
+\subsection{Clustering and the weekday restriction}
+
+At a fixed 456 launches per year, Poisson, weekday-only renewal and campaign-style timing give the same additive, energy-averaged and number-above metrics but different interval metrics: days with an event above 90 dBA at the South Padre Island edge of \valETwoPoissonDaysNineZeroSpi~(Poisson), \valETwoWeekdayDaysNineZeroSpi~(weekday) and \valETwoCampaignDaysNineZeroSpi~(campaign); weekend daylight availability of \valETwoPoissonWeekendAvail~and \valETwoWeekdayWeekendAvail; and longest undisturbed gaps at the habitat receptor of \valETwoPoissonLongestGapHabitatH, \valETwoWeekdayLongestGapHabitatH~and \valETwoCampaignLongestGapHabitatH~hours. The ranking of cadence levels does not change with the temporal model, but the magnitudes of the interval metrics do.
+
+\subsection{Closure-cap consistency}
+
+With the mean of the per-launch access-restriction hours recorded for Flights 1 to 4 (\valRecordMeanLaunchClosureH~hours) and hypothetical allocations for other events, expected annual hours are \valEFourRecordFlightsOneToFourNOneZeroZeroClosureH~at 100 launches and \valEFourRecordFlightsOneToFourNFourFiveSixClosureH~at 456 launches per year, and the probability of exceeding 2,000 hours at 456 launches is \valEFourRecordFlightsOneToFourNFourFiveSixPexceedTwoZeroZeroZero. The caps imply per-launch budgets of \valBudgetPerLaunchTwoZeroZeroZeroNFourFiveSixH~hours (2,000 h) and \valBudgetPerLaunchFiveZeroZeroNFourFiveSixH~hours (500 h) at 456 launches, against 7.75 hours for the shortest recorded launch. These are not predictions of actual closures; they show that the consistency of the 2,000-hour assumption with the proposed cadence rests on a per-launch duration the PEIS can state and support.
+
+\subsection{Disturbance coverage}
+
+At the piping plover critical-habitat receptor, the disturbed fraction of a season follows the closed form $1 - \exp(-\lambda E[\tau])$ in the event rate $\lambda$ and mean recovery time $\tau$. Linear (per-event) extrapolation overstates coverage by more than 10 percent once $\lambda E[\tau]$ exceeds about 0.2, which at 456 launches per year corresponds to recovery times of about \valEFiveWeekdayTauOneZeroPctH~hours or more. With a one-hour recovery time the disturbed fraction is \valEFiveWeekdayDisturbedTauOneH; with one day it is \valEFiveWeekdayDisturbedTauTwoFourH. Recovery times for the species and stressors at this site have not been published; the results are response surfaces in two unknown parameters.
+
+\subsection{Sensitivity}
+
+Total-order Sobol indices over sixteen inputs show that at 456 launches per year the noise metrics are controlled by vehicle-configuration scaling and night share, the boom counts by the boom factor and the share of landings from other sites, the disturbed fraction by the recovery time, and the closure and availability metrics by the per-launch closure duration and anomaly frequency (Attachment Figure 7). These are the inputs on which PEIS sensitivity analyses would be most informative.
+
+\section{Recommendations tied to resource areas and PEIS analyses}
+
+\begin{enumerate}[leftmargin=*, itemsep=2pt]
+\item \textit{Noise and noise-compatible land use (FAA Order 1050.1G; 14 CFR part 150 compatibility guidelines; Desk Reference chapter 11 supplemental metrics).} Report number-above, exceedance-day, night-count and boom-count metrics at named receptors (Port Isabel, South Padre Island, Laguna Vista, Laguna Heights, Brownsville, Boca Chica Village, Isla Blanca Park, Boca Chica State Park) for each cadence level, alongside DNL and CDNL. Evidence: Attachment Figure 3, Table 5; model-verification level.
+\item \textit{Noise.} Present DNL and CDNL contours for each cadence with and without the 50 percent night assumption and state the count and night-share terms separately. Evidence: Attachment Figure 4 and closed form; numerical-correctness level.
+\item \textit{Noise; biological resources; coastal resources.} Describe and analyze the temporal distribution of operations (weekday restriction, campaign clustering, landing spacing) and report interval metrics under it. Evidence: Attachment Section 5; model-verification level.
+\item \textit{Section 4(f) and Section 6(f); coastal resources; land use; socioeconomics.} Disclose the per-operation closure durations assumed, demonstrate consistency with 2,000 hours per year at 456 launches, and report closure hours by weekday, weekend, holiday and season. Evidence: Attachment Figure 6; model-verification level with hypothetical parameters bracketing the record.
+\item \textit{Biological resources (ESA Section 7 consultation; refuge compatibility).} Analyze disturbed-time fraction and undisturbed-interval availability as functions of recovery time for species of concern, and disclose the recovery times and sources assumed. Evidence: Attachment Figure 5; the results are conditional response surfaces, not predictions.
+\item \textit{Noise; biological resources.} Count landings of externally launched vehicles explicitly in all event-based metrics. Evidence: Attachment Section 4.
+\item \textit{All resource areas.} Include the targeted sensitivity analyses identified in Attachment Figure 7.
+\item \textit{Alternatives (FAA Order 1050.1G reasonable alternatives).} Evaluate Phase 1 as a distinct alternative and an alternative with a night-operations cap. Evidence: the metrics in Attachment Table 5 and Figure 4 distinguish these cases.
+\item \textit{Cumulative effects; air quality.} Disclose combined stratospheric emissions across Starship sites with assumptions stated. Evidence: Attachment Section 9.
+\item \textit{Record.} Reconcile the SEL contour statements with the Appendix B maps and publish single-event contours as tables. Evidence: Attachment Section 2.
+\end{enumerate}
+
+\section{Limitations}
+
+The screening study uses the FAA's existing per-operation values for the vehicle configuration assessed in 2024; it does not model future configurations except through labelled hypothetical scaling factors. Operational patterns within the stated caps, species-specific recovery times, and per-event closure durations other than the four recorded launches are unknown and are represented by labelled hypothetical ranges. The study does not estimate the actual impacts of the Proposed Action, and nothing in this comment asserts that any impact, harm or benefit will occur at any location. The results describe the behaviour of metrics under stated assumptions and identify the analyses and disclosures that would resolve the uncertainties.
+
+\section{References}
+
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+\item Federal Aviation Administration. Notice of Intent To Prepare a Programmatic Environmental Impact Statement \ldots Boca Chica Launch Site at Starbase, Texas. 91 FR 65289--65291 (October 14, 2026), FR Doc.\ 2026-20963, document FAA-2026-12808-0001.
+\item Federal Aviation Administration. Update regarding the Notice of Intent, extension of the scoping period to December 7, 2026. 91 FR 72611--72612 (November 10, 2026), FR Doc.\ 2026-22898, document FAA-2026-12808-0057.
+\item Federal Aviation Administration. Public Scoping Meeting presentation, November 17--19, 2026. \url{https://www.faa.gov/space/stakeholder_engagement/spacex_starship/Starbase-PEIS-Virtual-Public-Scoping-Meeting-PPT.pdf}
+\item Federal Aviation Administration. Final Tiered Environmental Assessment for SpaceX Starship/Super Heavy Vehicle Increased Cadence at the SpaceX Boca Chica Launch Site in Cameron County, Texas (April 2025), with Appendix B (KBR TN 23-05 Rev.\ 4; Sonic Boom Analysis, July 2024); Mitigated FONSI and ROD (May 2025); Notice of Availability, 90 FR 20203 (May 12, 2025), FR Doc.\ 2025-08232.
+\item Federal Aviation Administration. Final Tiered EA and FONSI/ROD for Updates to Airspace Closures for Additional Launch Trajectories and Starship Boca Chica Landings (February 2026); 91 FR 8054 (February 19, 2026), FR Doc.\ 2026-03291.
+\item Federal Aviation Administration. 1050.1F Desk Reference, Version 2, Chapter 11, Noise and Noise-Compatible Land Use (February 2020).
+\item Federal Aviation Administration. Notice of Availability of the Final EIS and ROD for SpaceX Starship-Super Heavy at Launch Complex 39A, 91 FR 5020 (February 3, 2026), FR Doc.\ 2026-02108. Department of the Air Force, Notice of Record of Decision, Starship-Super Heavy at Cape Canaveral Space Force Station, 90 FR 59094 (December 18, 2025), FR Doc.\ 2025-23314.
+\item Full reference list, including the peer-reviewed sources for recovery times, emission indices and sensitivity methods, in the technical attachment.
+\end{itemize}
+
+\end{document}
