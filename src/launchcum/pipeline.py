@@ -1020,9 +1020,6 @@ def derived_values(values: dict[str, Any], out: Path) -> dict[str, Any]:
         if src is not None:
             d[key.replace("haswindow_w24h", "haswindow_complement_w1_day")] = 1.0 - float(src)
     # Presentation forms used in the documents (strings pass through the formatter unchanged).
-    for k, v in list(values.items()):
-        if re.match(r"(e1_n\d+|e2_\w+|e4_\w+)_(weekend|summer)_avail$", k) and isinstance(v, float):
-            d[k + "_pct"] = int(round(100.0 * v))
     if "e3_night_cf_maxabsdiff_db" in values:
         d["e3_night_cf_maxabsdiff_db_1dp"] = f"{float(values['e3_night_cf_maxabsdiff_db']):.1f}"
     if "cf_night_term_012_05_db" in values:
@@ -1070,6 +1067,10 @@ def derived_values(values: dict[str, Any], out: Path) -> dict[str, Any]:
         for n_l, row in sub.iterrows():
             d[f"e1_n{int(_num(n_l))}_weekend_avail"] = float(row["weekend_avail"])
             d[f"e1_n{int(_num(n_l))}_summer_avail"] = float(row["summer_avail"])
+    # Percent forms of availability, including the e1 values derived just above.
+    for k, v in list({**values, **d}.items()):
+        if re.match(r"(e1_n\d+|e2_\w+|e4_\w+)_(weekend|summer)_avail$", k) and isinstance(v, float):
+            d[k + "_pct"] = int(round(100.0 * v))
     return d
 
 

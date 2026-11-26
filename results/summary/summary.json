@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "created_utc": "2026-11-26T00:38:13+00:00",
-    "git_commit": "c5e676e02365eb4068ee0c018011443d1d59a1bd",
+    "created_utc": "2026-11-26T01:05:08+00:00",
+    "git_commit": "c4834e43130cc3c2ca991e24dd47140fab20d604",
     "config_hash": "84b8e570a6b997e4a9754a0cc0464bff186d0c80cfb5aab69b9b2ec04e0bba2a",
     "config_files": [
       "configs/paper.yaml",
@@ -807,7 +807,7 @@
     "n_receptors": 19,
     "grid_cell_m": 250.0,
     "grid_half_width_km": 30.0,
-    "runtime_s": 0.24344396591186523,
+    "runtime_s": 0.22702717781066895,
     "e1_n25_weekend_avail_pct": 95,
     "e1_n25_summer_avail_pct": 95,
     "e1_n50_weekend_avail_pct": 91,
