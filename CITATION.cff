@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: If you use this software or its results, please cite it as below.
 type: software
 title: "launch-cumulative-screening: a stochastic-scheduling framework for cumulative-effects screening of high-cadence launch and landing operations"
-version: 1.0.0
+version: 1.0.1
 date-released: "2026-12-07"
 authors:
   - family-names: Gupta
@@ -13,6 +13,7 @@ license:
   - BSD-3-Clause
   - CC-BY-4.0
 license-url: https://github.com/AvinGupta-ship-it/launch-cumulative-screening/blob/main/LICENSE
+doi: 10.5281/zenodo.24550085
 repository-code: https://github.com/AvinGupta-ship-it/launch-cumulative-screening
 abstract: >-
   Code in this repository (src/, scripts/, figures/, tests/, configs/) is licensed

@@ -47,14 +47,30 @@ def crossref(doi: str) -> dict:
         return json.load(resp)["message"]
 
 
+def datacite(doi: str) -> dict:
+    """DataCite record in the shape of a Crossref message (title, issued, author)."""
+    url = "https://api.datacite.org/dois/" + urllib.parse.quote(doi, safe="")
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(req, timeout=60) as resp:
+        a = json.load(resp)["data"]["attributes"]
+    return {
+        "title": [t.get("title", "") for t in a.get("titles", [])],
+        "issued": {"date-parts": [[a.get("publicationYear")]]},
+        "author": [{"family": c.get("familyName") or c.get("name", "")} for c in a.get("creators", [])],
+    }
+
+
 def check_entry(e: dict[str, str]) -> list[str]:
     problems = []
     doi = e.get("doi")
     if doi:
         try:
             msg = crossref(doi)
-        except Exception as exc:  # noqa: BLE001
-            return [f"{e['_key']}: DOI {doi} did not resolve ({exc})"]
+        except Exception:  # noqa: BLE001
+            try:
+                msg = datacite(doi)  # Zenodo and other DataCite registrants are not in Crossref
+            except Exception as exc:  # noqa: BLE001
+                return [f"{e['_key']}: DOI {doi} did not resolve ({exc})"]
         cr_title = norm(msg.get("title", [""])[0]) if msg.get("title") else ""
         bib_title = norm(e.get("title", ""))
         if cr_title and bib_title and not (bib_title[:60] in cr_title or cr_title[:60] in bib_title):

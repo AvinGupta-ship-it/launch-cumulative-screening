@@ -162,7 +162,9 @@ Annual emissions above the tropopause for species $s$ are
 $E_s = \sum_{sites} N\, M_{prop}\, f_{strat}\, EI_s$ with uniform ranges on
 $M_{prop}$ (6,000–6,750 t from the 2025 EA capacities), $f_{strat}$
 (0.5–0.8) and $EI_s$ from the cited literature; no atmospheric modeling is
-performed.
+performed. The black-carbon inventory is computed twice: with the full
+1–20 g/kg range, whose upper part comes from kerosene engines, and with the
+methane–oxygen estimates only (5–7.5 g/kg), and both are reported.
 
 ## 7. Numerical settings
 

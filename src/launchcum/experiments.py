@@ -592,4 +592,17 @@ def e8_emissions(cfg: PipelineConfig, rng: np.random.Generator) -> pd.DataFrame:
         ei_g_per_kg={k: Range(v.low, v.high, v.note) for k, v in e.emission_index_g_per_kg.items()},
     )
     sites = [SiteCadence(s.name, s.launches_per_year, s.source) for s in e.sites]
-    return inventory(sites, inputs, rng, e.n_samples)
+    tab = inventory(sites, inputs, rng, e.n_samples)
+    if e.emission_index_methane_only_g_per_kg:
+        # The same inventory with indices restricted to methane-oxygen estimates, so that the result can be
+        # reported beside the full-range result; the species name carries the suffix.
+        methane = EmissionInputs(
+            propellant_per_launch_t=inputs.propellant_per_launch_t,
+            f_stratosphere=inputs.f_stratosphere,
+            ei_g_per_kg={
+                f"{k}_methane_only": Range(v.low, v.high, v.note)
+                for k, v in e.emission_index_methane_only_g_per_kg.items()
+            },
+        )
+        tab = pd.concat([tab, inventory(sites, methane, rng, e.n_samples)], ignore_index=True)
+    return tab

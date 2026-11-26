@@ -89,15 +89,15 @@ Deluge water per operation (gallons) & 422,000 & 422,000 & transcribed value \\
 \hline
 Metric at 456/yr & Simulated & Extrapolated from 25/yr & Error & Rel. error, \% (95\% CI) \\
 \hline
-Deluge water (million gal/yr) & 423 & 422 & $-1.2$ & $-0.3$ ($-0.7$, $+0.1$) \\
-NO$_x$ (short tons/yr) & 1,696 & 1,691 & $-4.6$ & $-0.3$ ($-0.7$, $+0.2$) \\
-DNL, Port Isabel edge (dB) & 75.7 & 75.5 & $-0.17$ & $-3.7$ ($-4.3$, $-3.2$) \\
-Events $>100$ dBA $L_{A\max}$, Port Isabel edge (per yr) & 456 & 455 & $-1.2$ & $-0.3$ ($-0.7$, $+0.1$) \\
-Days $>90$ dBA, Port Isabel edge (days/yr) & 331 & 810 & $+479.0$ & $+144.8$ ($+143.9$, $+145.7$) \\
-Days $>90$ dBA, S. Padre Island edge (days/yr) & 331 & 810 & $+479.0$ & $+144.8$ ($+143.7$, $+145.8$) \\
-Booms $>2$ psf, Port Isabel edge (per yr) & 910 & 908 & $-2.4$ & $-0.3$ ($-0.6$, $+0.1$) \\
+Deluge water (million gal/yr) & 422.8 & 421.6 & $-1.2$ & $-0.3$ ($-0.7$, $+0.1$) \\
+NO$_x$ (short tons/yr) & 1{,}695.7 & 1{,}691.1 & $-4.6$ & $-0.3$ ($-0.7$, $+0.2$) \\
+DNL, Port Isabel edge (dB) & 75.65 & 75.49 & $-0.17$ & $-3.7$ ($-4.3$, $-3.2$) \\
+Events $>100$ dBA $L_{A\max}$, Port Isabel edge (per yr) & 456.2 & 455.0 & $-1.2$ & $-0.3$ ($-0.7$, $+0.1$) \\
+Days $>90$ dBA, Port Isabel edge (days/yr) & 330.8 & 809.8 & $+479.0$ & $+144.8$ ($+143.9$, $+145.7$) \\
+Days $>90$ dBA, S. Padre Island edge (days/yr) & 330.8 & 809.8 & $+479.0$ & $+144.8$ ($+143.7$, $+145.8$) \\
+Booms $>2$ psf, Port Isabel edge (per yr) & 910.4 & 908.0 & $-2.4$ & $-0.3$ ($-0.6$, $+0.1$) \\
 Disturbed fraction of season, habitat, 1 h recovery & 0.134 & 0.143 & $+0.008$ & $+6.3$ ($+5.6$, $+6.9$) \\
-Closure hours, operations (h/yr) & 5,345 & 8,057 & $+2{,}711.3$ & $+50.7$ ($+50.1$, $+51.3$) \\
+Closure hours, operations (h/yr) & 5{,}345.2 & 8{,}056.5 & $+2{,}711.3$ & $+50.7$ ($+50.1$, $+51.3$) \\
 \hline
 \multicolumn{5}{p{13.6cm}}{Error is the extrapolated value minus the simulated value; relative error is the error divided by the simulated value. Extrapolation is linear in the count from the 25/yr simulation, or $+10\log_{10}(456/25)$ for DNL, whose relative error is given for the energy $10^{\mathrm{DNL}/10}$. Intervals are bootstrap 95\% intervals over the simulated years. The two exceedance-day rows are identical because every launch and landing exceeds 90 dBA at both receptors and static fires exceed it at neither, so the same event days are counted; their intervals differ only by bootstrap resampling.} \\
 \end{tabular}}
@@ -355,6 +355,10 @@ fleet\_total & CO2 & 576 & 920,535 & 1,253,139 & 1,677,356 \\
 fleet\_total & CO & 576 & 14,097 & 141,441 & 286,186 \\
 fleet\_total & NOx & 576 & 10,472 & 42,199 & 79,291 \\
 fleet\_total & BC & 576 & 4,493 & 24,576 & 48,275 \\
+starbase\_phase2 & BC\_methane\_only & 456 & 8,508 & 11,634 & 15,593 \\
+ksc\_lc39a & BC\_methane\_only & 44 & 821 & 1,123 & 1,505 \\
+slc37 & BC\_methane\_only & 76 & 1,418 & 1,939 & 2,599 \\
+fleet\_total & BC\_methane\_only & 576 & 10,747 & 14,696 & 19,697 \\
 \hline
 \end{tabular}}
 % pipeline paper seed 20261207

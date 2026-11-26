@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "launchcum"
-version = "1.0.0"
+version = "1.0.1"
 description = "Stochastic-scheduling framework for cumulative-effects screening of high-cadence launch and landing operations"
 readme = "README.md"
 license = { file = "LICENSE" }

@@ -1,5 +1,7 @@
 # launch-cumulative-screening
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24550085.svg)](https://doi.org/10.5281/zenodo.24550085)
+
 A stochastic-scheduling framework for screening how cumulative-effect metrics
 scale with operating frequency, applied to the proposed increase in
 Starship-Super Heavy launch and landing operations at the Boca Chica Launch
@@ -52,5 +54,11 @@ comment/      scoping comment and technical attachment
 
 ## Citation
 
-See `CITATION.cff`. Code is released under the BSD 3-Clause License; text,
-figures and derived data under CC BY 4.0 (see `LICENSE`).
+Gupta, A. (2026). launch-cumulative-screening: a stochastic-scheduling
+framework for cumulative-effects screening of high-cadence launch and
+landing operations (version 1.0.1). Zenodo. https://doi.org/10.5281/zenodo.24550085
+
+The DOI above is the concept DOI and resolves to the latest archived version;
+`CITATION.cff` carries the same metadata. Code is released under the BSD
+3-Clause License; text, figures and derived data under CC BY 4.0 (see
+`LICENSE`).

@@ -27,7 +27,9 @@ def main() -> None:
     ax.set_ylabel("access-restriction hours per launch")
     ax.set_xticks([25, 100, 200, 456])
     ax.set_ylim(0, 30)
-    ax.legend(loc="upper right", fontsize=8, ncol=1)
+    # The legend sits between the Flight 1 line (24.5 h) and the Flight 2 line (10.5 h) at high cadence,
+    # where no curve passes.
+    ax.legend(loc="center right", fontsize=8, ncol=1, bbox_to_anchor=(0.99, 0.58))
     fig.tight_layout()
     save(fig, "figc2_closure_budget")
 

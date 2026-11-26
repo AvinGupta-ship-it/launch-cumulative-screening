@@ -167,6 +167,10 @@ class EmissionsConfig(StrictModel):
     propellant_per_launch_t: FactorRange
     f_stratosphere: FactorRange
     emission_index_g_per_kg: dict[str, FactorRange]
+    emission_index_methane_only_g_per_kg: dict[str, FactorRange] = Field(
+        default_factory=dict,
+        description="Indices restricted to methane-oxygen estimates, reported beside the full-range result",
+    )
     comparison_scenarios_bc_gg_per_yr: list[float] = Field(default_factory=lambda: [10.0, 30.0, 100.0])
     n_samples: int = 20000
 

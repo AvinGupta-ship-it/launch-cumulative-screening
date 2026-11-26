@@ -935,9 +935,13 @@ class Runner:
             self.values[f"e8_{tag}_median_t"] = float(r["median_t"])
             self.values[f"e8_{tag}_p05_t"] = float(r["p05_t"])
             self.values[f"e8_{tag}_p95_t"] = float(r["p95_t"])
-        bc = tab[(tab["site"] == "fleet_total") & (tab["species"] == "BC")].iloc[0]
-        for sc in self.cfg.emissions.comparison_scenarios_bc_gg_per_yr:
-            self.values[f"e8_bc_fleet_over_{int(sc)}gg_median"] = float(bc["median_t"] / (sc * 1000.0))
+        for species, tag in (("BC", "bc"), ("BC_methane_only", "bc_methane_only")):
+            sel = tab[(tab["site"] == "fleet_total") & (tab["species"] == species)]
+            if sel.empty:
+                continue
+            bc = sel.iloc[0]
+            for sc in self.cfg.emissions.comparison_scenarios_bc_gg_per_yr:
+                self.values[f"e8_{tag}_fleet_over_{int(sc)}gg_median"] = float(bc["median_t"] / (sc * 1000.0))
         self.values["e8_fleet_launches"] = float(sum(s.launches_per_year for s in self.cfg.emissions.sites))
 
     # ------------------------------------------------------------------
@@ -1033,6 +1037,9 @@ def derived_values(values: dict[str, Any], out: Path) -> dict[str, Any]:
         "e8_fleet_total_bc_p05_t",
         "e8_fleet_total_bc_p95_t",
         "e8_fleet_total_h2o_median_t",
+        "e8_fleet_total_bc_methane_only_median_t",
+        "e8_fleet_total_bc_methane_only_p05_t",
+        "e8_fleet_total_bc_methane_only_p95_t",
     ):
         src = values.get(k, values.get(k.upper(), d.get(k)))
         if src is not None:
@@ -1042,8 +1049,9 @@ def derived_values(values: dict[str, Any], out: Path) -> dict[str, Any]:
         lin = values.get(f"e5_{model}_renewal_linear_tau1h", values.get(f"e5_{model}_linear_tau1h"))
         if dis and lin:
             d[f"e5_{model}_over_tau1h_pct"] = f"{100.0 * (float(lin) / float(dis) - 1.0):.0f}"
-    if "e8_bc_fleet_over_10gg_median" in values:
-        d["e8_bc_fleet_over_10gg_median_1dp"] = f"{float(values['e8_bc_fleet_over_10gg_median']):.1f}"
+    for k in ("e8_bc_fleet_over_10gg_median", "e8_bc_methane_only_fleet_over_10gg_median"):
+        if k in values:
+            d[k + "_1dp"] = f"{float(values[k]):.1f}"
     if "e1_n456_ldn_portisabel" in values and "e1_n25_ldn_portisabel" in values:
         d["e1_ldn_portisabel_rise_25_456_db"] = (
             f"{float(values['e1_n456_ldn_portisabel']) - float(values['e1_n25_ldn_portisabel']):.1f}"

@@ -19,18 +19,18 @@ CASES = [
     ("phase2_fn012_ldn", r"456/yr, 12\% night"),
 ]
 RADIUS_KM = 30.0
-LETTER_OFFSETS = {
-    "A": (-2.8, 1.2),
-    "B": (1.2, 0.8),
-    "C": (-2.6, 0.6),
-    "D": (-0.2, 1.6),
-    "E": (-2.6, -0.6),
-    "F": (-7.0, -9.0),
-    "G": (1.2, 0.6),
-    "H": (-1.0, -11.0),
-    "I": (-11.0, -4.0),
+# Label positions in km from the pad; every label is joined to its receptor by a short leader line.
+LABEL_POSITIONS = {
+    "A": (-8.0, 4.6),
+    "B": (-3.6, 10.8),
+    "C": (-14.6, 10.4),
+    "D": (-8.6, 12.0),
+    "E": (-15.0, 2.2),
+    "F": (-6.0, -4.2),
+    "G": (2.4, 7.2),
+    "H": (2.2, -3.6),
+    "I": (-7.8, 0.4),
 }
-LEADER = {"F", "H", "I"}  # receptors within 4 km of the pad are labelled with a leader line
 
 
 def main() -> None:
@@ -40,8 +40,6 @@ def main() -> None:
     x = (ds["x"].values - pad_x) / 1000.0
     y = (ds["y"].values - pad_y) / 1000.0
     water = gpd.read_file(GPKG, layer="water")
-    # One dissolved water body so that only shorelines are drawn; the county's offshore limit (a straight
-    # north-south line) is dropped by masking vertices east of it.
     # One dissolved water body so that only shorelines are drawn (bays, lagoons and the Gulf; not ponds). The
     # county's offshore limit, a straight north-south line, is not a shoreline and is masked out.
     gulf_east = max(
@@ -54,8 +52,10 @@ def main() -> None:
     for ax, (key, title), letter in zip(axes.ravel(), CASES, "abcd", strict=True):
         f = ds[key].values
         clip = Circle((0, 0), RADIUS_KM, transform=ax.transData)
-        ax.add_patch(Circle((0, 0), RADIUS_KM, facecolor="white", edgecolor="none", zorder=0))
-        cf_ = ax.contourf(x, y, f, levels=[50, 55, 60, 65, 70, 75, 90], cmap="viridis", zorder=2)
+        # The field is colored over the whole 30 km disk in every panel: values below the lowest level take the
+        # colormap's "under" color, so the disk edge is the computation boundary in each panel.
+        cmap = plt.get_cmap("viridis").with_extremes(under="0.88", over=plt.get_cmap("viridis")(1.0))
+        cf_ = ax.contourf(x, y, f, levels=[50, 55, 60, 65, 70, 75, 90], cmap=cmap, extend="both", zorder=2)
         cf_.set_clip_path(clip)
         cs = ax.contour(x, y, f, levels=[55, 65, 75], colors="white", linewidths=0.7, zorder=3)
         cs.set_clip_path(clip)
@@ -72,26 +72,22 @@ def main() -> None:
                 line.set_clip_path(clip)
         ax.add_patch(Circle((0, 0), RADIUS_KM, facecolor="none", edgecolor="black", lw=0.5, zorder=5))
         ax.plot(0, 0, marker="X", color=OI["vermillion"], markersize=7, zorder=6)
+        box = {"boxstyle": "square,pad=0.08", "facecolor": "white", "edgecolor": "none", "alpha": 0.85}
         for let, name in RECEPTOR_LETTERS.items():
             rx = (rec.loc[name, "x"] - pad_x) / 1000
             ry = (rec.loc[name, "y"] - pad_y) / 1000
-            ax.plot(rx, ry, "o", color="white", markersize=3.5, markeredgecolor="black", markeredgewidth=0.5, zorder=6)
-            dx, dy = LETTER_OFFSETS[let]
-            box = {"boxstyle": "square,pad=0.08", "facecolor": "white", "edgecolor": "none", "alpha": 0.8}
-            if let in LEADER:
-                ax.annotate(
-                    let,
-                    (rx, ry),
-                    (rx + dx, ry + dy),
-                    fontsize=8,
-                    ha="center",
-                    va="center",
-                    zorder=7,
-                    arrowprops={"arrowstyle": "-", "lw": 0.5, "color": "black", "shrinkB": 2},
-                    bbox=box,
-                )
-            else:
-                ax.text(rx + dx, ry + dy, let, fontsize=8, ha="left", va="center", zorder=7, bbox=box)
+            ax.plot(rx, ry, "o", color="white", markersize=3.5, markeredgecolor="black", markeredgewidth=0.5, zorder=7)
+            ax.annotate(
+                let,
+                (rx, ry),
+                LABEL_POSITIONS[let],
+                fontsize=8,
+                ha="center",
+                va="center",
+                zorder=8,
+                arrowprops={"arrowstyle": "-", "lw": 0.5, "color": "black", "shrinkA": 0, "shrinkB": 2.5},
+                bbox=box,
+            )
         ax.set_title(title, fontsize=8)
         ax.set_xlim(-31, 31)
         ax.set_ylim(-31, 31)
@@ -105,6 +101,7 @@ def main() -> None:
         ax.set_ylabel("km north of pad")
     cb = fig.colorbar(cf_, ax=axes, shrink=0.75, pad=0.03)
     cb.set_label("DNL (dB), expected-count field")
+    cb.set_ticks([50, 55, 60, 65, 70, 75, 90])
     save(fig, "fig4_ldn_maps")
 
 

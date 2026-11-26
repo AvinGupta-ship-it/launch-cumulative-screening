@@ -24,7 +24,7 @@ PANELS = [
     (f"days90|{COMMUNITY_SPI}", "Days with $>$ 90 dBA,\nSouth Padre Island edge (per yr)", 1.0, "linear"),
     (f"boom2|{COMMUNITY_EDGE}", "Booms $>$ 2 psf,\nPort Isabel edge (per yr)", 1.0, "linear"),
     (f"disturbed|{HABITAT}", "Disturbed fraction of season,\nhabitat (1 h recovery)", 1.0, "linear"),
-    (f"longest_gap|{HABITAT}", "Longest undisturbed gap\nin season, habitat (d)", 1.0, "none"),
+    (f"longest_gap|{HABITAT}", "Longest undisturbed gap\nin season, habitat (h)", 24.0, "none"),
     ("closure_h", "Access-restriction hours\nper year (operations)", 1.0, "linear"),
     ("weekend_avail", "Weekend and holiday daylight\navailable (fraction)", 1.0, "none"),
 ]
@@ -70,9 +70,18 @@ def main() -> None:
         if col.startswith("days90"):
             ax.axhline(365, color="gray", linewidth=0.7, linestyle=":")
             ax.axhline(BUSINESS_DAYS_2030, color="gray", linewidth=0.7, linestyle="-.")
-            ax.text(30, 365 + 12, "365 days", fontsize=8, color="gray", va="bottom")
+            # Labels sit where no data lie: the extrapolation line and the band are below 365 at the left and
+            # above 250 at the right.
+            ax.text(30, 365 + 12, "365 days", fontsize=8, color="gray", va="bottom", ha="left")
             ax.text(
-                30, BUSINESS_DAYS_2030 - 28, f"{BUSINESS_DAYS_2030} business days", fontsize=8, color="gray", va="top"
+                420,
+                BUSINESS_DAYS_2030 - 14,
+                f"{BUSINESS_DAYS_2030} business\ndays",
+                fontsize=8,
+                color="gray",
+                va="top",
+                ha="right",
+                linespacing=1.0,
             )
         ax.set_title(
             rf"\textbf{{({letter})}} " + label.split("\n")[0] + "\n" + label.split("\n")[1], fontsize=8, loc="left"

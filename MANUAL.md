@@ -324,7 +324,7 @@ The repository `launch-cumulative-screening` uses this skeleton:
 launch-cumulative-screening/
 ├── README.md               # purpose, installation, reproduction, citation
 ├── LICENSE                 # BSD-3-Clause for code; CC BY 4.0 for text, figures, derived data
-├── CITATION.cff            # citation metadata; version 1.0.0
+├── CITATION.cff            # citation metadata; version 1.0.1; concept DOI 10.5281/zenodo.24550085
 ├── .zenodo.json            # Zenodo deposit metadata (version taken from the release tag)
 ├── pyproject.toml
 ├── uv.lock                 # or conda-lock.yml
@@ -370,4 +370,4 @@ Each project produces, inside its repository:
 - `paper/figures/` — final vector figures as used in the manuscript.
 - `comment/comment.docx`, `comment/comment.pdf` — the formal regulatory comment.
 - `comment/attachment_technical.pdf` — the technical attachment (condensed methods, results and figures, written for agency technical staff).
-- A tagged release (`v1.0.0`) archived to Zenodo when made public, producing a DOI that is then (and only then) cited in the comment and manuscript.
+- Tagged releases (`v1.0.0`, `v1.0.1`) archived to Zenodo under the concept DOI 10.5281/zenodo.24550085, which resolves to the latest version and is the DOI cited in the comment and the attachment.

@@ -88,5 +88,7 @@ emissions:
     CO: {low: 0, high: 120, source_rank: 3, note: "Barker et al. 2024 Table 1 methane primary 120; afterburning oxidises most CO above 40 km"}
     NOx: {low: 3, high: 33, source_rank: 3, note: "Ryan et al. 2022 Table 1 range across propellants; no methane-specific value located"}
     BC: {low: 1, high: 20, source_rank: 3, note: "Barker et al. 2024 methane 5; Tsigaridis et al. 2024 7.5; Ross & Sheaffer 2014 kerosene 10-40; no measurement for methane engines"}
+  emission_index_methane_only_g_per_kg:
+    BC: {low: 5, high: 7.5, source_rank: 3, note: "methane-oxygen estimates only: Barker et al. 2024 5; Tsigaridis et al. 2024 7.5"}
   comparison_scenarios_bc_gg_per_yr: [10, 30, 100]
   n_samples: 20000

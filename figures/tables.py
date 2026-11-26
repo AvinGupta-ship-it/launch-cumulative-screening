@@ -335,12 +335,13 @@ def table_aggregation_errors() -> str:
         sim = float(r["simulated"]) * scale
         lin = float(r["linear_extrapolation"]) * scale
         er = float(r["error"]) * scale
-        if abs(sim) < 1:
+        # One decimal for counts and hours, two for decibels, three for fractions, in every numeric column.
+        if r["metric"].startswith("disturbed"):
             f_val, f_err = "{:.3f}", "{:+.3f}"
-        elif abs(sim) < 100:
-            f_val, f_err = "{:.1f}", "{:+.2f}"
+        elif r["metric"].startswith("ldn"):
+            f_val, f_err = "{:.2f}", "{:+.2f}"
         else:
-            f_val, f_err = "{:,.0f}", "{:+,.1f}"
+            f_val, f_err = "{:,.1f}", "{:+,.1f}"
         if r["metric"].startswith("ldn"):
             pt, lo, hi = _ldn_energy_rel_error(float(top), ref)
             rel = f"{math(f'{100 * pt:+.1f}')} ({math(f'{100 * lo:+.1f}')}, {math(f'{100 * hi:+.1f}')})"
@@ -353,8 +354,8 @@ def table_aggregation_errors() -> str:
         out.append(
             row(
                 labels[r["metric"]],
-                f_val.format(sim),
-                f_val.format(lin),
+                f_val.format(sim).replace(",", "{,}"),
+                f_val.format(lin).replace(",", "{,}"),
                 math(f_err.format(er).replace(",", "{,}")),
                 rel,
             )

@@ -42,8 +42,11 @@ def main() -> None:
         )
     ax.axhline(365, color="gray", linewidth=0.7, linestyle=":")
     ax.axhline(BUSINESS_DAYS_2030, color="gray", linewidth=0.7, linestyle="-.")
-    ax.text(30, 373, "365 days in the year", fontsize=8, color="gray", va="bottom")
-    ax.text(30, BUSINESS_DAYS_2030 - 22, f"{BUSINESS_DAYS_2030} business days", fontsize=8, color="gray", va="top")
+    # Labels sit where no data lie: below 365 at the left, and below 250 at the right, where the simulated
+    # values and the extrapolation are all above the line.
+    ax.text(30, 373, "365 days in the year", fontsize=8, color="gray", va="bottom", ha="left")
+    label = f"{BUSINESS_DAYS_2030} business days"
+    ax.text(450, BUSINESS_DAYS_2030 - 12, label, fontsize=8, color="gray", va="top", ha="right")
     ax.set_xlabel("launches per year")
     ax.set_ylabel(r"days per year with an event $>$ 90 dBA" + "\n" + "at the South Padre Island edge")
     ax.set_xticks([25, 100, 200, 456])
