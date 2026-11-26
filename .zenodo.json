@@ -1,0 +1,34 @@
+{
+  "title": "launch-cumulative-screening: a stochastic-scheduling framework for cumulative-effects screening of high-cadence launch and landing operations",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "bsd-3-clause",
+  "creators": [
+    {
+      "name": "Gupta, Avin",
+      "affiliation": "Independent researcher"
+    }
+  ],
+  "description": "<p>A stochastic-scheduling framework for screening how cumulative-effect metrics scale with operating frequency, applied to the proposed increase in Starship-Super Heavy launch and landing operations at the Boca Chica Launch Site (FAA docket FAA-2026-12808). The repository contains the <code>launchcum</code> package, the transcribed and digitized FAA per-operation inputs, the experiments, the manuscript and supporting information, and the scoping comment with its technical attachment.</p><p>The framework treats operations as a marked point process on the calendar, evaluates four classes of metric (additive, energy-averaged, number-above and exceedance-day, coverage and interval) plus public-access availability, and quantifies the error of extrapolating per-operation or annual-average assessments linearly to higher cadence, with a global sensitivity analysis over the uncertain inputs. Per-event footprints are the FAA's own modeled values; the results are statements about metric behavior, not estimates of actual impacts.</p><p>Licensing: code (src/, scripts/, figures/, tests/, configs/) under the BSD 3-Clause License; text, figures and derived data (paper/, comment/, docs/, data/transcribed/, data/processed/, results/) under the Creative Commons Attribution 4.0 International License (CC BY 4.0).</p>",
+  "notes": "Code is licensed under the BSD 3-Clause License. Text, figures and derived data are licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0, https://creativecommons.org/licenses/by/4.0/). See the LICENSE file in the repository.",
+  "keywords": [
+    "cumulative effects",
+    "NEPA",
+    "launch noise",
+    "point processes",
+    "sensitivity analysis"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/AvinGupta-ship-it/launch-cumulative-screening",
+      "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://www.regulations.gov/docket/FAA-2026-12808",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}

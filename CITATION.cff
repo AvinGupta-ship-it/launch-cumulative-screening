@@ -7,9 +7,25 @@ date-released: "2026-12-07"
 authors:
   - family-names: Gupta
     given-names: Avin
+    affiliation: Independent researcher
     email: iamavingupta@gmail.com
-license: BSD-3-Clause
+license:
+  - BSD-3-Clause
+  - CC-BY-4.0
+license-url: https://github.com/AvinGupta-ship-it/launch-cumulative-screening/blob/main/LICENSE
 repository-code: https://github.com/AvinGupta-ship-it/launch-cumulative-screening
+abstract: >-
+  Code in this repository (src/, scripts/, figures/, tests/, configs/) is licensed
+  under the BSD 3-Clause License. Text, figures and derived data (paper/, comment/,
+  docs/, data/transcribed/, data/processed/, results/) are licensed under the
+  Creative Commons Attribution 4.0 International License. The framework treats
+  launch and landing operations as a marked point process on the calendar,
+  evaluates additive, energy-averaged, number-above, exceedance-day, coverage and
+  interval metrics plus public-access availability, and quantifies the error of
+  extrapolating per-operation or annual-average assessments linearly to higher
+  cadence, with a global sensitivity analysis over the uncertain inputs. Applied
+  to the proposed increase in Starship-Super Heavy operations at the Boca Chica
+  Launch Site (FAA docket FAA-2026-12808).
 keywords:
   - cumulative effects
   - NEPA

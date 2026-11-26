@@ -324,7 +324,8 @@ The repository `launch-cumulative-screening` uses this skeleton:
 launch-cumulative-screening/
 ├── README.md               # purpose, installation, reproduction, citation
 ├── LICENSE                 # BSD-3-Clause for code; CC BY 4.0 for text, figures, derived data
-├── CITATION.cff
+├── CITATION.cff            # citation metadata; version 1.0.0
+├── .zenodo.json            # Zenodo deposit metadata (version taken from the release tag)
 ├── pyproject.toml
 ├── uv.lock                 # or conda-lock.yml
 ├── Dockerfile
