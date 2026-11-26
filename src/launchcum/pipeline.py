@@ -495,6 +495,8 @@ class Runner:
             self.values[f"e2_{tag}_disturbed_habitat"] = float(g[f"disturbed|{HABITAT}"].mean())
             self.values[f"e2_{tag}_longest_gap_habitat_h"] = float(g[f"longest_gap|{HABITAT}"].mean() * 24)
             self.values[f"e2_{tag}_days90_spi"] = float(g[f"days90|{COMMUNITY_SPI}"].mean())
+            self.values[f"e2_{tag}_days90nb_spi"] = float(g[f"days90nb|{COMMUNITY_SPI}"].mean())
+            self.values[f"e2_{tag}_ss_landings_nonbusiness"] = float(g["n_ss_landing_nonbusiness"].mean())
             self.values[f"e2_{tag}_weekend_avail"] = float(g["weekend_avail"].mean())
             self.values[f"e2_{tag}_summer_avail"] = float(g["summer_avail"].mean())
             self.values[f"e2_{tag}_has_window_habitat"] = float(g[f"has_window|{HABITAT}"].mean())
@@ -984,8 +986,14 @@ def derived_values(values: dict[str, Any], out: Path) -> dict[str, Any]:
     """Quantities derived from saved values and summaries (percentages, deltas, aliases)."""
     d: dict[str, Any] = {}
     for k, v in list(values.items()):
-        if k.startswith("e1_relerr_") and isinstance(v, float) and np.isfinite(v):
+        if (
+            k.startswith("e1_relerr_")
+            and not k.startswith("e1_relerr_pct_")
+            and isinstance(v, float)
+            and np.isfinite(v)
+        ):
             d["e1_relerr_pct_" + k[len("e1_relerr_") :]] = 100.0 * v
+            d["e1_relerr_pct_" + k[len("e1_relerr_") :] + "_1dp"] = f"{100.0 * v:.1f}"
         if k.startswith("e1_sim_") and ("e1_err_" + k[len("e1_sim_") :]) in values:
             d["e1_lin_" + k[len("e1_sim_") :]] = float(v) + float(values["e1_err_" + k[len("e1_sim_") :]])
         if k.startswith("e5_weekday_renewal_"):
@@ -1011,6 +1019,50 @@ def derived_values(values: dict[str, Any], out: Path) -> dict[str, Any]:
         src = values.get(key, d.get(key))
         if src is not None:
             d[key.replace("haswindow_w24h", "haswindow_complement_w1_day")] = 1.0 - float(src)
+    # Presentation forms used in the documents (strings pass through the formatter unchanged).
+    for k, v in list(values.items()):
+        if re.match(r"(e1_n\d+|e2_\w+|e4_\w+)_(weekend|summer)_avail$", k) and isinstance(v, float):
+            d[k + "_pct"] = int(round(100.0 * v))
+    if "e3_night_cf_maxabsdiff_db" in values:
+        d["e3_night_cf_maxabsdiff_db_1dp"] = f"{float(values['e3_night_cf_maxabsdiff_db']):.1f}"
+    if "cf_night_term_012_05_db" in values:
+        d["cf_night_term_012_05_db_1dp"] = f"{float(values['cf_night_term_012_05_db']):.1f}"
+    for model in ("weekday", "poisson"):
+        src = values.get(f"e5_{model}_renewal_tau_10pct_h", values.get(f"e5_{model}_tau_10pct_h"))
+        if src is not None and np.isfinite(float(src)):
+            d[f"e5_{model}_tau_10pct_min"] = f"{60.0 * float(src):.0f}"
+    for k in (
+        "e8_fleet_total_bc_median_t",
+        "e8_fleet_total_bc_p05_t",
+        "e8_fleet_total_bc_p95_t",
+        "e8_fleet_total_h2o_median_t",
+    ):
+        src = values.get(k, values.get(k.upper(), d.get(k)))
+        if src is not None:
+            d[k + "_2sf"] = f"{float(f'{float(src):.2g}'):,.0f}"
+    for model in ("weekday", "poisson"):
+        dis = values.get(f"e5_{model}_renewal_disturbed_tau1h", values.get(f"e5_{model}_disturbed_tau1h"))
+        lin = values.get(f"e5_{model}_renewal_linear_tau1h", values.get(f"e5_{model}_linear_tau1h"))
+        if dis and lin:
+            d[f"e5_{model}_over_tau1h_pct"] = f"{100.0 * (float(lin) / float(dis) - 1.0):.0f}"
+    if "e8_bc_fleet_over_10gg_median" in values:
+        d["e8_bc_fleet_over_10gg_median_1dp"] = f"{float(values['e8_bc_fleet_over_10gg_median']):.1f}"
+    if "e1_n456_ldn_portisabel" in values and "e1_n25_ldn_portisabel" in values:
+        d["e1_ldn_portisabel_rise_25_456_db"] = (
+            f"{float(values['e1_n456_ldn_portisabel']) - float(values['e1_n25_ldn_portisabel']):.1f}"
+        )
+    verif = out / "verification.csv"
+    if verif.exists():
+        vt = pd.read_csv(verif)
+        rep = {str(q): float(r) for q, r in zip(vt["quantity"], vt["reproduced"], strict=True)}
+        ea = {str(q): str(v) for q, v in zip(vt["quantity"], vt["ea_value"], strict=True)}
+        k65 = "DNL 65 dB contour extent (miles)"
+        d["verif_dnl65_below_low_end_pct"] = f"{100.0 * (1.0 - rep[k65] / float(ea[k65].split('-')[0])):.0f}"
+        for key, name in (("dnl65", "DNL 65 dB"), ("dnl75", "DNL 75 dB")):
+            q = f"{name} overland contour radius, digitized Figure 21 (miles)"
+            d[f"verif_{key}_vs_digitized_miles"] = f"{abs(rep[q] - float(ea[q])):.2f}"
+        kc = "CDNL 60 dB contour extent (miles)"
+        d["verif_cdnl60_above_stated_pct"] = f"{100.0 * (rep[kc] / float(ea[kc]) - 1.0):.0f}"
     e1 = out / "e1_raw.parquet"
     if e1.exists():
         raw = pd.read_parquet(e1, columns=["cadence", "external_fraction", "weekend_avail", "summer_avail"])
@@ -1051,7 +1103,7 @@ def fmt(v: Any) -> str:
     if isinstance(v, bool):
         return "1" if v else "0"
     if isinstance(v, int):
-        return f"{v:d}"
+        return f"{v:,d}" if abs(v) >= 10000 else f"{v:d}"
     if isinstance(v, float):
         if not np.isfinite(v):
             return "n/a"
@@ -1080,7 +1132,8 @@ def values_tex(values: dict[str, Any]) -> str:
         if name in seen:
             continue
         seen.add(name)
-        lines.append(f"\\newcommand{{\\{name}}}{{{fmt(values[k])}}}")
+        text = f"{values[k]:d}" if isinstance(values[k], int) and ("seed" in k or "year" in k) else fmt(values[k])
+        lines.append(f"\\newcommand{{\\{name}}}{{{text}}}")
     return "\n".join(lines) + "\n"
 
 

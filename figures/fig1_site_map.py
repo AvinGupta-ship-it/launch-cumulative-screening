@@ -41,7 +41,7 @@ def main() -> None:
     for key, color in (("existing_ldn", OI["blue"]), ("phase2_ldn", OI["vermillion"])):
         ax.contour(x, y, ds[key].values, levels=[65.0], colors=[color], linewidths=1.3)
     ax.plot([], [], color=OI["blue"], label="DNL 65 dB, existing (25/yr)")
-    ax.plot([], [], color=OI["vermillion"], label="DNL 65 dB, Phase 2 (456/yr, 50% night)")
+    ax.plot([], [], color=OI["vermillion"], label=r"DNL 65 dB, Phase 2 (456/yr, 50\% night)")
     ax.contour(
         x, y, ds["existing_cdnl"].values, levels=[60.0], colors=[OI["green"]], linewidths=1.0, linestyles="dotted"
     )

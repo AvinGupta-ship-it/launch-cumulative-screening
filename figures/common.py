@@ -2,7 +2,8 @@
 
 Figures read saved results only; no computation of scientific content
 happens here. The results directory is ``results/paper`` unless the
-environment variable ``LAUNCHCUM_RESULTS`` points elsewhere.
+environment variable ``LAUNCHCUM_RESULTS`` points elsewhere. Text is set
+with LaTeX so that figure fonts match the body font of the documents.
 """
 
 from __future__ import annotations
@@ -34,19 +35,59 @@ OI = {
 }
 SERIES = [OI["blue"], OI["vermillion"], OI["green"], OI["orange"], OI["purple"], OI["skyblue"], OI["black"]]
 
+# One color per cadence level and one per timing model, used in every figure.
+CADENCE_COLORS = {25: OI["black"], 50: OI["skyblue"], 100: OI["orange"], 200: OI["vermillion"], 456: OI["purple"]}
+MODEL_COLORS = {"poisson": OI["blue"], "weekday_renewal": OI["green"], "campaign": OI["purple"]}
+MODEL_LABELS = {"poisson": "Poisson, all days", "weekday_renewal": "weekday-only renewal", "campaign": "campaign"}
+EXTRAP_COLOR = OI["vermillion"]
+
 COMMUNITY_EDGE = "Port Isabel (nearest edge)"
 COMMUNITY_SPI = "South Padre Island (nearest edge)"
 HABITAT = "Piping plover critical habitat (near pad)"
 REFUGE = "Lower Rio Grande Valley NWR (near pad)"
 PARK = "Boca Chica State Park"
 
+# Named receptors reported in the documents, keyed by the letter used in the maps.
+RECEPTOR_LETTERS = {
+    "A": COMMUNITY_EDGE,
+    "B": COMMUNITY_SPI,
+    "C": "Laguna Vista (nearest edge)",
+    "D": "Laguna Heights (nearest edge)",
+    "E": "Brownsville (nearest edge)",
+    "F": "Boca Chica Village",
+    "G": "Isla Blanca Park",
+    "H": PARK,
+    "I": HABITAT,
+}
+
+# Readable names of the sensitivity-analysis inputs (factor table in the configuration).
+FACTOR_LABELS = {
+    "night_fraction": "night share",
+    "scrub_probability": "scrub probability",
+    "turnaround_min_days": "minimum pad turnaround",
+    "n_pads": "number of pads",
+    "cluster_rate_per_year": "campaign rate",
+    "cluster_spread_days": "campaign spread",
+    "level_offset_db": "vehicle level offset",
+    "boom_scale": "boom scale factor",
+    "closure_launch_mean_h": "launch closure mean",
+    "closure_launch_cv": "launch closure CV",
+    "anomaly_probability": "anomaly probability",
+    "static_fires_per_launch": "static fires per launch",
+    "external_fraction": "external landing share",
+    "p_ss_landing_local": "local Starship landing share",
+    "recovery_days": "recovery time",
+    "window_days": "required window",
+    "random_seed": "random seed (Monte Carlo)",
+}
+
 
 def read_csv(name: str) -> pd.DataFrame:
     return pd.read_csv(RESULTS / name)
 
 
-def read_parquet(name: str) -> pd.DataFrame:
-    return pd.read_parquet(RESULTS / name)
+def read_parquet(name: str, columns: list[str] | None = None) -> pd.DataFrame:
+    return pd.read_parquet(RESULTS / name, columns=columns)
 
 
 def summary() -> dict:
@@ -57,6 +98,16 @@ def save(fig, name: str) -> None:
     fig.savefig(FIGDIR / f"{name}.pdf")
     fig.savefig(FIGDIR / f"{name}.png", dpi=200)
     print("wrote", FIGDIR / f"{name}.pdf")
+
+
+def panel_label(ax, letter: str, x: float = -0.18, y: float = 1.04) -> None:
+    """Bold panel letter outside the top-left corner of an axes."""
+    ax.text(x, y, rf"\textbf{{({letter})}}", transform=ax.transAxes, ha="left", va="bottom", fontsize=9)
+
+
+def tex(s: str) -> str:
+    """Escape a data string for LaTeX text."""
+    return s.replace("_", " ").replace("%", r"\%").replace("&", r"\&")
 
 
 def stage_label(df_label: str) -> str:

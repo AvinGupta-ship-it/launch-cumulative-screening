@@ -104,3 +104,29 @@ def test_access_metrics_respect_caps_and_availability():
     acc2 = access_metrics(real, cal, apply_pea_measures=True)
     assert acc2.protected_holiday_hours_closed == 0.0
     assert acc2.closure_hours <= acc.closure_hours + 1e-9
+
+
+def test_nonbusiness_exceedance_days_are_a_subset() -> None:
+    """Weekend and holiday exceedance days never exceed the total exceedance days."""
+    import numpy as np
+
+    from launchcum.metrics import ReceptorLevels, exceedance_days, exceedance_days_nonbusiness
+    from launchcum.opcalendar import build_calendar
+    from launchcum.schedule import EVENT_TYPES, ScheduleParams, generate
+
+    cal = build_calendar(2030)
+    params = ScheduleParams(n_launches=120.0, model="weekday_renewal", weekday_only=True, year=2030)
+    real = generate(params, np.random.default_rng(3), cal)
+    n_t = len(EVENT_TYPES)
+    lamax = np.full((n_t, 1), 95.0)
+    lamax[EVENT_TYPES.index("static_fire"), 0] = 80.0
+    lamax[EVENT_TYPES.index("scrub"), 0] = -np.inf
+    lv = ReceptorLevels(["r"], np.array([5.0]), np.array([0.0]), lamax, lamax.copy(), np.zeros((n_t, 1)))
+    total = exceedance_days(real, lv, 90.0)[0]
+    nonbusiness = exceedance_days_nonbusiness(real, lv, 90.0, cal)[0]
+    assert 0 < nonbusiness <= total
+    # launches sit on business days, so weekend exposure comes only from landings (a booster landing
+    # follows a launch just before midnight on Friday into Saturday)
+    landing = np.isin(real.type_code, [EVENT_TYPES.index("ss_landing"), EVENT_TYPES.index("sh_landing")])
+    days = np.floor(real.t[landing]).astype(int)
+    assert nonbusiness <= np.unique(days[~cal.business[days]]).size

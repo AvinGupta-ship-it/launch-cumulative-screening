@@ -251,6 +251,14 @@ items:
     license: U.S. Government work, public domain
     source_rank: 2
     fetch_on_demand: true
+  gis/tl_2025_48061_areawater.zip:
+    organization: U.S. Census Bureau, TIGER/Line Shapefiles 2025, Area Hydrography, Cameron County, Texas
+    title: Water polygons (Laguna Madre, Gulf of America, South Bay, Bahia Grande and others) used for the map outlines
+    url: https://www2.census.gov/geo/tiger/TIGER2025/AREAWATER/tl_2025_48061_areawater.zip
+    sha256: e71816761fa69cdf845f18f35d1ca72d50e85c1a1d469b9c3ededdcb6b62481e
+    license: U.S. Government work, public domain
+    source_rank: 2
+    fetch_on_demand: true
 pad_location:
   description: Reference point for the vertical launch area, taken as the centroid of OpenStreetMap way 759249805 (aeroway apron, operator SpaceX) retrieved through the Overpass API on 2026-11-24.
   lon: -97.15456

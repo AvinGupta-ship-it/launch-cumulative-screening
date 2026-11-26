@@ -1,7 +1,7 @@
 # Mathematical specification of the model
 
 This document specifies the screening model implemented in `launchcum`. It is a
-model of stated assumptions whose per-event inputs are the FAA's own modelled
+model of stated assumptions whose per-event inputs are the FAA's own modeled
 footprints; it does not predict actual impacts at the site.
 
 ## 1. Operations as a marked point process
@@ -65,7 +65,7 @@ fixed `anomaly_hours` to the annual total; anomaly hours are not placed on the
 calendar and so do not enter the availability metrics. The launch-window mean (12.9 h) and the 5–25 h Sobol
 range bracket the per-launch hours stated in the 2025 Tiered EA for Flights
 1–4 (24.5, 10.5, 8.75, 7.75 h); the other closure parameters are
-hypothetical and are labelled so in the configuration files.
+hypothetical and are labeled so in the configuration files.
 
 ## 2. Per-event footprints
 
@@ -73,7 +73,7 @@ Footprints are taken from the FAA record (`launchcum.footprints`,
 `launchcum.data.digitize`):
 
 - Contour maps in Appendix B of the 2025 Tiered EA (KBR TN 23-05) are
-  rasterized at 300 dpi; the legend colours are matched to pixels, the scale
+  rasterized at 300 dpi; the legend colors are matched to pixels, the scale
   bar sets the pixel scale, and the pad is the centroid of the innermost
   contour. For each contour the median radius over the overland sector
   (azimuth 240°–360°, where the receptors lie) is recorded, together with the
@@ -161,7 +161,7 @@ availability. The implementation is verified on the Ishigami function.
 Annual emissions above the tropopause for species $s$ are
 $E_s = \sum_{sites} N\, M_{prop}\, f_{strat}\, EI_s$ with uniform ranges on
 $M_{prop}$ (6,000–6,750 t from the 2025 EA capacities), $f_{strat}$
-(0.5–0.8) and $EI_s$ from the cited literature; no atmospheric modelling is
+(0.5–0.8) and $EI_s$ from the cited literature; no atmospheric modeling is
 performed.
 
 ## 7. Numerical settings

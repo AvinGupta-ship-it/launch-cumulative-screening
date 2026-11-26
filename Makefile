@@ -46,7 +46,7 @@ si:
 
 comment:
 	cd comment && latexmk -pdf -interaction=nonstopmode comment.tex
-	cd comment && pandoc comment.tex -o comment.docx
+	cd comment && pandoc comment.tex --resource-path=../paper/figures --default-image-extension=png -o comment.docx
 
 attachment:
 	cd comment && latexmk -pdf -interaction=nonstopmode attachment_technical.tex

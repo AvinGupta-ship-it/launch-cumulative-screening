@@ -1,7 +1,7 @@
 """Grid and receptor geometry.
 
 All spatial computations are carried out in UTM zone 14N (EPSG:32614). The
-analysis grid is centred on the launch pad and holds distance and azimuth
+analysis grid is centered on the launch pad and holds distance and azimuth
 arrays used to evaluate the isotropic and azimuth-dependent footprints.
 """
 
@@ -38,7 +38,7 @@ def utm_to_lonlat(x: FloatArray, y: FloatArray) -> tuple[FloatArray, FloatArray]
 
 @dataclass
 class Grid:
-    """Regular grid centred on the pad."""
+    """Regular grid centered on the pad."""
 
     x0: float
     y0: float
@@ -48,10 +48,10 @@ class Grid:
     def __post_init__(self) -> None:
         n = int(round(2 * self.half_width_m / self.cell_m))
         edges = -self.half_width_m + self.cell_m * np.arange(n + 1)
-        centres = 0.5 * (edges[:-1] + edges[1:])
+        centers = 0.5 * (edges[:-1] + edges[1:])
         self.n = n
-        self.x = self.x0 + centres
-        self.y = self.y0 + centres
+        self.x = self.x0 + centers
+        self.y = self.y0 + centers
         self.xx, self.yy = np.meshgrid(self.x, self.y)
         dx = self.xx - self.x0
         dy = self.yy - self.y0
@@ -70,7 +70,7 @@ class Grid:
         return float(np.max(self.r_km[m])) if m.any() else 0.0
 
     def mask_from_geometry(self, geom: BaseGeometry) -> BoolArray:
-        """Cells whose centres fall inside ``geom`` (UTM coordinates)."""
+        """Cells whose centers fall inside ``geom`` (UTM coordinates)."""
         return np.asarray(shapely.contains_xy(geom, self.xx, self.yy))
 
     def lonlat(self) -> tuple[FloatArray, FloatArray]:

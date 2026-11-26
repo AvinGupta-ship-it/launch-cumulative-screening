@@ -199,9 +199,9 @@ def _launch_days_campaign(rng: np.random.Generator, p: ScheduleParams, cal: OpCa
     if n_clusters == 0:
         return np.zeros(0, dtype=np.int64)
     mean_size = p.n_launches / p.cluster_rate_per_year
-    centres = rng.random(n_clusters) * axis_len
+    centers = rng.random(n_clusters) * axis_len
     sizes = rng.poisson(mean_size, size=n_clusters)
-    parents = np.repeat(centres, sizes)
+    parents = np.repeat(centers, sizes)
     pos = parents + rng.normal(0.0, p.cluster_spread_days, size=parents.shape[0])
     pos = np.mod(pos, axis_len)
     if p.weekday_only:
@@ -254,7 +254,7 @@ def generate(params: ScheduleParams, rng: np.random.Generator, cal: OpCalendar |
         ext_day = np.floor(rng.random(n_ext) * cal.n_days)
     ext_night = np.asarray(rng.random(n_ext) < p.night_fraction, dtype=bool)
     t_ext = ext_day + draw_time_of_day(rng, ext_night) / 24.0
-    # Static fires before launch (daytime, per the current licence terms).
+    # Static fires before launch (daytime, per the current license terms).
     n_sf_per = rng.poisson(p.static_fires_per_launch, size=n_l)
     sf_parent = np.repeat(np.arange(n_l), n_sf_per)
     lo, hi = p.static_fire_lead_days

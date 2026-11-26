@@ -29,7 +29,7 @@ mismatch). Every transcribed row cites the document page.
 | 91 FR 65289 (NOI, FR Doc 2026-20963) and 91 FR 72611 (update, FR Doc 2026-22898) | Cadence scenarios (25/100/456 launches; 912 landings regardless of origin), weekday restriction, 50% night assumption, day/night definition, resource areas, alternatives, deadline | No per-operation quantities |
 | FAA scoping presentation (November 2026) | 2,000 h/yr access-restriction assumption; landing locations | Presentation, not a decision document |
 | 2025 Final Tiered EA and FONSI/ROD | Operations table (22 day/3 night), emission tables 3 and 4, deluge water, closure caps and the Flight 1–4 closure record, noise contour statements | Modelled, operator-supplied inputs |
-| 2025 Tiered EA Appendix B (KBR TN 23-05; sonic boom analysis) | Contour maps digitized for $L_{A\max}$ and SEL of launches, landings and static fires; DNL map for the 25-operation scenario; CDNL basis (44 booms) | Contours are for the vehicle configuration modelled in 2024 |
+| 2025 Tiered EA Appendix B (KBR TN 23-05; sonic boom analysis) | Contour maps digitized for $L_{A\max}$ and SEL of launches, landings and static fires; DNL map for the 25-operation scenario; CDNL basis (44 booms) | Contours are for the vehicle configuration modeled in 2024 |
 | 2026 Tiered EA (trajectories, Starship RTLS) | Confirms caps unchanged (500 + 300 h); no new quantitative footprints used | — |
 | 91 FR 5020 and 90 FR 59094 | Fleet cadence for the emissions inventory (44 and 76 launches/yr) | — |
 | FAA Desk Reference ch. 11 | psf to CSEL/CDNL conversion | — |
@@ -38,10 +38,10 @@ Inconsistencies found in the record and how they are handled:
 
 - The 2025 EA text states the 100 dBA SEL contour extends about 8 miles west
   and the 90 dBA contour about 15 miles; the digitized Appendix B maps give
-  overland radii of about 14.8 and 27 miles. The maps are the modelled
+  overland radii of about 14.8 and 27 miles. The maps are the modeled
   output and are used; the text extents are retained at reduced weight and
   their residuals are reported.
-- Structural-damage contours are labelled "dBA" in places; they are treated
+- Structural-damage contours are labeled "dBA" in places; they are treated
   as unweighted $L_{\max}$ with the other structural contours and are not used
   for A-weighted metrics.
 
@@ -56,6 +56,8 @@ Inconsistencies found in the record and how they are handled:
 - USFWS refuge boundaries (Lower Rio Grande Valley and Laguna Atascosa NWR).
 - Boca Chica State Park boundary (TPWD provisional boundary via TxDOT) and
   PAD-US units for Isla Blanca Park.
+- TIGER/Line 2025 area hydrography for Cameron County (Laguna Madre, Gulf,
+  South Bay, Bahia Grande), used only for the shoreline outlines on the maps.
 - Launch pad reference point: OpenStreetMap apron centroid; a 300 m
   uncertainty changes the nearest community distance by under 4%.
 
@@ -77,7 +79,7 @@ Inconsistencies found in the record and how they are handled:
 
 ## Hypothetical parameters
 
-The following enter only as labelled hypothetical ranges: same-pad turnaround,
+The following enter only as labeled hypothetical ranges: same-pad turnaround,
 number of pads, campaign clustering parameters, scrub probability, static
 fires per launch, Starship landing delay, closure window parameters other
 than the launch mean, anomaly probability, vehicle-variant scaling factors,

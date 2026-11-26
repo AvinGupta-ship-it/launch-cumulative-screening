@@ -28,6 +28,7 @@ from .metrics import (
     coverage,
     disturbance_times,
     exceedance_days,
+    exceedance_days_nonbusiness,
     ldn,
     ldn_from_counts,
     number_above,
@@ -92,6 +93,11 @@ def realization_metrics(
         d = exceedance_days(real, lv, thr)
         for k, nm in enumerate(names):
             out[f"days{int(thr)}|{nm}"] = d[k]
+    dnb = exceedance_days_nonbusiness(real, lv, spec.lamax_thresholds[0], cal)
+    for k, nm in enumerate(names):
+        out[f"days{int(spec.lamax_thresholds[0])}nb|{nm}"] = dnb[k]
+    ss_days = np.floor(real.t[real.type_code == TYPE_CODE["ss_landing"]]).astype(np.int64)
+    out["n_ss_landing_nonbusiness"] = int((~cal.business[ss_days]).sum())
     for p in spec.psf_thresholds:
         b = boom_counts(real, lv, p)
         for k, nm in enumerate(names):

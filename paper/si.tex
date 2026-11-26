@@ -3,6 +3,7 @@
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{booktabs}
+\usepackage{array}
 \usepackage{longtable}
 \usepackage{siunitx}
 \usepackage{hyperref}
@@ -31,7 +32,7 @@
 \end{table}
 
 \begin{table}[htbp]
-\caption{Per-operation inputs and footprint fits. Digitized contour radii are honoured exactly by monotone interpolation; the law parameters $L_0$ and $\alpha$ describe the extrapolation beyond the outermost contour and their residuals against all points are reported in \texttt{footprint\_fit\_residuals.csv}.}
+\caption{Per-operation inputs and footprint fits. Digitized contour radii are honored exactly by monotone interpolation; the law parameters $L_0$ and $\alpha$ describe the extrapolation beyond the outermost contour and their residuals against all points are reported in \texttt{footprint\_fit\_residuals.csv}.}
 \centering\scriptsize
 \tablePerOperation
 \end{table}
@@ -50,11 +51,18 @@
 
 \section{Digitization method and residuals}
 
-Pages of the noise appendix were rasterized at 300 dpi with PyMuPDF. The map frame was located from the long horizontal rules, the legend swatches from saturated horizontal segments in the legend box in row-major order, and the scale bar from the longest dark run shorter than the box border (\num{58} pixels per mile on the zoomed maps). Pixels within an RGB distance of 55 of a swatch colour were assigned to that contour after removing solid fills (pixels whose $15\times15$ neighbourhood was mostly matching). The pad was the centroid of the innermost contour. Pixels were binned into 16 azimuth sectors; the median radius per sector and the median over the overland sector (240--360\si{\degree}) are stored in \texttt{data/processed/digitized\_contours.csv}. Table S2 reports the residuals of the propagation law; the hybrid evaluator reproduces every digitized radius exactly by construction. The text extents that disagree with the maps are the launch SEL 100 dBA (8 miles in the text, \num{14.8} miles on the map) and 90 dBA (15 miles in the text, \num{27} miles on the map) contours.
+Pages of the noise appendix were rasterized at 300 dpi with PyMuPDF. The map frame was located from the long horizontal rules, the legend swatches from saturated horizontal segments in the legend box in row-major order, and the scale bar from the longest dark run shorter than the box border (\num{58} pixels per mile on the zoomed maps). Pixels within an RGB distance of 55 of a swatch color were assigned to that contour after removing solid fills (pixels whose $15\times15$ neighbourhood was mostly matching). The pad was the centroid of the innermost contour. Pixels were binned into 16 azimuth sectors; the median radius per sector and the median over the overland sector (240--360\si{\degree}) are stored in \texttt{data/processed/digitized\_contours.csv}. Table S2 reports the residuals of the propagation law; the hybrid evaluator reproduces every digitized radius exactly by construction. The text extents that disagree with the maps are the launch SEL 100 dBA (8 miles in the text, \num{14.8} miles on the map) and 90 dBA (15 miles in the text, \num{27} miles on the map) contours.
 
 \section{Convergence studies}
 
-Monte Carlo standard errors of every headline quantity are listed in \texttt{monte\_carlo\_standard\_}\allowbreak\texttt{errors.csv}; the largest standard error relative to the mean is \valMcMaxSeFractionPct\%. Contour areas on the 250 m grid differ from those on the 125 m grid by at most \valConvPhaseTwoMaxRelPct\% (Phase 2 fields) and by \valConvDnlSixFiveRel~(relative, $L_{dn}$ 65 dB) and \valConvCdnlSixZeroRel~(CDNL 60 dB) for the verification fields. The Sobol estimator reproduces the analytical first- and total-order indices of the Ishigami function to within 0.06 at the sample size used in the test suite.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{fig8_convergence}
+\caption{Monte Carlo convergence: standard error of the running mean, as a percentage of the mean, against the number of simulated years for every headline quantity in \texttt{monte\_carlo\_standard\_errors.csv} (five scenarios; DNL, events above 100 dBA, exceedance days and disturbed fraction at the Port Isabel edge and the habitat receptor, and closure hours). The dashed line is the 2\% criterion; the highlighted curve is the quantity with the largest standard error at the full sample.}
+\label{fig:convergence}
+\end{figure}
+
+Monte Carlo standard errors of every headline quantity are listed in \texttt{monte\_carlo\_standard\_}\allowbreak\texttt{errors.csv}; the largest standard error relative to the mean is \valMcMaxSeFractionPct\% (Figure~\ref{fig:convergence}). Contour areas on the 250 m grid differ from those on the 125 m grid by at most \valConvPhaseTwoMaxRelPct\% (Phase 2 fields) and by \valConvDnlSixFiveRel~(relative, $L_{dn}$ 65 dB) and \valConvCdnlSixZeroRel~(CDNL 60 dB) for the verification fields. The Sobol estimator reproduces the analytical first- and total-order indices of the Ishigami function to within 0.06 at the sample size used in the test suite.
 
 \section{Parameter ranges}
 

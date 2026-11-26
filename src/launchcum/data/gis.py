@@ -104,6 +104,12 @@ def build(pad_lon: float, pad_lat: float, half_width_km: float = 30.0) -> dict[s
             }
         )
 
+    # Area hydrography (shorelines of the Gulf, Laguna Madre and bays) -------
+    water = gpd.read_file(RAW / "tl_2025_48061_areawater.zip").to_crs(CRS_UTM)
+    water["geometry"] = water.geometry.make_valid()
+    water = water[water.intersects(dom)].copy()
+    water[["HYDROID", "FULLNAME", "MTFCC", "AWATER", "geometry"]].to_file(gpkg, layer="water", driver="GPKG")
+
     # Census blocks ---------------------------------------------------------
     blocks = gpd.read_file(RAW / "tigerweb_blocks_bbox.geojson").to_crs(CRS_UTM)
     blocks["POP100"] = pd.to_numeric(blocks["POP100"])

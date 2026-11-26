@@ -9,8 +9,10 @@ uv sync --extra dev          # or: make env
 ```
 
 A `Dockerfile` builds the same environment (`docker build -t launchcum .`).
-LaTeX (`latexmk`) and `pandoc` are needed only for the manuscript, supporting
-information and comment documents.
+LaTeX (`latexmk`, with `dvipng` and Ghostscript) is needed for the figures, whose
+text is typeset with LaTeX so that it matches the document font, and for the
+manuscript, supporting information and comment documents; `pandoc` is needed
+only for the Word copies.
 
 ## Inputs
 

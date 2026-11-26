@@ -9,7 +9,7 @@ for each species ``s``, where ``N`` is the annual launch count, ``M_prop``
 the propellant mass per launch, ``f_strat`` the fraction of propellant
 consumed above the tropopause and ``EI_s`` the emission index. Ranges are
 propagated by Monte Carlo sampling of uniform distributions over the
-documented bounds. No atmospheric chemistry or transport is modelled.
+documented bounds. No atmospheric chemistry or transport is modeled.
 """
 
 from __future__ import annotations

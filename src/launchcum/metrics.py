@@ -173,6 +173,20 @@ def exceedance_days(real: Realization, lv: ReceptorLevels, threshold_db: float) 
     return out
 
 
+def exceedance_days_nonbusiness(
+    real: Realization, lv: ReceptorLevels, threshold_db: float, cal: OpCalendar
+) -> IntArray:
+    """Number of weekend and holiday days with at least one event above ``threshold_db``."""
+    lam = lv.lamax[real.type_code]
+    above = lam > threshold_db
+    day = np.floor(real.t).astype(np.int64)
+    out = np.zeros(lv.n_receptors, dtype=np.int64)
+    for k in range(lv.n_receptors):
+        days = np.unique(day[above[:, k]])
+        out[k] = int((~cal.business[days]).sum())
+    return out
+
+
 def boom_counts(real: Realization, lv: ReceptorLevels, psf_threshold: float) -> IntArray:
     p = lv.psf[real.type_code]
     return np.asarray((p > psf_threshold).sum(axis=0), dtype=np.int64)

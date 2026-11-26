@@ -13,8 +13,8 @@ evaluates four classes of metric (additive, energy-averaged, number-above and
 exceedance-day, coverage and interval) plus public-access availability, and
 quantifies the error of extrapolating per-operation or annual-average
 assessments linearly to higher cadence, with a global sensitivity analysis
-over the uncertain inputs. Per-event footprints are the FAA's own modelled
-values; the results are statements about metric behaviour, not estimates of
+over the uncertain inputs. Per-event footprints are the FAA's own modeled
+values; the results are statements about metric behavior, not estimates of
 actual impacts.
 
 ## Installation

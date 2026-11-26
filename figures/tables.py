@@ -7,11 +7,21 @@ supporting information and the technical attachment.
 
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 
-from common import COMMUNITY_EDGE, COMMUNITY_SPI, HABITAT, ROOT, read_csv, summary
+from common import COMMUNITY_EDGE, COMMUNITY_SPI, HABITAT, RECEPTOR_LETTERS, ROOT, read_csv, read_parquet, summary
 
 OUT = ROOT / "paper" / "generated" / "tables.tex"
+
+EVENT_LABELS = {
+    "launch": "Launch",
+    "ss_landing": "Starship landing",
+    "sh_landing": "Super Heavy landing",
+    "static_fire": "Static fire (Super Heavy)",
+    "static_fire_ss": "Static fire (Starship)",
+}
+METRIC_LABELS = {"lamax": r"$L_{A\max}$", "lmax": r"$L_{\max}$ (unweighted)", "sel": "SEL"}
 
 
 def row(*cells: object) -> str:
@@ -31,6 +41,11 @@ def fmtnum(v: float, nd: int = 2) -> str:
     if abs(v) >= 10:
         return f"{v:.1f}"
     return f"{v:.{nd}f}"
+
+
+def math(s: str) -> str:
+    """Set a signed number in math mode so that the minus sign is a true minus."""
+    return f"${s}$"
 
 
 def table_scenarios() -> str:
@@ -91,57 +106,103 @@ def table_scenarios() -> str:
 def table_per_operation() -> str:
     po = read_csv("per_operation_inputs.csv")
     fits = read_csv("footprint_fits.csv")
-    out = [r"\begin{tabular}{llrp{6.2cm}}", r"\hline", r"Quantity & Event type & Value & Source \\", r"\hline"]
-    src = {
-        "deluge_gal": "2025 Tiered EA p.~39 (422,000 gal per launch, booster landing or booster static fire; "
-        "applied to every static fire, an upper bound)",
-        "co_tons": "2025 Tiered EA Table 3 / {n}",
-        "nox_tons": "2025 Tiered EA Table 3 / {n}",
-        "co2e_t": "2025 Tiered EA Table 4 / {n} (launch includes methane venting)",
-    }
-    sf = "11 static fires (Appendix B scenario)"
-    basis = {"static_fire": sf, "static_fire_ss": sf}
-    for _, r in po.iterrows():
-        n = basis.get(str(r["event_type"]), "25 operations")
-        out.append(
-            row(
-                esc(r["quantity"]),
-                esc(r["event_type"]),
-                fmtnum(float(r["value"])),
-                src.get(r["quantity"], "").format(n=n),
-            )
-        )
+    types = ["launch", "sh_landing", "ss_landing", "static_fire"]
+    quantities = [
+        ("deluge_gal", "Deluge water (gal per operation)"),
+        ("co_tons", "CO (short tons per operation)"),
+        ("nox_tons", r"NO$_x$ (short tons per operation)"),
+        ("co2e_t", r"CO$_2$e (metric tons per operation)"),
+    ]
+    out = [
+        r"\begin{tabular}{P{3.4cm}rrrr}",
+        r"\hline",
+        row("Quantity", "Launch", "SH landing", "SS landing", "Static fire"),
+        r"\hline",
+    ]
+    for q, label in quantities:
+        cells = []
+        for et in types:
+            v = po[(po["quantity"] == q) & (po["event_type"] == et)]["value"]
+            cells.append(fmtnum(float(v.iloc[0])) if len(v) else "--")
+        out.append(row(label, *cells))
     out += [
         r"\hline",
-        r"\multicolumn{4}{l}{Footprint fits (digitized contours, monotone interpolation; "
-        r"law parameters for extrapolation):} \\",
+        r"\multicolumn{5}{p{13.2cm}}{Sources. Deluge water: 2025 Tiered EA p.~39 (422,000 gal per launch, "
+        r"booster landing or booster static fire; applied to every static fire, an upper bound). CO and NO$_x$: "
+        r"2025 Tiered EA Table 3 annual totals divided by 25 operations (11 static fires, the Appendix B scenario). "
+        r"CO$_2$e: 2025 Tiered EA Table 4 annual totals divided by the same counts; the launch value includes "
+        r"methane venting.} \\",
+        r"\hline",
+        r"\multicolumn{5}{p{13.2cm}}{Footprint fits. Digitized contour radii are interpolated exactly; the law "
+        r"$L(r)=L_0-\alpha\,(r-1\,\mathrm{km})$ continues them beyond the outermost contour.} \\",
+        row("Event type and metric", "$L_0$ at 1 km (dB)", r"$\alpha$ (dB/km)", "Points", "rms (dB)"),
+        r"\hline",
     ]
     for _, r in fits.iterrows():
         out.append(
             row(
-                f"{esc(r['event_type'])} {esc(r['metric'])}",
-                f"$L_0$ = {r['l0_db_at_1km']:.1f} dB at 1 km",
-                f"$\\alpha$ = {r['alpha_db_per_km']:.2f} dB/km",
-                f"{int(r['n_points'])} points, rms {r['rms_residual_db']:.1f} dB",
+                f"{EVENT_LABELS.get(str(r['event_type']), esc(r['event_type']))}, {METRIC_LABELS[str(r['metric'])]}",
+                f"{r['l0_db_at_1km']:.1f}",
+                f"{r['alpha_db_per_km']:.2f}",
+                int(r["n_points"]),
+                f"{r['rms_residual_db']:.1f}",
             )
         )
-    out += [r"\hline", r"\end{tabular}"]
+    out += [
+        r"\hline",
+        r"\multicolumn{5}{p{13.2cm}}{$\alpha$ is one shared slope per metric, fitted jointly across event types. "
+        r"$L_{\max}$ (unweighted) is the unweighted maximum sound pressure level used in the record for structural "
+        r"screening. The rms is the root-mean-square difference between the footprint and all transcribed points: "
+        r"0.0 dB means every point is a digitized contour radius, which the interpolant reproduces exactly; nonzero "
+        r"values arise where text statements at named communities (for example 100--110 dBA) accompany the digitized "
+        r"radii and the interpolant passes between them.} \\",
+        r"\end{tabular}",
+    ]
+    return "\n".join(out)
+
+
+def table_receptors_named() -> str:
+    rec = read_csv("receptors_used.csv").set_index("name")
+    out = [
+        r"\begin{tabular}{clrrP{4.2cm}}",
+        r"\hline",
+        row("Key", "Receptor", "Distance (km)", "Bearing (deg)", "How located"),
+        r"\hline",
+    ]
+    for letter, name in RECEPTOR_LETTERS.items():
+        r = rec.loc[name]
+        out.append(
+            row(letter, esc(name), f"{float(r['r_km']):.1f}", f"{float(r['azimuth_deg']):.0f}", esc(r["derivation"]))
+        )
+    out += [
+        r"\hline",
+        r"\multicolumn{5}{p{12.3cm}}{Bearing is measured clockwise from north at the pad reference point "
+        r"(OpenStreetMap apron centroid). Place boundaries are TIGER/Line 2025; the critical-habitat polygon is "
+        r"the \mbox{USFWS} designation. Letters key the receptors in Figure~2.} \\",
+        r"\end{tabular}",
+    ]
     return "\n".join(out)
 
 
 def table_metric_definitions() -> str:
     rows = [
-        ("Additive", r"$M=\sum_i q_{m_i}$", r"$E[M]=\sum_\tau N_\tau \bar q_\tau$", "exact; linear"),
+        (
+            "Additive",
+            r"$M=\sum_i q_{m_i}$",
+            r"$E[M]=\sum_\tau N_\tau \bar q_\tau$",
+            "exact; linear",
+        ),
         (
             "Energy-averaged",
-            r"$L_{dn}=10\log_{10}\!\big[\tfrac{1}{T}\sum_i E_i\big]$, $E_i=10^{(L_{AE,i}+10\,\mathbb{1}_{n,i})/10}$",
-            r"$+10\log_{10}(N_2/N_1)+10\log_{10}\tfrac{1+9f_{n,2}}{1+9f_{n,1}}$",
+            r"$\mathrm{DNL}=10\log_{10}\big[\tfrac{1}{T}\sum_i E_i\big]$,\newline "
+            r"$E_i=10^{(L_{AE,i}+10\,\mathbb{1}_{n,i})/10}$",
+            r"$\Delta=10\log_{10}(N_2/N_1)$ $+\,10\log_{10}\tfrac{1+9f_{n,2}}{1+9f_{n,1}}$",
             "logarithmic in count",
         ),
         (
             "Number-above",
             r"$NA_L=\#\{i: L_{A\max,i}>L\}$",
-            r"$E[NA_L]=\sum_\tau N_\tau \mathbb{1}[L_\tau>L]$",
+            r"$E[NA_L]=\sum_\tau N_\tau\,\mathbb{1}[L_\tau>L]$",
             "linear",
         ),
         (
@@ -171,31 +232,76 @@ def table_metric_definitions() -> str:
         ),
     ]
     out = [
-        r"\begin{tabular}{p{1.8cm}p{3.9cm}p{3.5cm}p{2.1cm}}",
+        r"\begin{tabular}{P{1.9cm}P{4.6cm}P{4.8cm}P{2.3cm}}",
         r"\hline",
         r"Class & Definition & Poisson closed form & Scaling with count \\",
         r"\hline",
     ]
     for r in rows:
         out.append(" & ".join(r) + r" \\")
-    out += [r"\hline", r"\end{tabular}"]
+    out += [
+        r"\hline",
+        r"\multicolumn{4}{p{14.2cm}}{$q_{m_i}$: per-operation quantity of event $i$; $N_\tau$: number of events of "
+        r"type $\tau$; $f_n$: night share; $L_{AE}$: sound exposure level; $\mathbb{1}_{n,i}$: night indicator; "
+        r"$\lambda$: event rate; $\tau$: recovery time; $S$: season length; $w$: window length; $\bar h$: mean "
+        r"closure window.} \\",
+        r"\end{tabular}",
+    ]
     return "\n".join(out)
 
 
 def table_verification() -> str:
     vt = read_csv("verification.csv")
     out = [
-        r"\begin{tabular}{p{4cm}rrp{4.1cm}}",
+        r"\begin{tabular}{P{4.3cm}rrP{4.6cm}}",
         r"\hline",
-        r"Quantity & 2025 EA value & Reproduced & Basis \\",
+        r"Quantity & 2025 EA value & Model & Basis \\",
         r"\hline",
     ]
+    names = {
+        "annual NOX (short tons)": "Annual NO$_x$ (short tons)",
+        "annual CO (short tons)": "Annual CO (short tons)",
+        "annual CO2E (metric tons)": "Annual CO$_2$e (metric tons)",
+        "deluge water per operation (gallons)": "Deluge water per operation (gallons)",
+    }
     for _, r in vt.iterrows():
-        out.append(
-            f"{esc(r['quantity'])} & {esc(r['ea_value'])} & {fmtnum(float(r['reproduced']))} & {esc(r['basis'])} \\\\"
-        )
+        ea_raw = str(r["ea_value"])
+        ea = ea_raw.replace("-", "--")
+        rep = fmtnum(float(r["reproduced"]))
+        try:
+            ea_num = float(ea_raw)
+            decimals = len(ea_raw.split(".")[1]) if "." in ea_raw else 0
+            ea = f"{ea_num:,.{decimals}f}"
+            rv = float(r["reproduced"])
+            if decimals:
+                rep = f"{rv:,.{decimals}f}"
+            elif abs(rv - round(rv)) < 1e-9:
+                rep = f"{rv:,.0f}"
+            else:
+                rep = fmtnum(rv)
+        except ValueError:
+            pass
+        out.append(f"{names.get(str(r['quantity']), esc(r['quantity']))} & {ea} & {rep} & {esc(r['basis'])} \\\\")
     out += [r"\hline", r"\end{tabular}"]
     return "\n".join(out)
+
+
+def _ldn_energy_rel_error(top: float, ref: float) -> tuple[float, float, float]:
+    """Relative error of the energy-average extrapolation in the energy domain, with a bootstrap interval."""
+    col = f"ldn|{COMMUNITY_EDGE}"
+    raw = read_parquet("e1_raw.parquet", columns=["cadence", "external_fraction", col])
+    raw = raw[raw["external_fraction"] == 0.0]
+    a = raw[raw["cadence"] == ref][col].to_numpy(float)
+    b = raw[raw["cadence"] == top][col].to_numpy(float)
+    rng = np.random.default_rng(0)
+
+    def rel(ya: float, yb: float) -> float:
+        return float(10 ** ((ya + 10 * np.log10(top / ref) - yb) / 10) - 1)
+
+    point = rel(a.mean(), b.mean())
+    boots = [rel(rng.choice(a, a.size).mean(), rng.choice(b, b.size).mean()) for _ in range(400)]
+    lo, hi = np.percentile(boots, [2.5, 97.5])
+    return point, float(lo), float(hi)
 
 
 def table_aggregation_errors() -> str:
@@ -204,41 +310,66 @@ def table_aggregation_errors() -> str:
     top = err["cadence"].max()
     e = err[err["cadence"] == top].merge(ci[ci["cadence"] == top], on=["metric", "cadence"], how="left")
     labels = {
-        "deluge_gal": "Deluge water (million gal, additive)",
-        "nox_tons": "NO$_x$ (additive)",
-        f"ldn|{COMMUNITY_EDGE}": "$L_{dn}$, Port Isabel edge (energy)",
-        f"na100|{COMMUNITY_EDGE}": "Events $>100$ dBA, Port Isabel edge",
-        f"days90|{COMMUNITY_EDGE}": "Days $>90$ dBA, Port Isabel edge",
-        f"days90|{COMMUNITY_SPI}": "Days $>90$ dBA, S. Padre Island edge",
-        f"boom2|{COMMUNITY_EDGE}": "Booms $>2$ psf, Port Isabel edge",
-        f"disturbed|{HABITAT}": "Disturbed fraction, habitat (1 h recovery)",
-        "closure_h": "Closure hours (operations)",
-        "weekend_avail": "Weekend daylight availability",
+        "deluge_gal": "Deluge water (million gal/yr)",
+        "nox_tons": "NO$_x$ (short tons/yr)",
+        f"ldn|{COMMUNITY_EDGE}": "DNL, Port Isabel edge (dB)",
+        f"na100|{COMMUNITY_EDGE}": r"Events $>100$ dBA $L_{A\max}$, Port Isabel edge (per yr)",
+        f"days90|{COMMUNITY_EDGE}": r"Days $>90$ dBA, Port Isabel edge (days/yr)",
+        f"days90|{COMMUNITY_SPI}": r"Days $>90$ dBA, S. Padre Island edge (days/yr)",
+        f"boom2|{COMMUNITY_EDGE}": r"Booms $>2$ psf, Port Isabel edge (per yr)",
+        f"disturbed|{HABITAT}": "Disturbed fraction of season, habitat, 1 h recovery",
+        "closure_h": "Closure hours, operations (h/yr)",
     }
     out = [
-        r"\begin{tabular}{p{3.3cm}rrrr}",
+        r"\begin{tabular}{P{4.6cm}rrrr}",
         r"\hline",
-        f"Metric at {int(top)}/yr & Simulated & Linear from 25/yr & Error & Rel. error \\% (95\\% CI) \\\\",
+        f"Metric at {int(top)}/yr & Simulated & Extrapolated from 25/yr & Error & "
+        r"Rel. error, \% (95\% CI) \\",
         r"\hline",
     ]
+    ref = float(err["cadence"].min())
     for _, r in e.iterrows():
         if r["metric"] not in labels:
             continue
-        rel = "" if pd.isna(r["relative_error"]) else f"{100 * r['relative_error']:+.0f}"
-        if not pd.isna(r.get("rel_error_lo", float("nan"))):
-            rel += f" ({100 * r['rel_error_lo']:+.0f}, {100 * r['rel_error_hi']:+.0f})"
-        unit = " dB" if "ldn" in r["metric"] else ""
         scale = 1e-6 if r["metric"] == "deluge_gal" else 1.0
+        sim = float(r["simulated"]) * scale
+        lin = float(r["linear_extrapolation"]) * scale
+        er = float(r["error"]) * scale
+        if abs(sim) < 1:
+            f_val, f_err = "{:.3f}", "{:+.3f}"
+        elif abs(sim) < 100:
+            f_val, f_err = "{:.1f}", "{:+.2f}"
+        else:
+            f_val, f_err = "{:,.0f}", "{:+,.1f}"
+        if r["metric"].startswith("ldn"):
+            pt, lo, hi = _ldn_energy_rel_error(float(top), ref)
+            rel = f"{math(f'{100 * pt:+.1f}')} ({math(f'{100 * lo:+.1f}')}, {math(f'{100 * hi:+.1f}')})"
+        else:
+            rel = math(f"{100 * r['relative_error']:+.1f}")
+            if not pd.isna(r.get("rel_error_lo", float("nan"))):
+                lo_s = math(f"{100 * r['rel_error_lo']:+.1f}")
+                hi_s = math(f"{100 * r['rel_error_hi']:+.1f}")
+                rel += f" ({lo_s}, {hi_s})"
         out.append(
             row(
                 labels[r["metric"]],
-                fmtnum(float(r["simulated"]) * scale),
-                fmtnum(float(r["linear_extrapolation"]) * scale),
-                f"{fmtnum(float(r['error']) * scale)}{unit}",
+                f_val.format(sim),
+                f_val.format(lin),
+                math(f_err.format(er).replace(",", "{,}")),
                 rel,
             )
         )
-    out += [r"\hline", r"\end{tabular}"]
+    out += [
+        r"\hline",
+        r"\multicolumn{5}{p{13.6cm}}{Error is the extrapolated value minus the simulated value; relative error is "
+        r"the error divided by the simulated value. Extrapolation is linear in the count from the 25/yr simulation, "
+        r"or $+10\log_{10}(456/25)$ for DNL, whose relative error is given for the energy "
+        r"$10^{\mathrm{DNL}/10}$. Intervals are bootstrap 95\% intervals over the simulated years. The two "
+        r"exceedance-day rows are identical because every launch and landing exceeds 90 dBA at both receptors "
+        r"and static fires exceed it at neither, so the same event days are counted; their intervals differ only by "
+        r"bootstrap resampling.} \\",
+        r"\end{tabular}",
+    ]
     return "\n".join(out)
 
 
@@ -368,8 +499,11 @@ def main() -> None:
     s = summary()
     parts = [
         "% Generated by figures/tables.py from saved results; do not edit by hand.",
+        r"\providecommand{\tabularnewline}{\\}",
+        r"\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}",
         r"\newcommand{\tableScenarios}{" + table_scenarios() + "}",
         r"\newcommand{\tablePerOperation}{" + table_per_operation() + "}",
+        r"\newcommand{\tableReceptorsNamed}{" + table_receptors_named() + "}",
         r"\newcommand{\tableMetricDefinitions}{" + table_metric_definitions() + "}",
         r"\newcommand{\tableVerification}{" + table_verification() + "}",
         r"\newcommand{\tableAggregationErrors}{" + table_aggregation_errors() + "}",

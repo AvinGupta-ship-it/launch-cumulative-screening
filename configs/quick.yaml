@@ -58,7 +58,7 @@ sobol:
   cadences: [25, 100, 456]
   report_threshold: 0.05
   factors:
-    night_fraction: {low: 0.0, high: 0.5, source_rank: 1, note: "NOI assumes 0.5; existing licence 3 of 25 launches"}
+    night_fraction: {low: 0.0, high: 0.5, source_rank: 1, note: "NOI assumes 0.5; existing license 3 of 25 launches"}
     scrub_probability: {low: 0.0, high: 0.4, source_rank: 5, note: "hypothetical"}
     turnaround_min_days: {low: 0.25, high: 1.5, source_rank: 5, note: "hypothetical same-pad turnaround"}
     n_pads: {low: 1.0, high: 2.999, source_rank: 5, note: "hypothetical; floored to integer"}
